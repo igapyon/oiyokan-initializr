@@ -53,7 +53,8 @@ public class OiyokanInitializrApp {
     private static final char[] CAMEL_DELIMITER_CHARS = new char[] { '.', '-', '_', '@' };
 
     public static void main(String[] args) {
-        log.info("Oiyokan Initializr v" + OiyokanInitializrConstants.VERSION + ": begin.");
+        // [IYI1001] Oiyokan Initializr Begin.
+        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
@@ -86,7 +87,9 @@ public class OiyokanInitializrApp {
         // Process settings
 
         try {
-            log.info("Oiyokan Initializr: traverse tables.");
+            // [IYI1101] Traverse tables in database.
+            log.info(OiyokanInitializrMessages.IYI1101);
+
             traverseTable(oiyoInfo, oiyoSettings);
         } catch (ODataApplicationException ex) {
             log.error("Fail to connect database. Check database settings: " + ex.toString());
@@ -94,21 +97,24 @@ public class OiyokanInitializrApp {
             log.error("Fail to close database. Check database settings: " + ex.toString());
         }
 
-        log.info("Oiyokan Initializr: tune settings info.");
+        // [IYI1201] Tune settings info."
+        log.info(OiyokanInitializrMessages.IYI1201);
         tuneSettings(oiyoInfo, oiyoSettings, isSfdcMode);
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json
 
         try {
-            log.info("Oiyokan Initializr: write settings info into `oiyokan-settings.json`.");
+            // [IYI1301] Write settings info into `oiyokan-settings.json`.
+            log.info(OiyokanInitializrMessages.IYI1301);
             targetJsonFile.getParentFile().mkdirs();
             writeToFile(oiyoSettings, targetJsonFile);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        log.info("Oiyokan Initializr: end.");
+        // [IYI1002] Oiyokan Initializr End.
+        log.info(OiyokanInitializrMessages.IYI1002);
     }
 
     /**
@@ -123,6 +129,8 @@ public class OiyokanInitializrApp {
             throws SQLException, ODataApplicationException {
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
 
+        // [IYI1111] Connect to database.
+        log.info(OiyokanInitializrMessages.IYI1111 + ": " + database.getName());
         try (Connection connTargetDb = OiyoCommonJdbcUtil.getConnection(database)) {
             ResultSet rsTables = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE" });
             for (; rsTables.next();) {

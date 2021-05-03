@@ -6,7 +6,7 @@ class OiyokanInitializrAppTest {
 
     @Test
     void test() {
-        if (true)
+        if (false)
             OiyokanInitializrApp.main(new String[] {});
     }
 }
