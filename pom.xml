@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.4.4</version>
+		<relativePath />
+	</parent>
+
+	<groupId>jp.igapyon.oiyokan</groupId>
+	<artifactId>oiyokan-initializr</artifactId>
+	<version>1.11.20210503a</version>
+	<name>oiyokan-initializr</name>
+	<description>Oyekan Initializr is a generator for creating `oiyokan-settings.json`.</description>
+	<url>https://github.com/igapyon/oiyokan-initializr</url>
+
+	<!-- see: https://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/igapyon/oiyokan-initializr</url>
+		<connection>scm:git:https://github.com/igapyon/oiyokan-initializr.git</connection>
+		<developerConnection>scm:git:https://github.com/igapyon/oiyokan-initializr.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>igapyon</id>
+			<name>Toshiki Iga</name>
+			<email>igapyon@gmail.com</email>
+			<url>http://www.igapyon.jp/</url>
+			<roles>
+				<role>lead</role>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Asia/Tokyo</timezone>
+		</developer>
+		<developer>
+			<id>ymoto</id>
+			<name>Koji Yamamoto</name>
+			<email>k.ymoto@gmail.com</email>
+			<roles>
+				<role>tester</role>
+			</roles>
+			<timezone>Asia/Tokyo</timezone>
+		</developer>
+	</developers>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
+			</url>
+		</repository>
+	</distributionManagement>
+
+	<properties>
+		<java.version>11</java.version>
+	</properties>
+	<dependencies>
+		<!-- Oiyokan Library -->
+		<dependency>
+			<groupId>jp.igapyon.oiyokan</groupId>
+			<artifactId>oiyokan</artifactId>
+			<version>1.11.20210503h-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>9.2.1.jre11</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc11 -->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<version>21.1.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
