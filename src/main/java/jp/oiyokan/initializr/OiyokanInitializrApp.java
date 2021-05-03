@@ -24,7 +24,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -120,18 +119,12 @@ public class OiyokanInitializrApp {
     static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings)
             throws SQLException, ODataApplicationException {
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
+
         try (Connection connTargetDb = OiyoCommonJdbcUtil.getConnection(database)) {
-            final List<String> tableNameList = new ArrayList<>();
+            ResultSet rsTables = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE" });
+            for (; rsTables.next();) {
+                final String tableName = rsTables.getString("TABLE_NAME");
 
-            ResultSet rset = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE", "VIEW" });
-            for (; rset.next();) {
-                final String tableName = rset.getString("TABLE_NAME");
-                tableNameList.add(tableName);
-            }
-
-            Collections.sort(tableNameList);
-
-            for (String tableName : tableNameList) {
                 try {
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
@@ -142,12 +135,25 @@ public class OiyokanInitializrApp {
                 }
             }
 
-            Collections.sort(oiyoSettings.getEntitySet(), new Comparator<OiyoSettingsEntitySet>() {
-                @Override
-                public int compare(OiyoSettingsEntitySet o1, OiyoSettingsEntitySet o2) {
-                    return o1.getName().compareTo(o2.getName());
+            ResultSet rsViews = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "VIEW" });
+            for (; rsViews.next();) {
+                final String viewName = rsViews.getString("TABLE_NAME");
+
+                try {
+                    final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
+                            connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
+                    oiyoSettings.getEntitySet().add(entitySet);
+                    entitySet.setDbSettingName(database.getName());
+
+                    // VIEWは Create, Update, Delete を抑止.
+                    entitySet.setCanCreate(false);
+                    entitySet.setCanUpdate(false);
+                    entitySet.setCanDelete(false);
+                } catch (Exception ex) {
+                    log.warn("Fail to read view: " + viewName);
                 }
-            });
+            }
+
         }
     }
 
@@ -164,6 +170,13 @@ public class OiyokanInitializrApp {
         // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
         database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
         database.setJdbcPassPlain(null);
+
+        Collections.sort(oiyoSettings.getEntitySet(), new Comparator<OiyoSettingsEntitySet>() {
+            @Override
+            public int compare(OiyoSettingsEntitySet o1, OiyoSettingsEntitySet o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
             for (OiyoSettingsProperty property : entitySet.getEntityType().getProperty()) {
