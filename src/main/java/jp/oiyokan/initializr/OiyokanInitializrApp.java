@@ -28,6 +28,7 @@ import java.util.Comparator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.text.CaseUtils;
 import org.apache.olingo.server.api.ODataApplicationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +49,8 @@ import jp.oiyokan.util.OiyoEncryptUtil;
  */
 public class OiyokanInitializrApp {
     private static final Log log = LogFactory.getLog(OiyokanInitializrApp.class);
+
+    private static final char[] CAMEL_DELIMITER_CHARS = new char[] { '.', '-', '_', '@' };
 
     public static void main(String[] args) {
         log.info("Oiyokan Initializr v" + OiyokanInitializrConstants.VERSION + ": begin.");
@@ -130,6 +133,8 @@ public class OiyokanInitializrApp {
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
                     oiyoSettings.getEntitySet().add(entitySet);
                     entitySet.setDbSettingName(database.getName());
+                    entitySet.setOmitCountAll(false);
+
                 } catch (Exception ex) {
                     log.warn("Fail to read table: " + tableName);
                 }
@@ -144,6 +149,7 @@ public class OiyokanInitializrApp {
                             connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
                     oiyoSettings.getEntitySet().add(entitySet);
                     entitySet.setDbSettingName(database.getName());
+                    entitySet.setOmitCountAll(true);
 
                     // VIEWは Create, Update, Delete を抑止.
                     entitySet.setCanCreate(false);
@@ -153,7 +159,6 @@ public class OiyokanInitializrApp {
                     log.warn("Fail to read view: " + viewName);
                 }
             }
-
         }
     }
 
@@ -171,15 +176,13 @@ public class OiyokanInitializrApp {
         database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
         database.setJdbcPassPlain(null);
 
-        Collections.sort(oiyoSettings.getEntitySet(), new Comparator<OiyoSettingsEntitySet>() {
-            @Override
-            public int compare(OiyoSettingsEntitySet o1, OiyoSettingsEntitySet o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
+            entitySet.setName(CaseUtils.toCamelCase(entitySet.getName(), true, CAMEL_DELIMITER_CHARS));
+            entitySet.setJdbcStmtTimeout(30);
+
             for (OiyoSettingsProperty property : entitySet.getEntityType().getProperty()) {
+                property.setName(CaseUtils.toCamelCase(property.getName(), true, CAMEL_DELIMITER_CHARS));
+
                 if ("Edm.String".equals(property.getEdmType())) {
                     if (isSfdcMode) {
                         property.setFilterTreatNullAsBlank(true);
@@ -187,6 +190,13 @@ public class OiyokanInitializrApp {
                 }
             }
         }
+
+        Collections.sort(oiyoSettings.getEntitySet(), new Comparator<OiyoSettingsEntitySet>() {
+            @Override
+            public int compare(OiyoSettingsEntitySet o1, OiyoSettingsEntitySet o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
     }
 
     /**
