@@ -13,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.olingo.server.api.ODataApplicationException;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +31,7 @@ import jp.oiyokan.initializr.OiyokanInitializrUtil;
 public class ThIndexCtrl {
     private static final Log log = LogFactory.getLog(ThIndexCtrl.class);
 
-    @RequestMapping(value = { "/", "/index.html" })
+    @RequestMapping(value = { "/", "/index.html" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String index(Model model, OiyoSettingsDatabase database, BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
@@ -94,19 +93,18 @@ public class ThIndexCtrl {
             model.addAttribute("msgSuccess", "Connection test success.");
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
+            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201);
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
+            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
             model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202);
         }
 
         return "index";
     }
 
-    @RequestMapping(value = { "/entry" }, params = "download", method = {
-            RequestMethod.POST }, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @RequestMapping(value = { "/entry" }, params = "download", method = { RequestMethod.POST })
     public String entry(Model model, OiyoSettingsDatabase database, HttpServletResponse response) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
@@ -141,12 +139,12 @@ public class ThIndexCtrl {
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings);
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
-            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201);
+            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
+            database.setDescription(OiyokanInitializrMessages.IYI2201);
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
-            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202);
+            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
+            database.setDescription(OiyokanInitializrMessages.IYI2202);
         }
 
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, convertCamel, isSfdcMode);
@@ -160,12 +158,14 @@ public class ThIndexCtrl {
         } catch (IOException ex) {
             // [IYI4201] ERROR: Fail to generate json file.
             log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
+            database.setDescription(OiyokanInitializrMessages.IYI4201);
         }
 
         try {
             final byte[] zipFile = OiyokanInitializrUtil
                     .packageZipFile(new File("./src/main/resources/oiyokan-web-template"), jsonString);
 
+            response.setContentType("application/zip");
             response.setHeader("Content-Disposition", "attachment; filename=oiyokan-demo.zip");
 
             final OutputStream outStream = response.getOutputStream();
@@ -183,7 +183,6 @@ public class ThIndexCtrl {
 
         // [IYI1002] Oiyokan Initializr End.
         log.info(OiyokanInitializrMessages.IYI1002);
-
         return null;
     }
 }
