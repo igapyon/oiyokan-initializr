@@ -59,6 +59,8 @@ public class OiyokanInitializrApp {
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
+        // [IYI1101] Prepare database settings.
+        log.info(OiyokanInitializrMessages.IYI1101);
         OiyoInfo oiyoInfo = new OiyoInfo();
         oiyoInfo.setPassphrase(OiyokanConstants.OIYOKAN_PASSPHRASE);
 
@@ -87,8 +89,8 @@ public class OiyokanInitializrApp {
         // Process settings
 
         try {
-            // [IYI1101] Traverse tables in database.
-            log.info(OiyokanInitializrMessages.IYI1101);
+            // [IYI2101] Traverse tables in database.
+            log.info(OiyokanInitializrMessages.IYI2101);
 
             traverseTable(oiyoInfo, oiyoSettings);
         } catch (ODataApplicationException ex) {
@@ -97,18 +99,21 @@ public class OiyokanInitializrApp {
             log.error("Fail to close database. Check database settings: " + ex.toString());
         }
 
-        // [IYI1201] Tune settings info."
-        log.info(OiyokanInitializrMessages.IYI1201);
+        // [IYI3101] Tune settings info.
+        log.info(OiyokanInitializrMessages.IYI3101);
         tuneSettings(oiyoInfo, oiyoSettings, isSfdcMode);
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json
 
         try {
-            // [IYI1301] Write settings info into `oiyokan-settings.json`.
-            log.info(OiyokanInitializrMessages.IYI1301);
+            // [IYI4101] Write settings info into `oiyokan-settings.json`.
+            log.info(OiyokanInitializrMessages.IYI4101);
             targetJsonFile.getParentFile().mkdirs();
             writeToFile(oiyoSettings, targetJsonFile);
+
+            // [IYI4102] Check the `oiyokan-settings.json`.
+            log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -129,14 +134,18 @@ public class OiyokanInitializrApp {
             throws SQLException, ODataApplicationException {
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
 
-        // [IYI1111] Connect to database.
-        log.info(OiyokanInitializrMessages.IYI1111 + ": " + database.getName());
+        // [IYI2111] Connect to database.
+        log.info(OiyokanInitializrMessages.IYI2111 + ": " + database.getName());
         try (Connection connTargetDb = OiyoCommonJdbcUtil.getConnection(database)) {
+            // [IYI2102] DEBUG: Traverse TABLE.
+            log.debug(OiyokanInitializrMessages.IYI2102);
             ResultSet rsTables = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE" });
             for (; rsTables.next();) {
                 final String tableName = rsTables.getString("TABLE_NAME");
 
                 try {
+                    // [IYI2112] DEBUG: Read table.
+                    log.debug(OiyokanInitializrMessages.IYI2112 + ": " + tableName);
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
                     oiyoSettings.getEntitySet().add(entitySet);
@@ -144,15 +153,20 @@ public class OiyokanInitializrApp {
                     entitySet.setOmitCountAll(false);
 
                 } catch (Exception ex) {
-                    log.warn("Fail to read table: " + tableName);
+                    // [IYI2113] WARN: Fail to read table.
+                    log.warn(OiyokanInitializrMessages.IYI2113 + ": " + tableName);
                 }
             }
 
+            // [IYI2103] DEBUG: Traverse VIEW.
+            log.debug(OiyokanInitializrMessages.IYI2103);
             ResultSet rsViews = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "VIEW" });
             for (; rsViews.next();) {
                 final String viewName = rsViews.getString("TABLE_NAME");
 
                 try {
+                    // [IYI2114] DEBUG: Read view.
+                    log.debug(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
                     oiyoSettings.getEntitySet().add(entitySet);
@@ -164,7 +178,8 @@ public class OiyokanInitializrApp {
                     entitySet.setCanUpdate(false);
                     entitySet.setCanDelete(false);
                 } catch (Exception ex) {
-                    log.warn("Fail to read view: " + viewName);
+                    // [IYI2115] WARN: Fail to read view.
+                    log.warn(OiyokanInitializrMessages.IYI2115 + ": " + viewName);
                 }
             }
         }
