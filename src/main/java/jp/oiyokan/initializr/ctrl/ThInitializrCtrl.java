@@ -28,10 +28,10 @@ import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
 
 @Controller
-public class ThIndexCtrl {
-    private static final Log log = LogFactory.getLog(ThIndexCtrl.class);
+public class ThInitializrCtrl {
+    private static final Log log = LogFactory.getLog(ThInitializrCtrl.class);
 
-    @RequestMapping(value = { "/", "/index.html" }, method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, OiyoSettingsDatabase database, BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
@@ -55,10 +55,10 @@ public class ThIndexCtrl {
         database.setJdbcUser(""); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
 
-        return "index";
+        return "oiyokan/initializr";
     }
 
-    @RequestMapping(value = { "/entry" }, params = { "connTest" }, method = { RequestMethod.POST })
+    @RequestMapping(value = { "/initializr" }, params = { "connTest" }, method = { RequestMethod.POST })
     public String connTest(Model model, OiyoSettingsDatabase database, BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
@@ -101,10 +101,10 @@ public class ThIndexCtrl {
             model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202);
         }
 
-        return "index";
+        return "oiyokan/initializr";
     }
 
-    @RequestMapping(value = { "/entry" }, params = "download", method = { RequestMethod.POST })
+    @RequestMapping(value = { "/initializr" }, params = "download", method = { RequestMethod.POST })
     public String entry(Model model, OiyoSettingsDatabase database, HttpServletResponse response) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
@@ -119,7 +119,6 @@ public class ThIndexCtrl {
         // [IYI1101] Prepare database settings.
         log.info(OiyokanInitializrMessages.IYI1101);
         OiyoInfo oiyoInfo = new OiyoInfo();
-        oiyoInfo.setPassphrase(OiyokanConstants.OIYOKAN_PASSPHRASE);
 
         OiyoSettings oiyoSettings = new OiyoSettings();
         oiyoSettings.setNamespace("Oiyokan"); // Namespace of OData
