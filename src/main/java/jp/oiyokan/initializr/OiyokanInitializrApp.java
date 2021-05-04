@@ -16,6 +16,7 @@
 package jp.oiyokan.initializr;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -25,11 +26,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.CaseUtils;
 import org.apache.olingo.server.api.ODataApplicationException;
+import org.h2.util.IOUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -99,9 +103,11 @@ public class OiyokanInitializrApp {
 
             traverseTable(oiyoInfo, oiyoSettings);
         } catch (ODataApplicationException ex) {
-            log.error("Fail to connect database. Check database settings: " + ex.toString());
+            // [IYI2201] ERROR: Fail to connect database. Check database settings.
+            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
         } catch (SQLException ex) {
-            log.error("Fail to close database. Check database settings: " + ex.toString());
+            // [IYI2202] ERROR: Fail to close database. Check database settings.
+            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
         }
 
         // [IYI3101] Tune settings info.
@@ -120,7 +126,21 @@ public class OiyokanInitializrApp {
             // [IYI4102] Check the `oiyokan-settings.json`.
             log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // [IYI4201] ERROR: Fail to generate json file.
+            log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
+        }
+
+        try {
+            // [IYI5101] Generate zip file into `oiyokan-demo.zip`.
+            log.info(OiyokanInitializrMessages.IYI5101);
+            File fileZipTarget = new File("./target/generated-oiyokan/oiyokan-demo.zip");
+            packageToZipFile(new File("./src/main/resources/oiyokan-web-template"), targetJsonFile, fileZipTarget);
+
+            // [IYI5102] Check the `oiyokan-demo.zip`.
+            log.info(OiyokanInitializrMessages.IYI5102 + ": " + fileZipTarget.getCanonicalPath());
+        } catch (IOException ex) {
+            // [IYI5201] ERROR: Fail to generate zip file.
+            log.error(OiyokanInitializrMessages.IYI5201 + ": " + ex.toString(), ex);
         }
 
         // [IYI1002] Oiyokan Initializr End.
@@ -261,5 +281,35 @@ public class OiyokanInitializrApp {
         } else {
             return CaseUtils.toCamelCase(input, true, CAMEL_DELIMITER_CHARS);
         }
+    }
+
+    private static final String[] TEMPLATE_FILES = new String[] { "pom.xml", "system.properties", //
+            "src/main/java/com/example/DemoOData4App.java", //
+            "src/main/java/com/example/DemoOData4Register.java", //
+            "src/main/resources/oiyokan/memo.txt", //
+            "src/main/resources/static/error.html", //
+            "src/main/resources/static/index.html", //
+            "src/main/resources/application.properties", //
+            "src/test/resources/logback-test.xml",//
+    };
+
+    static void packageToZipFile(final File inputTemplateProjectDir, final File inputJsonFile, final File targetZipFile)
+            throws IOException {
+        final String ROOT_PATH = "./src/main/resources/oiyokan-web-template/";
+
+        final ZipArchiveOutputStream outZip = new ZipArchiveOutputStream(targetZipFile);
+
+        for (String fileName : TEMPLATE_FILES) {
+            outZip.putArchiveEntry(new ZipArchiveEntry(fileName));
+            IOUtils.copyAndCloseInput(new FileInputStream(ROOT_PATH + fileName), outZip);
+            outZip.closeArchiveEntry();
+        }
+
+        outZip.putArchiveEntry(new ZipArchiveEntry("src/main/resources/oiyokan/oiyokan-settings.json"));
+        IOUtils.copyAndCloseInput(new FileInputStream(inputJsonFile), outZip);
+        outZip.closeArchiveEntry();
+
+        outZip.flush();
+        outZip.close();
     }
 }
