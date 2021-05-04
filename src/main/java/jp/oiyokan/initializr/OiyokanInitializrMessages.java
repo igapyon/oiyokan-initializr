@@ -37,7 +37,7 @@ public class OiyokanInitializrMessages {
     public static final String IYI3101 = "[IYI3101] Tune settings info.";
 
     public static final String IYI4101 = "[IYI4101] Write settings info into `oiyokan-settings.json`.";
-    public static final String IYI4102 = "[IYI4102] Check the `oiyokan-settings.json`.";
+    public static final String IYI4102 = "[IYI4102] `oiyokan-settings.json` generated internally.";
     public static final String IYI4201 = "[IYI4201] ERROR: Fail to generate json file.";
 
     public static final String IYI5101 = "[IYI5101] Generate zip file into `oiyokan-demo.zip`.";
