@@ -124,14 +124,19 @@ public class OiyokanInitializrApp {
             // [IYI4102] Check the `oiyokan-settings.json`.
             log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error("Fail to generate json file: " + ex.toString(), ex);
         }
 
         try {
+            // [IYI5101] Generate zip file into `oiyokan-demo.zip`.
+            log.info(OiyokanInitializrMessages.IYI5101);
             packageToZipFile(new File("./src/main/resources/oiyokan-web-template"), targetJsonFile,
                     new File("./target/generated-oiyokan/oiyokan-demo.zip"));
+
+            // [IYI5102] Check the `oiyokan-demo.zip`.
+            log.info(OiyokanInitializrMessages.IYI5102 + ": " + targetJsonFile.getCanonicalPath());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error("Fail to generate zip file: " + ex.toString(), ex);
         }
 
         // [IYI1002] Oiyokan Initializr End.
