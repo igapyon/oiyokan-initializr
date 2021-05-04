@@ -64,6 +64,7 @@ public class OiyokanInitializrMain {
         database.setJdbcUser(""); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
 
+        boolean processView = false;
         boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
         boolean isSfdcMode = true; // Support Salesforce or not.
 
@@ -71,7 +72,7 @@ public class OiyokanInitializrMain {
         // Process settings
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, processView);
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);

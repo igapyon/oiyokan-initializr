@@ -122,6 +122,10 @@
               <input type="checkbox" id="FilterTreatNullAsBlank" th:field="${initializerBean.FilterTreatNullAsBlank}" />
               <label for="FilterTreatNullAsBlank">Treat null as blank. Check it for Salesforce</label>
             </div>
+            <div class="col-md-8 mb-3">
+              <input type="checkbox" id="processView" th:field="${initializerBean.processView}" />
+              <label for="processView">Process VIEW (for Oiyokan experts)</label>
+            </div>
           </div>
 
           <button class="btn btn-secondary btn-lg" type="submit" name="connTest">Connection Test</button>

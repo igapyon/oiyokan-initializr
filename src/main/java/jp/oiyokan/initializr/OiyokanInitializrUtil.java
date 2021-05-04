@@ -61,12 +61,13 @@ public class OiyokanInitializrUtil {
     /**
      * Traverse tables.
      * 
-     * @param oiyoInfo     OiyoInfo info for passphrase.
-     * @param oiyoSettings OiyoSettings info.
+     * @param oiyoInfo      OiyoInfo info for passphrase.
+     * @param oiyoSettings  OiyoSettings info.
+     * @param isProcessView Process View. default:false.
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
-    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings)
+    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView)
             throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
         log.info(OiyokanInitializrMessages.IYI2101);
@@ -97,28 +98,30 @@ public class OiyokanInitializrUtil {
                 }
             }
 
-            // [IYI2103] DEBUG: Traverse VIEW.
-            log.debug(OiyokanInitializrMessages.IYI2103);
-            ResultSet rsViews = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "VIEW" });
-            for (; rsViews.next();) {
-                final String viewName = rsViews.getString("TABLE_NAME");
+            if (isProcessView) {
+                // [IYI2103] DEBUG: Traverse VIEW.
+                log.debug(OiyokanInitializrMessages.IYI2103);
+                ResultSet rsViews = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "VIEW" });
+                for (; rsViews.next();) {
+                    final String viewName = rsViews.getString("TABLE_NAME");
 
-                try {
-                    // [IYI2114] DEBUG: Read view.
-                    log.debug(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
-                    final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
-                            connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
-                    oiyoSettings.getEntitySet().add(entitySet);
-                    entitySet.setDbSettingName(database.getName());
-                    entitySet.setOmitCountAll(true);
+                    try {
+                        // [IYI2114] DEBUG: Read view.
+                        log.debug(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
+                        final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
+                                connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
+                        oiyoSettings.getEntitySet().add(entitySet);
+                        entitySet.setDbSettingName(database.getName());
+                        entitySet.setOmitCountAll(true);
 
-                    // VIEWは Create, Update, Delete を抑止.
-                    entitySet.setCanCreate(false);
-                    entitySet.setCanUpdate(false);
-                    entitySet.setCanDelete(false);
-                } catch (Exception ex) {
-                    // [IYI2115] WARN: Fail to read view.
-                    log.warn(OiyokanInitializrMessages.IYI2115 + ": " + viewName);
+                        // VIEWは Create, Update, Delete を抑止.
+                        entitySet.setCanCreate(false);
+                        entitySet.setCanUpdate(false);
+                        entitySet.setCanDelete(false);
+                    } catch (Exception ex) {
+                        // [IYI2115] WARN: Fail to read view.
+                        log.warn(OiyokanInitializrMessages.IYI2115 + ": " + viewName);
+                    }
                 }
             }
         }

@@ -109,7 +109,7 @@ public class ThInitializrCtrl {
         }
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializerBean.isProcessView());
 
             // TODO message
             model.addAttribute("msgSuccess", "Connection test success.");
@@ -155,7 +155,7 @@ public class ThInitializrCtrl {
         // Process settings
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializerBean.isProcessView());
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
