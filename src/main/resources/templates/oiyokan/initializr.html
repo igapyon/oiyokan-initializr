@@ -60,70 +60,63 @@
       </div>
 
       <div class="row">
-        <div class="col-md-8 order-md-1">
+        <div class="col-md-6 order-md-1">
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="name">DB setting name</label>
-              <input type="text" class="form-control" id="name" th:field="*{name}" />
+            <label for="name">DB setting name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" />
+          </div>
+          <div class="row">
+            <label for="type">DB type</label>
+            <select class="custom-select d-block w-100" id="type" required th:field="*{type}">
+              <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
+              <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
+              <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
+              <option th:value="SQLSV2008" th:text="SQLSV2008" th:selected="${type == 'SQLSV2008'}" />
+              <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
+            </select>
+            <div class="invalid-feedback">
+              Please select a valid pref.
             </div>
           </div>
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="type">DB type</label>
-              <select class="custom-select d-block w-100" id="type" required th:field="*{type}">
-                <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
-                <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
-                <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
-                <option th:value="SQLSV2008" th:text="SQLSV2008" th:selected="${type == 'SQLSV2008'}" />
-                <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid pref.
-              </div>
-            </div>
+            <label for="description">Description of db settings</label>
+            <input type="text" class="form-control" id="description" th:field="*{description}" />
           </div>
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="description">Description of db settings</label>
-              <input type="text" class="form-control" id="description" th:field="*{description}" />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="jdbcDriver">JDBC Driver class name</label>
+            <label for="jdbcDriver">JDBC Driver class name</label>
 
-              <input type="text" class="form-control" id="jdbcDriver" th:field="*{jdbcDriver}" />
-            </div>
+            <input type="text" class="form-control" id="jdbcDriver" th:field="*{jdbcDriver}" />
           </div>
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="jdbcUrl">JDBC URL</label>
-              <input type="text" class="form-control" id="jdbcUrl" th:field="*{jdbcUrl}" />
-            </div>
+            <label for="jdbcUrl">JDBC URL</label>
+            <input type="text" class="form-control" id="jdbcUrl" th:field="*{jdbcUrl}" />
           </div>
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="jdbcUser">JDBC User</label>
-              <input type="text" class="form-control" id="jdbcUser" th:field="*{jdbcUser}" />
-            </div>
+            <label for="jdbcUser">JDBC User</label>
+            <input type="text" class="form-control" id="jdbcUser" th:field="*{jdbcUser}" />
           </div>
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <label for="jdbcPassPlain">JDBC Password (plain text)</label>
-              <input type="text" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
-            </div>
+            <label for="jdbcPassPlain">JDBC Password (plain text)</label>
+            <input type="text" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
           </div>
           <div class="row">
-            <div class="col-md-8 mb-3">
-              <input type="checkbox" id="convertCamel" th:field="${initializerBean.convertCamel}" />
+            <div class="form-group">
+              <input type="checkbox" class="form-check-input" id="convertCamel"
+                th:field="${initializerBean.convertCamel}" />
               <label for="convertCamel">Convert Camel Name</label>
             </div>
-            <div class="col-md-8 mb-3">
-              <input type="checkbox" id="FilterTreatNullAsBlank" th:field="${initializerBean.FilterTreatNullAsBlank}" />
+          </div>
+          <div class="row">
+            <div class="form-group">
+              <input type="checkbox" class="form-check-input" id="FilterTreatNullAsBlank"
+                th:field="${initializerBean.FilterTreatNullAsBlank}" />
               <label for="FilterTreatNullAsBlank">Treat null as blank. Check it for Salesforce</label>
             </div>
-            <div class="col-md-8 mb-3">
-              <input type="checkbox" id="processView" th:field="${initializerBean.processView}" />
+          </div>
+          <div class="row">
+            <div class="form-group">
+              <input type="checkbox" class="form-check-input" id="processView"
+                th:field="${initializerBean.processView}" />
               <label for="processView">Process VIEW (for Oiyokan experts)</label>
             </div>
           </div>
@@ -133,7 +126,7 @@
         </div>
       </div>
     </form>
-  </div>
+  </div> <!-- Container -->
 
   <hr />
 
