@@ -48,19 +48,19 @@
 
     <h3>Database settings for Oiyokan</h3>
 
-    <div class="row">
-      <div class="col-md-8 order-md-1">
-        <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
-          <div class="row">
-            <div class="col-md-8 mb-3">
-              <button class="btn btn-secondary btn-sm" type="submit" name="preH2">h2</button>
-              <button class="btn btn-secondary btn-sm" type="submit" name="prePostgreSQL">PostgreSQL</button>
-              <button class="btn btn-secondary btn-sm" type="submit" name="preMySQL">MySQL</button>
-              <button class="btn btn-secondary btn-sm" type="submit" name="preSQLSV2008">SQLSV2008</button>
-              <button class="btn btn-secondary btn-sm" type="submit" name="preORCL18">ORCL18</button>
-            </div>
-          </div>
+    <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <button class="btn btn-secondary btn-sm" type="submit" name="preH2">h2</button>
+          <button class="btn btn-secondary btn-sm" type="submit" name="prePostgreSQL">PostgreSQL</button>
+          <button class="btn btn-secondary btn-sm" type="submit" name="preMySQL">MySQL</button>
+          <button class="btn btn-secondary btn-sm" type="submit" name="preSQLSV2008">SQLSV2008</button>
+          <button class="btn btn-secondary btn-sm" type="submit" name="preORCL18">ORCL18</button>
+        </div>
+      </div>
 
+      <div class="row">
+        <div class="col-md-8 order-md-1">
           <div class="row">
             <div class="col-md-8 mb-3">
               <label for="name">DB setting name</label>
@@ -130,9 +130,9 @@
 
           <button class="btn btn-secondary btn-lg" type="submit" name="connTest">Connection Test</button>
           <button class="btn btn-primary btn-lg" type="submit" name="download">GENERATE</button>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <hr />
