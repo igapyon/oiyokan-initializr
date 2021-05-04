@@ -103,9 +103,11 @@ public class OiyokanInitializrApp {
 
             traverseTable(oiyoInfo, oiyoSettings);
         } catch (ODataApplicationException ex) {
-            log.error("Fail to connect database. Check database settings: " + ex.toString());
+            // [IYI2201] ERROR: Fail to connect database. Check database settings.
+            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
         } catch (SQLException ex) {
-            log.error("Fail to close database. Check database settings: " + ex.toString());
+            // [IYI2202] ERROR: Fail to close database. Check database settings.
+            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
         }
 
         // [IYI3101] Tune settings info.
@@ -124,19 +126,21 @@ public class OiyokanInitializrApp {
             // [IYI4102] Check the `oiyokan-settings.json`.
             log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
         } catch (IOException ex) {
-            log.error("Fail to generate json file: " + ex.toString(), ex);
+            // [IYI4201] ERROR: Fail to generate json file.
+            log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
         }
 
         try {
             // [IYI5101] Generate zip file into `oiyokan-demo.zip`.
             log.info(OiyokanInitializrMessages.IYI5101);
-            packageToZipFile(new File("./src/main/resources/oiyokan-web-template"), targetJsonFile,
-                    new File("./target/generated-oiyokan/oiyokan-demo.zip"));
+            File fileZipTarget = new File("./target/generated-oiyokan/oiyokan-demo.zip");
+            packageToZipFile(new File("./src/main/resources/oiyokan-web-template"), targetJsonFile, fileZipTarget);
 
             // [IYI5102] Check the `oiyokan-demo.zip`.
-            log.info(OiyokanInitializrMessages.IYI5102 + ": " + targetJsonFile.getCanonicalPath());
+            log.info(OiyokanInitializrMessages.IYI5102 + ": " + fileZipTarget.getCanonicalPath());
         } catch (IOException ex) {
-            log.error("Fail to generate zip file: " + ex.toString(), ex);
+            // [IYI5201] ERROR: Fail to generate zip file.
+            log.error(OiyokanInitializrMessages.IYI5201 + ": " + ex.toString(), ex);
         }
 
         // [IYI1002] Oiyokan Initializr End.
