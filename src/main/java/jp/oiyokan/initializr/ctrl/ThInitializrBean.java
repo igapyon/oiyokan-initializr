@@ -2,7 +2,7 @@ package jp.oiyokan.initializr.ctrl;
 
 public class ThInitializrBean {
     boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
-    boolean isFilterTreatNullAsBlank = true; // Support Salesforce or not.
+    boolean isFilterTreatNullAsBlank = false; // Support Salesforce or not.
 
     public boolean isConvertCamel() {
         return convertCamel;

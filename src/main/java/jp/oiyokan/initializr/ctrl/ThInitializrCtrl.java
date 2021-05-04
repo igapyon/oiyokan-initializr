@@ -166,7 +166,8 @@ public class ThInitializrCtrl {
             database.setDescription(OiyokanInitializrMessages.IYI2202);
         }
 
-        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializerBean.isConvertCamel(), initializerBean.isFilterTreatNullAsBlank);
+        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializerBean.isConvertCamel(),
+                initializerBean.isFilterTreatNullAsBlank);
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json
@@ -221,7 +222,8 @@ public class ThInitializrCtrl {
             database.setDescription("Tutorial db sample.");
         }
         database.setJdbcDriver("org.h2.Driver"); // JDBC Driver class name.
-        database.setJdbcUrl("jdbc:h2:file:./oiyokanTest;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE;MODE=MSSQLServer");
+        database.setJdbcUrl(
+                "jdbc:h2:file:./src/main/resources/db/oiyokanTest;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE;MODE=MSSQLServer");
         database.setJdbcUser("sa"); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
 
