@@ -48,7 +48,7 @@
       <div class="alert alert-danger" role="alert"><span th:text="${msgError}" th:remove="tag" /></div>
     </div>
 
-    <h3>Database settings info to bind to Oiyokan OData v4 server.</h3>
+    <h3>Database settings for Oiyokan</h3>
     <div class="row">
       <div class="col-md-8 order-md-1">
         <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
@@ -61,7 +61,16 @@
           <div class="row">
             <div class="col-md-8 mb-3">
               <label for="type">DB type</label>
-              <input type="text" class="form-control" id="type" th:field="*{type}" />
+              <select class="custom-select d-block w-100" id="type" required th:field="*{type}">
+                <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
+                <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
+                <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
+                <option th:value="SQLSV2008" th:text="SQLSV2008" th:selected="${type == 'SQLSV2008'}" />
+                <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid pref.
+              </div>
             </div>
           </div>
           <div class="row">
