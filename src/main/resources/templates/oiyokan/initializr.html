@@ -20,7 +20,7 @@
     <div class="jumbotron" style="padding:5rem 2rem 1rem 2rem;">
       <div class="container">
         <h1 class="display-3">Oiyokan Initializr</h1>
-        <p>Generate Oiyokan settings file `oiyokan-settings.json`.
+        <p>Oiyokan Initializr generates oiyokan project with `oiyokan-settings.json`.
           <a href="https://github.com/igapyon/oiyokan">
             <span style="font-size: 1.5em">
 
@@ -49,9 +49,20 @@
     </div>
 
     <h3>Database settings for Oiyokan</h3>
+
     <div class="row">
       <div class="col-md-8 order-md-1">
         <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <button class="btn btn-secondary btn-sm" type="submit" name="preH2">h2</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="prePostgreSQL">PostgreSQL</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="preMySQL">MySQL</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="preSQLSV2008">SQLSV2008</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="preORCL18">ORCL18</button>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-md-8 mb-3">
               <label for="name">DB setting name</label>
@@ -101,7 +112,17 @@
           <div class="row">
             <div class="col-md-8 mb-3">
               <label for="jdbcPassPlain">JDBC Password (plain text)</label>
-              <input type="password" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
+              <input type="text" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <input type="checkbox" id="convertCamel" th:field="${initializerBean.convertCamel}" />
+              <label for="convertCamel">Convert Camel Name</label>
+            </div>
+            <div class="col-md-8 mb-3">
+              <input type="checkbox" id="FilterTreatNullAsBlank" th:field="${initializerBean.FilterTreatNullAsBlank}" />
+              <label for="FilterTreatNullAsBlank">Treat null as blank. Check it for Salesforce</label>
             </div>
           </div>
 
