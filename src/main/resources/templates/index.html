@@ -41,8 +41,12 @@
   </main>
 
   <div class="container">
-    <div class="alert alert-success" role="alert"><span th:text="${msgSuccess}" th:remove="tag" /></div>
-    <div class="alert alert-danger" role="alert"><span th:text="${msgError}" th:remove="tag" /></div>
+    <div th:if="${msgSuccess ne null && msgSuccess != ''}" th:remove="tag">
+      <div class="alert alert-success" role="alert"><span th:text="${msgSuccess}" th:remove="tag" /></div>
+    </div>
+    <div th:if="${msgError ne null && msgError != ''}" th:remove="tag">
+      <div class="alert alert-danger" role="alert"><span th:text="${msgError}" th:remove="tag" /></div>
+    </div>
 
     <h3>Database settings info to bind to Oiyokan OData v4 server.</h3>
     <div class="row">

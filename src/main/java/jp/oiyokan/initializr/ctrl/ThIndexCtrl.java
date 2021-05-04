@@ -95,11 +95,11 @@ public class ThIndexCtrl {
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
-            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201);
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
-            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202);
         }
 
         return "index";
@@ -141,11 +141,11 @@ public class ThIndexCtrl {
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
-            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201);
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
-            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202);
         }
 
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, convertCamel, isSfdcMode);
@@ -177,7 +177,7 @@ public class ThIndexCtrl {
             log.info(OiyokanInitializrMessages.IYI5102 + ": oiyokan-demo.zip");
         } catch (IOException ex) {
             // [IYI5201] ERROR: Fail to generate zip file.
-            log.error(OiyokanInitializrMessages.IYI5201 + ": " + ex.toString(), ex);
+            log.error(OiyokanInitializrMessages.IYI5201, ex);
         }
 
         // [IYI1002] Oiyokan Initializr End.
