@@ -211,8 +211,11 @@ public class OiyokanInitializrUtil {
             "src/main/java/com/example/DemoOData4App.java", //
             "src/main/java/com/example/DemoOData4Register.java", //
             "src/main/resources/oiyokan/memo.txt", //
-            "src/main/resources/static/error.html", //
             "src/main/resources/static/index.html", //
+            "src/main/resources/static/static/css/bootstrap.min.css", //
+            "src/main/resources/static/static/js/bootstrap.min.js", //
+            "src/main/resources/static/static/js/jquery-3.6.0.min.js", //
+            "src/main/resources/templates/error.html", //
             "src/main/resources/application.properties", //
             "src/test/resources/logback-test.xml",//
     };
