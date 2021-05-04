@@ -24,11 +24,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.text.CaseUtils;
 import org.apache.olingo.server.api.ODataApplicationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +40,7 @@ import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 import jp.oiyokan.dto.OiyoSettingsEntitySet;
+import jp.oiyokan.dto.OiyoSettingsEntityType;
 import jp.oiyokan.dto.OiyoSettingsProperty;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
@@ -50,12 +51,21 @@ import jp.oiyokan.util.OiyoEncryptUtil;
 public class OiyokanInitializrApp {
     private static final Log log = LogFactory.getLog(OiyokanInitializrApp.class);
 
+    /**
+     * EntitySetなどの名称を Camel case にするかどうか。通常は false で良い。
+     */
+    private static final boolean CONVERT_CAMEL = false;
+    private static final char[] CAMEL_DELIMITER_CHARS = new char[] { '.', '-', '_', '@' };
+
     public static void main(String[] args) {
-        log.info("Oiyokan Initializr v" + OiyokanInitializrConstants.VERSION + ": begin.");
+        // [IYI1001] Oiyokan Initializr Begin.
+        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
+        // [IYI1101] Prepare database settings.
+        log.info(OiyokanInitializrMessages.IYI1101);
         OiyoInfo oiyoInfo = new OiyoInfo();
         oiyoInfo.setPassphrase(OiyokanConstants.OIYOKAN_PASSPHRASE);
 
@@ -84,7 +94,9 @@ public class OiyokanInitializrApp {
         // Process settings
 
         try {
-            log.info("Oiyokan Initializr: traverse tables.");
+            // [IYI2101] Traverse tables in database.
+            log.info(OiyokanInitializrMessages.IYI2101);
+
             traverseTable(oiyoInfo, oiyoSettings);
         } catch (ODataApplicationException ex) {
             log.error("Fail to connect database. Check database settings: " + ex.toString());
@@ -92,21 +104,27 @@ public class OiyokanInitializrApp {
             log.error("Fail to close database. Check database settings: " + ex.toString());
         }
 
-        log.info("Oiyokan Initializr: tune settings info.");
+        // [IYI3101] Tune settings info.
+        log.info(OiyokanInitializrMessages.IYI3101);
         tuneSettings(oiyoInfo, oiyoSettings, isSfdcMode);
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json
 
         try {
-            log.info("Oiyokan Initializr: write settings info into `oiyokan-settings.json`.");
+            // [IYI4101] Write settings info into `oiyokan-settings.json`.
+            log.info(OiyokanInitializrMessages.IYI4101);
             targetJsonFile.getParentFile().mkdirs();
             writeToFile(oiyoSettings, targetJsonFile);
+
+            // [IYI4102] Check the `oiyokan-settings.json`.
+            log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
-        log.info("Oiyokan Initializr: end.");
+        // [IYI1002] Oiyokan Initializr End.
+        log.info(OiyokanInitializrMessages.IYI1002);
     }
 
     /**
@@ -120,34 +138,55 @@ public class OiyokanInitializrApp {
     static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings)
             throws SQLException, ODataApplicationException {
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
+
+        // [IYI2111] Connect to database.
+        log.info(OiyokanInitializrMessages.IYI2111 + ": " + database.getName());
         try (Connection connTargetDb = OiyoCommonJdbcUtil.getConnection(database)) {
-            final List<String> tableNameList = new ArrayList<>();
+            // [IYI2102] DEBUG: Traverse TABLE.
+            log.debug(OiyokanInitializrMessages.IYI2102);
+            ResultSet rsTables = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE" });
+            for (; rsTables.next();) {
+                final String tableName = rsTables.getString("TABLE_NAME");
 
-            ResultSet rset = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE", "VIEW" });
-            for (; rset.next();) {
-                final String tableName = rset.getString("TABLE_NAME");
-                tableNameList.add(tableName);
-            }
-
-            Collections.sort(tableNameList);
-
-            for (String tableName : tableNameList) {
                 try {
+                    // [IYI2112] DEBUG: Read table.
+                    log.debug(OiyokanInitializrMessages.IYI2112 + ": " + tableName);
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
                     oiyoSettings.getEntitySet().add(entitySet);
                     entitySet.setDbSettingName(database.getName());
+                    entitySet.setOmitCountAll(false);
+
                 } catch (Exception ex) {
-                    log.warn("Fail to read table: " + tableName);
+                    // [IYI2113] WARN: Fail to read table.
+                    log.warn(OiyokanInitializrMessages.IYI2113 + ": " + tableName);
                 }
             }
 
-            Collections.sort(oiyoSettings.getEntitySet(), new Comparator<OiyoSettingsEntitySet>() {
-                @Override
-                public int compare(OiyoSettingsEntitySet o1, OiyoSettingsEntitySet o2) {
-                    return o1.getName().compareTo(o2.getName());
+            // [IYI2103] DEBUG: Traverse VIEW.
+            log.debug(OiyokanInitializrMessages.IYI2103);
+            ResultSet rsViews = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "VIEW" });
+            for (; rsViews.next();) {
+                final String viewName = rsViews.getString("TABLE_NAME");
+
+                try {
+                    // [IYI2114] DEBUG: Read view.
+                    log.debug(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
+                    final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
+                            connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
+                    oiyoSettings.getEntitySet().add(entitySet);
+                    entitySet.setDbSettingName(database.getName());
+                    entitySet.setOmitCountAll(true);
+
+                    // VIEWは Create, Update, Delete を抑止.
+                    entitySet.setCanCreate(false);
+                    entitySet.setCanUpdate(false);
+                    entitySet.setCanDelete(false);
+                } catch (Exception ex) {
+                    // [IYI2115] WARN: Fail to read view.
+                    log.warn(OiyokanInitializrMessages.IYI2115 + ": " + viewName);
                 }
-            });
+            }
         }
     }
 
@@ -166,7 +205,20 @@ public class OiyokanInitializrApp {
         database.setJdbcPassPlain(null);
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-            for (OiyoSettingsProperty property : entitySet.getEntityType().getProperty()) {
+            entitySet.setName(adjustName(entitySet.getName()));
+            entitySet.setJdbcStmtTimeout(30);
+
+            final OiyoSettingsEntityType entityType = entitySet.getEntityType();
+            entityType.setName(adjustName(entityType.getName()));
+
+            for (int index = 0; index < entityType.getKeyName().size(); index++) {
+                String keyName = entityType.getKeyName().get(index);
+                entityType.getKeyName().set(index, adjustName(keyName));
+            }
+
+            for (OiyoSettingsProperty property : entityType.getProperty()) {
+                property.setName(adjustName(property.getName()));
+
                 if ("Edm.String".equals(property.getEdmType())) {
                     if (isSfdcMode) {
                         property.setFilterTreatNullAsBlank(true);
@@ -174,6 +226,13 @@ public class OiyokanInitializrApp {
                 }
             }
         }
+
+        Collections.sort(oiyoSettings.getEntitySet(), new Comparator<OiyoSettingsEntitySet>() {
+            @Override
+            public int compare(OiyoSettingsEntitySet o1, OiyoSettingsEntitySet o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
     }
 
     /**
@@ -191,5 +250,16 @@ public class OiyokanInitializrApp {
         writer.flush();
 
         FileUtils.writeStringToFile(targetJsonFile, writer.toString(), "UTF-8");
+    }
+
+    static String adjustName(String input) {
+        if (!CONVERT_CAMEL) {
+            for (int index = 0; index < CAMEL_DELIMITER_CHARS.length; index++) {
+                input = input.replaceAll("[" + CAMEL_DELIMITER_CHARS[index] + "]", "_");
+            }
+            return input;
+        } else {
+            return CaseUtils.toCamelCase(input, true, CAMEL_DELIMITER_CHARS);
+        }
     }
 }
