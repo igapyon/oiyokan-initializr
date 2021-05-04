@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -87,6 +89,22 @@ public class ThInitializrCtrl {
         // Process settings
 
         try {
+            if (database.getJdbcUser() == null || database.getJdbcUser().trim().length() == 0) {
+                try (Connection conn = DriverManager.getConnection(database.getJdbcUrl())) {
+                }
+            } else {
+                try (Connection conn = DriverManager.getConnection(database.getJdbcUrl(), database.getJdbcUser(),
+                        database.getJdbcPassPlain())) {
+                }
+            }
+        } catch (SQLException ex) {
+            // [IYI2201] ERROR: Fail to connect database. Check database settings.
+            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201);
+            return "oiyokan/initializr";
+        }
+
+        try {
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings);
 
             // TODO message
@@ -100,7 +118,6 @@ public class ThInitializrCtrl {
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
             model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202);
         }
-
         return "oiyokan/initializr";
     }
 
