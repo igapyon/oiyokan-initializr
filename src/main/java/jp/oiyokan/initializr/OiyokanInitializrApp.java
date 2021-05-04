@@ -94,9 +94,6 @@ public class OiyokanInitializrApp {
 
         boolean isSfdcMode = true; // Support Salesforce or not.
 
-        // Target file name to generate.
-        File targetJsonFile = new File("./target/generated-oiyokan/oiyokan-settings.json");
-
         //////////////////////////////////////////////////////////
         // Process settings
 
@@ -124,11 +121,10 @@ public class OiyokanInitializrApp {
         try {
             // [IYI4101] Write settings info into `oiyokan-settings.json`.
             log.info(OiyokanInitializrMessages.IYI4101);
-            targetJsonFile.getParentFile().mkdirs();
             jsonString = oiyoSettings2String(oiyoSettings);
 
             // [IYI4102] `oiyokan-settings.json` generated internally.
-            log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
+            log.info(OiyokanInitializrMessages.IYI4102);
         } catch (IOException ex) {
             // [IYI4201] ERROR: Fail to generate json file.
             log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
@@ -140,6 +136,7 @@ public class OiyokanInitializrApp {
             File fileZipTarget = new File("./target/generated-oiyokan/oiyokan-demo.zip");
             final byte[] zipFile = packageZipFile(new File("./src/main/resources/oiyokan-web-template"), jsonString);
 
+            fileZipTarget.getParentFile().mkdirs();
             FileUtils.writeByteArrayToFile(fileZipTarget, zipFile);
 
             // [IYI5102] Check the `oiyokan-demo.zip`.
