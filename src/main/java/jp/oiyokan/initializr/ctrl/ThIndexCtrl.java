@@ -59,7 +59,7 @@ public class ThIndexCtrl {
         return "index";
     }
 
-    @RequestMapping(value = { "/entry" }, params = { "connTest" }, method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = { "/entry" }, params = { "connTest" }, method = { RequestMethod.POST })
     public String connTest(Model model, OiyoSettingsDatabase database, BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
@@ -105,7 +105,8 @@ public class ThIndexCtrl {
         return "index";
     }
 
-    @RequestMapping(value = { "/entry" }, params = "download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @RequestMapping(value = { "/entry" }, params = "download", method = {
+            RequestMethod.POST }, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public String entry(Model model, OiyoSettingsDatabase database, HttpServletResponse response) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("msgSuccess", "");
