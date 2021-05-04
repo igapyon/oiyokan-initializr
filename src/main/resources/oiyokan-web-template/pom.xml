@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>jp.igapyon.oiyokan</groupId>
 			<artifactId>oiyokan</artifactId>
-			<version>1.11.20210503h-SNAPSHOT</version>
+			<version>1.11.20210504a-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

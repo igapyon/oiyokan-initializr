@@ -80,6 +80,13 @@
 			<version>1.11.20210503h-SNAPSHOT</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.20</version>
+		</dependency>
+
 		<!-- v0.5 にて spring-boot-starter-thymeleaf および spring-boot-starter-web 
 			に対応したい -->
 

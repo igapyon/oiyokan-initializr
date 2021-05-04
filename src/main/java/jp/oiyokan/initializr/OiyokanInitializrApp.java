@@ -16,6 +16,7 @@
 package jp.oiyokan.initializr;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -25,11 +26,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.CaseUtils;
 import org.apache.olingo.server.api.ODataApplicationException;
+import org.h2.util.IOUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -119,6 +123,13 @@ public class OiyokanInitializrApp {
 
             // [IYI4102] Check the `oiyokan-settings.json`.
             log.info(OiyokanInitializrMessages.IYI4102 + ": " + targetJsonFile.getCanonicalPath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            packageToZipFile(new File("./src/main/resources/oiyokan-web-template"), targetJsonFile,
+                    new File("./target/generated-oiyokan/oiyokan-demo.zip"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -261,5 +272,35 @@ public class OiyokanInitializrApp {
         } else {
             return CaseUtils.toCamelCase(input, true, CAMEL_DELIMITER_CHARS);
         }
+    }
+
+    private static final String[] TEMPLATE_FILES = new String[] { "pom.xml", "system.properties", //
+            "src/main/java/com/example/DemoOData4App.java", //
+            "src/main/java/com/example/DemoOData4Register.java", //
+            "src/main/resources/oiyokan/memo.txt", //
+            "src/main/resources/static/error.html", //
+            "src/main/resources/static/index.html", //
+            "src/main/resources/application.properties", //
+            "src/test/resources/logback-test.xml",//
+    };
+
+    static void packageToZipFile(final File inputTemplateProjectDir, final File inputJsonFile, final File targetZipFile)
+            throws IOException {
+        final String ROOT_PATH = "./src/main/resources/oiyokan-web-template/";
+
+        final ZipArchiveOutputStream outZip = new ZipArchiveOutputStream(targetZipFile);
+
+        for (String fileName : TEMPLATE_FILES) {
+            outZip.putArchiveEntry(new ZipArchiveEntry(fileName));
+            IOUtils.copyAndCloseInput(new FileInputStream(ROOT_PATH + fileName), outZip);
+            outZip.closeArchiveEntry();
+        }
+
+        outZip.putArchiveEntry(new ZipArchiveEntry("src/main/resources/oiyokan/oiyokan-settings.json"));
+        IOUtils.copyAndCloseInput(new FileInputStream(inputJsonFile), outZip);
+        outZip.closeArchiveEntry();
+
+        outZip.flush();
+        outZip.close();
     }
 }
