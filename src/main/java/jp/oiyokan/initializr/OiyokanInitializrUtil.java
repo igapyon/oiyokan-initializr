@@ -66,7 +66,7 @@ public class OiyokanInitializrUtil {
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
-    static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings)
+    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings)
             throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
         log.info(OiyokanInitializrMessages.IYI2101);
@@ -131,7 +131,8 @@ public class OiyokanInitializrUtil {
      * @param oiyoSettings OiyoSettings info.
      * @param isSfdcMode   Adding Support of Salesforce.
      */
-    static void tuneSettings(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean convertCamel, boolean isSfdcMode) {
+    public static void tuneSettings(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean convertCamel,
+            boolean isSfdcMode) {
         // [IYI3101] Tune settings info.
         log.info(OiyokanInitializrMessages.IYI3101);
 
@@ -179,7 +180,7 @@ public class OiyokanInitializrUtil {
      * @return Target JSON string.
      * @throws IOException IO exception occured.
      */
-    static String oiyoSettings2String(final OiyoSettings oiyoSettings) throws IOException {
+    public static String oiyoSettings2String(final OiyoSettings oiyoSettings) throws IOException {
         // [IYI4101] Write settings info into `oiyokan-settings.json`.
         log.info(OiyokanInitializrMessages.IYI4101);
 
@@ -216,7 +217,8 @@ public class OiyokanInitializrUtil {
             "src/test/resources/logback-test.xml",//
     };
 
-    static byte[] packageZipFile(final File inputTemplateProjectDir, final String jsonString) throws IOException {
+    public static byte[] packageZipFile(final File inputTemplateProjectDir, final String jsonString)
+            throws IOException {
         // [IYI5101] Generate zip file into `oiyokan-demo.zip`.
         log.info(OiyokanInitializrMessages.IYI5101);
 
