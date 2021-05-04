@@ -35,6 +35,8 @@ public class ThIndexCtrl {
     @RequestMapping(value = { "/", "/index.html" })
     public String index(Model model, OiyoSettingsDatabase database, BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
+        model.addAttribute("msgSuccess", "");
+        model.addAttribute("msgError", "");
 
         if (database.getName() == null) {
             database.setName("mydbsetting1");
@@ -60,6 +62,8 @@ public class ThIndexCtrl {
     @RequestMapping(value = { "/entry" }, params = { "connTest" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String connTest(Model model, OiyoSettingsDatabase database, BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
+        model.addAttribute("msgSuccess", "");
+        model.addAttribute("msgError", "");
 
         // [IYI1001] Oiyokan Initializr Begin.
         log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
@@ -85,12 +89,17 @@ public class ThIndexCtrl {
 
         try {
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings);
+
+            // TODO message
+            model.addAttribute("msgSuccess", "Connection test success.");
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
         }
 
         return "index";
@@ -99,6 +108,8 @@ public class ThIndexCtrl {
     @RequestMapping(value = { "/entry" }, params = "download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public String entry(Model model, OiyoSettingsDatabase database, HttpServletResponse response) throws IOException {
         model.addAttribute("databaseBean", database);
+        model.addAttribute("msgSuccess", "");
+        model.addAttribute("msgError", "");
 
         // [IYI1001] Oiyokan Initializr Begin.
         log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
@@ -130,9 +141,11 @@ public class ThIndexCtrl {
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString(), ex);
+            model.addAttribute("msgError", OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
         }
 
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, convertCamel, isSfdcMode);
@@ -157,6 +170,8 @@ public class ThIndexCtrl {
             final OutputStream outStream = response.getOutputStream();
             IOUtils.copy(new ByteArrayInputStream(zipFile), outStream);
             outStream.flush();
+
+            model.addAttribute("msgSuccess", OiyokanInitializrMessages.IYI5102);
 
             // [IYI5102] Check the `oiyokan-demo.zip`.
             log.info(OiyokanInitializrMessages.IYI5102 + ": oiyokan-demo.zip");
