@@ -127,12 +127,12 @@ public class OiyokanInitializrUtil {
     /**
      * Tune settings info.
      * 
-     * @param oiyoInfo     OiyoInfo info for passphrase.
-     * @param oiyoSettings OiyoSettings info.
-     * @param isSfdcMode   Adding Support of Salesforce.
+     * @param oiyoInfo                 OiyoInfo info for passphrase.
+     * @param oiyoSettings             OiyoSettings info.
+     * @param isFilterTreatNullAsBlank Adding Support of Salesforce.
      */
     public static void tuneSettings(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean convertCamel,
-            boolean isSfdcMode) {
+            boolean isFilterTreatNullAsBlank) {
         // [IYI3101] Tune settings info.
         log.info(OiyokanInitializrMessages.IYI3101);
 
@@ -158,7 +158,7 @@ public class OiyokanInitializrUtil {
                 property.setName(adjustName(property.getName(), convertCamel));
 
                 if ("Edm.String".equals(property.getEdmType())) {
-                    if (isSfdcMode) {
+                    if (isFilterTreatNullAsBlank) {
                         property.setFilterTreatNullAsBlank(true);
                     }
                 }

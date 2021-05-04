@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Oiyokan Initializr</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+  <main role="main">
+    <div class="jumbotron" style="padding:5rem 2rem 1rem 2rem;">
+      <div class="container">
+        <h1 class="display-3">Oiyokan Initializr</h1>
+        <p>Oiyokan Initializr generates oiyokan project with `oiyokan-settings.json`.
+          <a href="https://github.com/igapyon/oiyokan">
+            <span style="font-size: 1.5em">
+              <svg class="bi bi-question-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                  clip-rule="evenodd"></path>
+                <path
+                  d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z">
+                </path>
+              </svg>
+            </span>
+          </a>
+        </p>
+        <p>Please enable the Oiyokan Initializr site only when using it.</p>
+      </div>
+    </div>
+  </main>
+
+  <div class="container">
+    <div th:if="${msgSuccess ne null && msgSuccess != ''}" th:remove="tag">
+      <div class="alert alert-success" role="alert"><span th:text="${msgSuccess}" th:remove="tag" /></div>
+    </div>
+    <div th:if="${msgError ne null && msgError != ''}" th:remove="tag">
+      <div class="alert alert-danger" role="alert"><span th:text="${msgError}" th:remove="tag" /></div>
+    </div>
+
+    <h3>Database settings for Oiyokan</h3>
+
+    <div class="row">
+      <div class="col-md-8 order-md-1">
+        <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <button class="btn btn-secondary btn-sm" type="submit" name="preH2">h2</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="prePostgreSQL">PostgreSQL</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="preMySQL">MySQL</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="preSQLSV2008">SQLSV2008</button>
+              <button class="btn btn-secondary btn-sm" type="submit" name="preORCL18">ORCL18</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="name">DB setting name</label>
+              <input type="text" class="form-control" id="name" th:field="*{name}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="type">DB type</label>
+              <select class="custom-select d-block w-100" id="type" required th:field="*{type}">
+                <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
+                <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
+                <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
+                <option th:value="SQLSV2008" th:text="SQLSV2008" th:selected="${type == 'SQLSV2008'}" />
+                <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid pref.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="description">Description of db settings</label>
+              <input type="text" class="form-control" id="description" th:field="*{description}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="jdbcDriver">JDBC Driver class name</label>
+
+              <input type="text" class="form-control" id="jdbcDriver" th:field="*{jdbcDriver}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="jdbcUrl">JDBC URL</label>
+              <input type="text" class="form-control" id="jdbcUrl" th:field="*{jdbcUrl}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="jdbcUser">JDBC User</label>
+              <input type="text" class="form-control" id="jdbcUser" th:field="*{jdbcUser}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="jdbcPassPlain">JDBC Password (plain text)</label>
+              <input type="text" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <input type="checkbox" id="convertCamel" th:field="${initializerBean.convertCamel}" />
+              <label for="convertCamel">Convert Camel Name</label>
+            </div>
+            <div class="col-md-8 mb-3">
+              <input type="checkbox" id="FilterTreatNullAsBlank" th:field="${initializerBean.FilterTreatNullAsBlank}" />
+              <label for="FilterTreatNullAsBlank">Treat null as blank. Check it for Salesforce</label>
+            </div>
+          </div>
+
+          <button class="btn btn-secondary btn-lg" type="submit" name="connTest">Connection Test</button>
+          <button class="btn btn-primary btn-lg" type="submit" name="download">GENERATE</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
