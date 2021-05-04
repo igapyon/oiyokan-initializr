@@ -51,6 +51,10 @@ import jp.oiyokan.util.OiyoEncryptUtil;
 public class OiyokanInitializrApp {
     private static final Log log = LogFactory.getLog(OiyokanInitializrApp.class);
 
+    /**
+     * EntitySetなどの名称を Camel case にするかどうか。通常は false で良い。
+     */
+    private static final boolean CONVERT_CAMEL = false;
     private static final char[] CAMEL_DELIMITER_CHARS = new char[] { '.', '-', '_', '@' };
 
     public static void main(String[] args) {
@@ -201,19 +205,19 @@ public class OiyokanInitializrApp {
         database.setJdbcPassPlain(null);
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-            entitySet.setName(CaseUtils.toCamelCase(entitySet.getName(), true, CAMEL_DELIMITER_CHARS));
+            entitySet.setName(adjustName(entitySet.getName()));
             entitySet.setJdbcStmtTimeout(30);
 
             final OiyoSettingsEntityType entityType = entitySet.getEntityType();
-            entityType.setName(CaseUtils.toCamelCase(entityType.getName(), true, CAMEL_DELIMITER_CHARS));
+            entityType.setName(adjustName(entityType.getName()));
 
             for (int index = 0; index < entityType.getKeyName().size(); index++) {
                 String keyName = entityType.getKeyName().get(index);
-                entityType.getKeyName().set(index, CaseUtils.toCamelCase(keyName, true, CAMEL_DELIMITER_CHARS));
+                entityType.getKeyName().set(index, adjustName(keyName));
             }
 
             for (OiyoSettingsProperty property : entityType.getProperty()) {
-                property.setName(CaseUtils.toCamelCase(property.getName(), true, CAMEL_DELIMITER_CHARS));
+                property.setName(adjustName(property.getName()));
 
                 if ("Edm.String".equals(property.getEdmType())) {
                     if (isSfdcMode) {
@@ -246,5 +250,16 @@ public class OiyokanInitializrApp {
         writer.flush();
 
         FileUtils.writeStringToFile(targetJsonFile, writer.toString(), "UTF-8");
+    }
+
+    static String adjustName(String input) {
+        if (!CONVERT_CAMEL) {
+            for (int index = 0; index < CAMEL_DELIMITER_CHARS.length; index++) {
+                input = input.replaceAll("[" + CAMEL_DELIMITER_CHARS[index] + "]", "_");
+            }
+            return input;
+        } else {
+            return CaseUtils.toCamelCase(input, true, CAMEL_DELIMITER_CHARS);
+        }
     }
 }
