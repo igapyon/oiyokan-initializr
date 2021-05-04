@@ -40,6 +40,7 @@ import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 import jp.oiyokan.dto.OiyoSettingsEntitySet;
+import jp.oiyokan.dto.OiyoSettingsEntityType;
 import jp.oiyokan.dto.OiyoSettingsProperty;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
@@ -203,7 +204,15 @@ public class OiyokanInitializrApp {
             entitySet.setName(CaseUtils.toCamelCase(entitySet.getName(), true, CAMEL_DELIMITER_CHARS));
             entitySet.setJdbcStmtTimeout(30);
 
-            for (OiyoSettingsProperty property : entitySet.getEntityType().getProperty()) {
+            final OiyoSettingsEntityType entityType = entitySet.getEntityType();
+            entityType.setName(CaseUtils.toCamelCase(entityType.getName(), true, CAMEL_DELIMITER_CHARS));
+
+            for (int index = 0; index < entityType.getKeyName().size(); index++) {
+                String keyName = entityType.getKeyName().get(index);
+                entityType.getKeyName().set(index, CaseUtils.toCamelCase(keyName, true, CAMEL_DELIMITER_CHARS));
+            }
+
+            for (OiyoSettingsProperty property : entityType.getProperty()) {
                 property.setName(CaseUtils.toCamelCase(property.getName(), true, CAMEL_DELIMITER_CHARS));
 
                 if ("Edm.String".equals(property.getEdmType())) {
