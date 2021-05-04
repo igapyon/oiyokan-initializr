@@ -2,11 +2,11 @@ package jp.oiyokan.initializr;
 
 import org.junit.jupiter.api.Test;
 
-class OiyokanInitializrAppTest {
+class OiyokanInitializrMainTest {
 
     @Test
     void test() {
         if (false)
-            OiyokanInitializrApp.main(new String[] {});
+            OiyokanInitializrMain.main(new String[] {});
     }
 }
