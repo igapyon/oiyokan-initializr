@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>OData v4 API Server</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+
+<body>
+  <main role="main">
+    <div class="jumbotron" style="padding:5rem 2rem 1rem 2rem;">
+      <div class="container">
+        <h1 class="display-3">OData v4 API Server</h1>
+        <p>This OData v4 API Server is powered by <a href="https://github.com/igapyon/oiyokan">Oiyokan</a>.
+      </div>
+    </div>
+  </main>
+
+  <div class="container">
+    <p>Hello OData v4 world.</p>
+    <ul>
+      <li><a href="/odata4.svc/">OData v4 ROOT</a></li>
+      <li><a href="/odata4.svc/$metadata">OData $metadata</a></li>
+      <li><a href="/odata4.svc/Oiyokan('Version')?$format=JSON">Oiyokan version</a></li>
+    </ul>
+    <p>Note: Please check the authn/authz setting status of OData v4 API.</p>
+    <p>Note: Make sure the settings in `oiyokan-settings.json` are as you intended.</p>
+  </div>
+
+  <hr />
+
+  <!-- Bootstrap JavaScript -->
+  <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+</body>
+
+</html>
