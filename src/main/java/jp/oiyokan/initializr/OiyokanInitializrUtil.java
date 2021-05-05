@@ -141,9 +141,11 @@ public class OiyokanInitializrUtil {
 
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
 
-        // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
-        database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
-        database.setJdbcPassPlain(null);
+        if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
+            // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
+            database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
+            database.setJdbcPassPlain(null);
+        }
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
             entitySet.setName(adjustName(entitySet.getName(), convertCamel));

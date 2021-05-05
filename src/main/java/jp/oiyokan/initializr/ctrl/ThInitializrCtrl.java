@@ -279,14 +279,22 @@ public class ThInitializrCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        log.info("processView:" + initializrBean.isProcessView());
+
         OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
         if (oiyoSettings != null) {
+            // ソートなど
+            OiyoInfo oiyoInfo = new OiyoInfo();
+            OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
+                    initializrBean.isFilterTreatNullAsBlank);
+
             initializrBean.getEntitySets().clear();
             for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
                 initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), false));
             }
 
             // セッションを記憶
+            // TODO FIXME そもそも Form Bean を作成して、通常のセッション処理を行うこと。
             session.setAttribute("database.name", database.getName());
             session.setAttribute("database.type", database.getType());
             session.setAttribute("database.description", database.getDescription());
@@ -294,6 +302,7 @@ public class ThInitializrCtrl {
             session.setAttribute("database.jdbcUrl", database.getJdbcUrl());
             session.setAttribute("database.jdbcUser", database.getJdbcUser());
             session.setAttribute("database.jdbcPassPlain", database.getJdbcPassPlain());
+            session.setAttribute("database.jdbcPassEnc", database.getJdbcPassEnc());
 
             return "oiyokan/initializr02";
         } else {
@@ -307,6 +316,7 @@ public class ThInitializrCtrl {
 
         final OiyoSettingsDatabase database = new OiyoSettingsDatabase();
 
+        // TODO FIXME そもそも Form Bean を作成して、通常のセッション処理を行うこと。
         database.setName((String) session.getAttribute("database.name"));
         database.setType((String) session.getAttribute("database.type"));
         database.setDescription((String) session.getAttribute("database.description"));
@@ -314,7 +324,10 @@ public class ThInitializrCtrl {
         database.setJdbcUrl((String) session.getAttribute("database.jdbcUrl"));
         database.setJdbcUser((String) session.getAttribute("database.jdbcUser"));
         database.setJdbcPassPlain((String) session.getAttribute("database.jdbcPassPlain"));
+        database.setJdbcPassEnc((String) session.getAttribute("database.jdbcPassEnc"));
 
+        // 一覧作成のため全体をセット
+        initializrBean.setProcessView(true);
         final OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
 
         log.info("選択したEntitySet以外を一旦消し込み");
