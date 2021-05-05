@@ -293,7 +293,7 @@ public class ThInitializrCtrl {
             session.setAttribute("database.jdbcDriver", database.getJdbcDriver());
             session.setAttribute("database.jdbcUrl", database.getJdbcUrl());
             session.setAttribute("database.jdbcUser", database.getJdbcUser());
-            session.setAttribute("database.jdbcPassEnc", database.getJdbcPassEnc());
+            session.setAttribute("database.jdbcPassPlain", database.getJdbcPassPlain());
 
             return "oiyokan/initializr02";
         } else {
@@ -313,7 +313,17 @@ public class ThInitializrCtrl {
         database.setJdbcDriver((String) session.getAttribute("database.jdbcDriver"));
         database.setJdbcUrl((String) session.getAttribute("database.jdbcUrl"));
         database.setJdbcUser((String) session.getAttribute("database.jdbcUser"));
-        database.setJdbcPassEnc((String) session.getAttribute("database.jdbcPassEnc"));
+        database.setJdbcPassPlain((String) session.getAttribute("database.jdbcPassPlain"));
+
+        if (database.getDescription() == null) {
+            database.setDescription("");
+        }
+        if (database.getJdbcUser() == null) {
+            database.setJdbcUser("");
+        }
+        if (database.getJdbcPassPlain() == null) {
+            database.setJdbcPassPlain("");
+        }
 
         OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
 
@@ -335,6 +345,10 @@ public class ThInitializrCtrl {
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
+        OiyoInfo oiyoInfo = new OiyoInfo();
+
+        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
+                initializrBean.isFilterTreatNullAsBlank);
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json

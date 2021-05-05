@@ -46,7 +46,6 @@ public class OiyokanInitializrMain {
         // [IYI1101] Prepare database settings.
         log.info(OiyokanInitializrMessages.IYI1101);
         OiyoInfo oiyoInfo = new OiyoInfo();
-        oiyoInfo.setPassphrase(OiyokanConstants.OIYOKAN_PASSPHRASE);
 
         OiyoSettings oiyoSettings = new OiyoSettings();
         oiyoSettings.setNamespace("Oiyokan"); // Namespace of OData
