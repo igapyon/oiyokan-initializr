@@ -87,7 +87,7 @@ public class OiyokanInitializrUtil {
 
                 if (mapNameFilter != null && mapNameFilter.get(tableName) == null) {
                     // 処理対象外
-                    log.info("チェックされていないテーブルであるため処理をスキップ: " + tableName);
+                    log.info("チェックされていないTABLEであるため処理をスキップ: " + tableName);
                     continue;
                 }
 
@@ -116,6 +116,12 @@ public class OiyokanInitializrUtil {
                 ResultSet rsViews = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "VIEW" });
                 for (; rsViews.next();) {
                     final String viewName = rsViews.getString("TABLE_NAME");
+
+                    if (mapNameFilter != null && mapNameFilter.get(viewName) == null) {
+                        // 処理対象外
+                        log.info("チェックされていないVIEWであるため処理をスキップ: " + viewName);
+                        continue;
+                    }
 
                     try {
                         // [IYI2114] DEBUG: Read view.
