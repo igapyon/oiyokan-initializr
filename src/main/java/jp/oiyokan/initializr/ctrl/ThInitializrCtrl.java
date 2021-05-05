@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
+import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
@@ -356,6 +357,11 @@ public class ThInitializrCtrl {
 
         OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
         if (oiyoSettings != null) {
+            initializrBean.getTables().clear();
+            for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
+                initializrBean.getTables().add(new ThInitializrBean.Table(entitySet.getName()));
+            }
+
             model.addAttribute("oiyoSettings", oiyoSettings);
             return "oiyokan/initializr02";
         } else {

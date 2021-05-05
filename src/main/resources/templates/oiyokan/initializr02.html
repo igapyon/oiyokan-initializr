@@ -49,15 +49,14 @@
 
     <h3>Table selection</h3>
 
-    <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
-      <div class="row">
-        <div class="col-md-6 order-md-1">
-          <div class="row">
-            <label for="name">DB setting name</label>
-            <input type="text" class="form-control" id="name" th:field="*{name}" />
-          </div>
-        </div>
-      </div>
+    <form class="needs-validation" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
+      <ul>
+        <li th:each="feat : ${initializrBean.tables}">
+          <input type="checkbox" th:field="*{tables}" th:value="${feat}" />
+          <label th:for="${#ids.prev('tables')}" 
+                 th:text="#{${'initializrBean.tables.' + feat}}">Heating</label>
+        </li>
+      </ul>
 
       <div class="row">
         <div class="col-md-12">
