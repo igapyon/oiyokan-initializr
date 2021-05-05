@@ -11,7 +11,7 @@ public class ThInitializrBean {
     boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
     boolean isFilterTreatNullAsBlank = false; // Support Salesforce or not.
 
-    private List<Table> tables = new ArrayList<>();
+    private List<EntitySet> entitySets = new ArrayList<>();
 
     public String getMsgSuccess() {
         return msgSuccess;
@@ -53,32 +53,32 @@ public class ThInitializrBean {
         this.processView = processView;
     }
 
-    public static class Table {
-        private boolean features = false;
-        private String tableName = null;
+    public static class EntitySet {
+        private boolean selected = false;
+        private String entitySetName = null;
 
-        public Table(String tableName) {
-            this.tableName = tableName;
+        public EntitySet(String entitySetName) {
+            this.entitySetName = entitySetName;
         }
 
-        public boolean isFeatures() {
-            return features;
+        public boolean isSelected() {
+            return selected;
         }
 
-        public void setFeatures(boolean features) {
-            this.features = features;
+        public void setSelected(boolean selected) {
+            this.selected = selected;
         }
 
-        public String getTableName() {
-            return tableName;
+        public String getEntitySetName() {
+            return entitySetName;
         }
 
-        public void setTableName(String tableName) {
-            this.tableName = tableName;
+        public void setEntitySetName(String entitySetName) {
+            this.entitySetName = entitySetName;
         }
     }
 
-    public List<Table> getTables() {
-        return tables;
+    public List<EntitySet> getEntitySets() {
+        return entitySets;
     }
 }

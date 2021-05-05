@@ -357,9 +357,9 @@ public class ThInitializrCtrl {
 
         OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
         if (oiyoSettings != null) {
-            initializrBean.getTables().clear();
+            initializrBean.getEntitySets().clear();
             for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-                initializrBean.getTables().add(new ThInitializrBean.Table(entitySet.getName()));
+                initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName()));
             }
 
             model.addAttribute("oiyoSettings", oiyoSettings);
