@@ -52,7 +52,7 @@
     <form class="needs-validation" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
       <ul>
         <li th:each="feat : ${initializrBean.entitySets}">
-          <input type="checkbox" th:field="*{entitySets}" th:value="${feat}" />
+          <input type="checkbox" th:field="*{entitySets}" th:value="${feat.selected}" />
           <label th:for="${#ids.prev('entitySets')}" 
                  th:text="${feat.entitySetName}">Heating</label>
         </li>
