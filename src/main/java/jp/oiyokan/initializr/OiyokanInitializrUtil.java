@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Map;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
@@ -63,11 +64,13 @@ public class OiyokanInitializrUtil {
      * @param oiyoInfo      OiyoInfo info for passphrase.
      * @param oiyoSettings  OiyoSettings info.
      * @param isProcessView Process View. default:false.
+     * @param mapNameFilter Filter of table name.
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
     public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView,
-            boolean isReadWriteAccess) throws SQLException, ODataApplicationException {
+            boolean isReadWriteAccess, Map<String, String> mapNameFilter)
+            throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
         log.info(OiyokanInitializrMessages.IYI2101);
 
@@ -81,6 +84,11 @@ public class OiyokanInitializrUtil {
             ResultSet rsTables = connTargetDb.getMetaData().getTables(null, "%", "%", new String[] { "TABLE" });
             for (; rsTables.next();) {
                 final String tableName = rsTables.getString("TABLE_NAME");
+
+                if (mapNameFilter != null && mapNameFilter.get(tableName) == null) {
+                    // 処理対象外
+                    continue;
+                }
 
                 try {
                     // [IYI2112] DEBUG: Read table.
