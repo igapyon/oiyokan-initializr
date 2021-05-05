@@ -41,7 +41,7 @@ http://localhost:8080/
 8. Select and check tables you want to publish
 
 9. Click `GENERATE`, and you will download an zip file named `oiyokan-demo.zip`.
-  なお、ここで生成された `oiyokan-demo.zip` および展開後のファイル `oiyokan-settings.json` にはデータベースの接続情報が含まれますので、必要ない場合は手順の後に必ず削除してください。
+  Note: この手順で生成される `oiyokan-demo.zip` にはデータベース接続情報の記載を含む `oiyokan-settings.json` ファイルが含まれます。必要ない場合は手順の後に必ず削除します。
 
 10. `Oiyokan Initializr` を終了。
 
@@ -66,7 +66,8 @@ http://localhost:8080/
 
 14. 試行が終わったら、`oiyokan-demo` を終了。
 
-15. 試行が終わり次第、`oiyokan-demo.zip` および展開後のファイル `oiyokan-settings.json` を削除する。
+15. 試行が終わり次第、`oiyokan-demo.zip` および展開後のファイル `oiyokan-settings.json` を削除します。
+  Note: この一連の手順で登場する `oiyokan-settings.json` ファイルにはデータベース接続情報の記載が含まれます。`oiyokan-demo.zip` も含めて必要ない場合は手順の後に必ず削除します。
 
 ## Supported target RDBMS
 
