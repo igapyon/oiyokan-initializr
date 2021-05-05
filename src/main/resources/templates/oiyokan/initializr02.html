@@ -54,7 +54,7 @@
         <li th:each="feat : ${initializrBean.tables}">
           <input type="checkbox" th:field="*{tables}" th:value="${feat}" />
           <label th:for="${#ids.prev('tables')}" 
-                 th:text="#{${'initializrBean.tables.' + feat}}">Heating</label>
+                 th:text="${feat.tableName}">Heating</label>
         </li>
       </ul>
 
