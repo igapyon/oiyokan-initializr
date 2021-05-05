@@ -50,13 +50,22 @@
     <h3>Table selection</h3>
 
     <form class="needs-validation" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
-      <ul>
-        <li th:each="feat : ${initializrBean.entitySets}">
-          <input type="checkbox" th:field="*{checkboxes}" th:value="${feat.name}" />
-          <label th:for="${#ids.prev('checkboxes')}" 
-                 th:text="${feat.name}">Heating</label>
-        </li>
-      </ul>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <div th:each="feat : ${initializrBean.entitySets}" th:remove="tag">
+            <tr>
+              <td> <input type="checkbox" th:field="*{checkboxes}" th:value="${feat.name}" />
+                <label th:for="${#ids.prev('checkboxes')}" th:text="${feat.name}">Heating</label>
+              </td>
+            </tr>
+          </div>
+        </tbody>
+      </table>
 
       <div class="row">
         <div class="col-md-12">

@@ -107,6 +107,8 @@ public class ThInitializrCtrl {
         // Process settings
 
         try {
+            // Enc pass は一旦クリア.
+            database.setJdbcPassEnc("");
             if (database.getJdbcUser() == null || database.getJdbcUser().trim().length() == 0) {
                 try (Connection conn = DriverManager.getConnection(database.getJdbcUrl())) {
                 }
@@ -325,6 +327,13 @@ public class ThInitializrCtrl {
         database.setJdbcUser((String) session.getAttribute("database.jdbcUser"));
         database.setJdbcPassPlain((String) session.getAttribute("database.jdbcPassPlain"));
         database.setJdbcPassEnc((String) session.getAttribute("database.jdbcPassEnc"));
+
+        if (database.getJdbcUser() == null) {
+            database.setJdbcUser("");
+        }
+        if (database.getJdbcPassPlain() == null) {
+            database.setJdbcPassPlain("");
+        }
 
         // 一覧作成のため全体をセット
         initializrBean.setProcessView(true);
