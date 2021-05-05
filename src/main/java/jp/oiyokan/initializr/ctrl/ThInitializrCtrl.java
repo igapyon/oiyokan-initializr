@@ -305,7 +305,7 @@ public class ThInitializrCtrl {
     public String download(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
 
-        OiyoSettingsDatabase database = new OiyoSettingsDatabase();
+        final OiyoSettingsDatabase database = new OiyoSettingsDatabase();
 
         database.setName((String) session.getAttribute("database.name"));
         database.setType((String) session.getAttribute("database.type"));
@@ -315,17 +315,7 @@ public class ThInitializrCtrl {
         database.setJdbcUser((String) session.getAttribute("database.jdbcUser"));
         database.setJdbcPassPlain((String) session.getAttribute("database.jdbcPassPlain"));
 
-        if (database.getDescription() == null) {
-            database.setDescription("");
-        }
-        if (database.getJdbcUser() == null) {
-            database.setJdbcUser("");
-        }
-        if (database.getJdbcPassPlain() == null) {
-            database.setJdbcPassPlain("");
-        }
-
-        OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
+        final OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
 
         log.info("選択したEntitySet以外を一旦消し込み");
         OUTER_LOOP: for (int index = oiyoSettings.getEntitySet().size() - 1; index >= 0; index--) {
