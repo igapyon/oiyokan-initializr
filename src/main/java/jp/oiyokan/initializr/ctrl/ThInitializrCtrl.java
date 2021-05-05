@@ -263,7 +263,7 @@ public class ThInitializrCtrl {
             database.setDescription("Tutorial db sample.");
         }
         database.setJdbcDriver("oracle.jdbc.driver.OracleDriver"); // JDBC Driver class name.
-        database.setJdbcUrl("jdbc:oracle:thin:@10.0.2.15:1521/xepdb1");
+        database.setJdbcUrl("jdbc:oracle:thin:@10.0.1.2:1521/xepdb1");
         database.setJdbcUser("orauser"); // JDBC User.
         database.setJdbcPassPlain("passwd123"); // JDBC Password.
 
