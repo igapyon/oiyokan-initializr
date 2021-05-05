@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Oiyokan Initializr</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+
+<body>
+  <main role="main">
+    <div class="jumbotron" style="padding:5rem 2rem 1rem 2rem;">
+      <div class="container">
+        <h1 class="display-3">Oiyokan Initializr</h1>
+        <p>Oiyokan Initializr generates oiyokan project with `oiyokan-settings.json`.
+          <a href="https://github.com/igapyon/oiyokan">
+            <span style="font-size: 1.5em">
+              <svg class="bi bi-question-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                  clip-rule="evenodd"></path>
+                <path
+                  d="M5.25 6.033h1.32c0-.781.458-1.384 1.36-1.384.685 0 1.313.343 1.313 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.007.463h1.307v-.355c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.326 0-2.786.647-2.754 2.533zm1.562 5.516c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z">
+                </path>
+              </svg>
+            </span>
+          </a>
+        </p>
+        <p>Please enable the Oiyokan Initializr site only when using it.</p>
+      </div>
+    </div>
+  </main>
+
+  <div class="container">
+    <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
+      <div class="alert alert-success" role="alert"><span th:text="${initializrBean.msgSuccess}" th:remove="tag" />
+      </div>
+    </div>
+    <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
+      <div class="alert alert-danger" role="alert"><span th:text="${initializrBean.msgError}" th:remove="tag" /></div>
+    </div>
+
+    <h3>Table selection</h3>
+
+    <form class="needs-validation" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
+      <ul>
+        <li th:each="feat : ${initializrBean.entitySets}">
+          <input type="checkbox" th:field="*{checkboxes}" th:value="${feat.name}" />
+          <label th:for="${#ids.prev('checkboxes')}" 
+                 th:text="${feat.name}">Heating</label>
+        </li>
+      </ul>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="form-group">
+              <input type="checkbox" class="form-check-input" id="convertCamel"
+                th:field="${initializrBean.convertCamel}" />
+              <label for="convertCamel">Convert Camel Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group">
+              <input type="checkbox" class="form-check-input" id="FilterTreatNullAsBlank"
+                th:field="${initializrBean.FilterTreatNullAsBlank}" />
+              <label for="FilterTreatNullAsBlank">Treat null as blank.</label>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-lg" type="submit" name="download">GENERATE</button>
+        </div>
+      </div>
+    </form>
+  </div> <!-- Container -->
+
+  <hr />
+
+  <!-- Bootstrap JavaScript -->
+  <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
