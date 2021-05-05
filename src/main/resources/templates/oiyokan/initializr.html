@@ -82,9 +82,6 @@
             <label for="description">Description of db settings</label>
             <input type="text" class="form-control" id="description" th:field="*{description}" />
           </div>
-        </div>
-
-        <div class="col-md-6 order-md-2">
           <div class="row">
             <label for="jdbcDriver">JDBC Driver class name</label>
 
@@ -120,14 +117,14 @@
             <div class="form-group">
               <input type="checkbox" class="form-check-input" id="FilterTreatNullAsBlank"
                 th:field="${initializerBean.FilterTreatNullAsBlank}" />
-              <label for="FilterTreatNullAsBlank">Treat null as blank. Check it for Salesforce</label>
+              <label for="FilterTreatNullAsBlank">Treat null as blank.</label>
             </div>
           </div>
           <div class="row">
             <div class="form-group">
               <input type="checkbox" class="form-check-input" id="processView"
                 th:field="${initializerBean.processView}" />
-              <label for="processView">Process VIEW (for Oiyokan experts)</label>
+              <label for="processView">Includes VIEW (for Oiyokan experts)</label>
             </div>
           </div>
 
