@@ -21,7 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
@@ -81,7 +80,7 @@ public class ThInitializrCtrl {
         return "oiyokan/initializr01";
     }
 
-    boolean connTestInternal(OiyoSettingsDatabase database, ThInitializrBean initializrBean) throws IOException {
+    OiyoSettings connTestInternal(OiyoSettingsDatabase database, ThInitializrBean initializrBean) throws IOException {
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
@@ -89,7 +88,6 @@ public class ThInitializrCtrl {
         // [IYI1101] Prepare database settings.
         log.info(OiyokanInitializrMessages.IYI1101);
         OiyoInfo oiyoInfo = new OiyoInfo();
-        oiyoInfo.setPassphrase(OiyokanConstants.OIYOKAN_PASSPHRASE);
 
         OiyoSettings oiyoSettings = new OiyoSettings();
         oiyoSettings.setNamespace("Oiyokan"); // Namespace of OData
@@ -115,7 +113,7 @@ public class ThInitializrCtrl {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
-            return false;
+            return null;
         }
 
         try {
@@ -123,17 +121,17 @@ public class ThInitializrCtrl {
 
             // TODO message
             initializrBean.setMsgSuccess("Connection test success.");
-            return true;
+            return oiyoSettings;
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
-            return false;
+            return null;
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2202);
-            return false;
+            return null;
         }
     }
 
@@ -356,8 +354,9 @@ public class ThInitializrCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        boolean isConnSuccess = connTestInternal(database, initializrBean);
-        if (isConnSuccess) {
+        OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
+        if (oiyoSettings != null) {
+            model.addAttribute("oiyoSettings", oiyoSettings);
             return "oiyokan/initializr02";
         } else {
             return "oiyokan/initializr01";
