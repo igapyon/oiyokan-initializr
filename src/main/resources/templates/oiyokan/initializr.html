@@ -75,13 +75,16 @@
               <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
             </select>
             <div class="invalid-feedback">
-              Please select a valid pref.
+              Please select a valid database.
             </div>
           </div>
           <div class="row">
             <label for="description">Description of db settings</label>
             <input type="text" class="form-control" id="description" th:field="*{description}" />
           </div>
+        </div>
+
+        <div class="col-md-6 order-md-2">
           <div class="row">
             <label for="jdbcDriver">JDBC Driver class name</label>
 
@@ -91,6 +94,7 @@
             <label for="jdbcUrl">JDBC URL</label>
             <input type="text" class="form-control" id="jdbcUrl" th:field="*{jdbcUrl}" />
           </div>
+
           <div class="row">
             <label for="jdbcUser">JDBC User</label>
             <input type="text" class="form-control" id="jdbcUser" th:field="*{jdbcUser}" />
@@ -99,6 +103,12 @@
             <label for="jdbcPassPlain">JDBC Password (plain text)</label>
             <input type="text" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
           </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+
           <div class="row">
             <div class="form-group">
               <input type="checkbox" class="form-check-input" id="convertCamel"
@@ -124,6 +134,9 @@
           <button class="btn btn-secondary btn-lg" type="submit" name="connTest">Connection Test</button>
           <button class="btn btn-primary btn-lg" type="submit" name="download">GENERATE</button>
         </div>
+
+
+
       </div>
     </form>
   </div> <!-- Container -->
