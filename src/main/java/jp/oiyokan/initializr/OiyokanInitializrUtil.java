@@ -48,7 +48,6 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.dto.OiyoSettingsEntityType;
 import jp.oiyokan.dto.OiyoSettingsProperty;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
-import jp.oiyokan.util.OiyoEncryptUtil;
 
 /**
  * Oiyokan Initializr.
@@ -142,14 +141,6 @@ public class OiyokanInitializrUtil {
             boolean isFilterTreatNullAsBlank) {
         // [IYI3101] Tune settings info.
         log.info(OiyokanInitializrMessages.IYI3101);
-
-        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
-
-        if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
-            // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
-            database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
-            database.setJdbcPassPlain(null);
-        }
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
             entitySet.setName(adjustName(entitySet.getName(), convertCamel));

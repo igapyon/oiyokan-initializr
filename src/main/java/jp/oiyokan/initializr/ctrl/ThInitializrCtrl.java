@@ -30,6 +30,7 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
+import jp.oiyokan.util.OiyoEncryptUtil;
 
 @Controller
 public class ThInitializrCtrl {
@@ -296,6 +297,19 @@ public class ThInitializrCtrl {
                 initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), false));
             }
 
+            if (database.getJdbcUser() == null) {
+                log.info("selectTable: database.jdbcUser was null");
+                database.setJdbcUser("");
+            }
+            if (database.getJdbcPassPlain() == null) {
+                log.info("selectTable: database.jdbcPassPlain was null");
+                database.setJdbcPassPlain("");
+            }
+            if (database.getJdbcPassEnc() == null) {
+                log.info("selectTable: database.jdbcPassEnc was null");
+                database.setJdbcPassPlain("");
+            }
+
             // セッションを記憶
             // TODO FIXME そもそも Form Bean を作成して、通常のセッション処理を行うこと。
             session.setAttribute("database.name", database.getName());
@@ -330,9 +344,15 @@ public class ThInitializrCtrl {
         database.setJdbcPassEnc((String) session.getAttribute("database.jdbcPassEnc"));
 
         if (database.getJdbcUser() == null) {
+            log.info("download: database.jdbcUser was null");
             database.setJdbcUser("");
         }
         if (database.getJdbcPassPlain() == null) {
+            log.info("download: database.jdbcPassPlain was null");
+            database.setJdbcPassPlain("");
+        }
+        if (database.getJdbcPassEnc() == null) {
+            log.info("download: database.jdbcPassEnc was null");
             database.setJdbcPassPlain("");
         }
 
@@ -362,6 +382,13 @@ public class ThInitializrCtrl {
 
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                 initializrBean.isFilterTreatNullAsBlank);
+
+        // JSON書き込み直前に、プレーンパスワードを除去
+        if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
+            // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
+            database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
+            database.setJdbcPassPlain(null);
+        }
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json
