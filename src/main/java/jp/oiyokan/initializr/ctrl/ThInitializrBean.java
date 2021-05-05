@@ -11,6 +11,7 @@ public class ThInitializrBean {
     boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
     boolean isFilterTreatNullAsBlank = false; // Support Salesforce or not.
 
+    private List<String> checkboxes = new ArrayList<>();
     private List<EntitySet> entitySets = new ArrayList<>();
 
     public String getMsgSuccess() {
@@ -53,12 +54,25 @@ public class ThInitializrBean {
         this.processView = processView;
     }
 
+    public List<String> getCheckboxes() {
+        return checkboxes;
+    }
+
+    public void setCheckboxes(List<String> checkboxes) {
+        this.checkboxes = checkboxes;
+    }
+
+    public List<EntitySet> getEntitySets() {
+        return entitySets;
+    }
+
     public static class EntitySet {
         private boolean selected = false;
-        private String entitySetName = null;
+        private String name = null;
 
-        public EntitySet(String entitySetName) {
-            this.entitySetName = entitySetName;
+        public EntitySet(String name, boolean selected) {
+            this.name = name;
+            this.selected = selected;
         }
 
         public boolean isSelected() {
@@ -69,16 +83,13 @@ public class ThInitializrBean {
             this.selected = selected;
         }
 
-        public String getEntitySetName() {
-            return entitySetName;
+        public String getName() {
+            return name;
         }
 
-        public void setEntitySetName(String entitySetName) {
-            this.entitySetName = entitySetName;
+        public void setName(String name) {
+            this.name = name;
         }
-    }
 
-    public List<EntitySet> getEntitySets() {
-        return entitySets;
     }
 }

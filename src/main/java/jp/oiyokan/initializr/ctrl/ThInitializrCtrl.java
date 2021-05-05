@@ -136,87 +136,6 @@ public class ThInitializrCtrl {
         }
     }
 
-    @RequestMapping(value = { "/initializr" }, params = "download", method = { RequestMethod.POST })
-    public String download(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            HttpServletResponse response) throws IOException {
-        model.addAttribute("databaseBean", database);
-        model.addAttribute("initializrBean", initializrBean);
-        initializrBean.setMsgSuccess(null);
-        initializrBean.setMsgError(null);
-
-        // [IYI1001] Oiyokan Initializr Begin.
-        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
-
-        //////////////////////////////////////////////////////////
-        // Setup basic settings info
-
-        // [IYI1101] Prepare database settings.
-        log.info(OiyokanInitializrMessages.IYI1101);
-        OiyoInfo oiyoInfo = new OiyoInfo();
-
-        OiyoSettings oiyoSettings = new OiyoSettings();
-        oiyoSettings.setNamespace("Oiyokan"); // Namespace of OData
-        oiyoSettings.setContainerName("Container"); // Container of OData
-        oiyoSettings.setDatabase(new ArrayList<>());
-        oiyoSettings.setEntitySet(new ArrayList<>());
-
-        oiyoSettings.getDatabase().add(database);
-
-        //////////////////////////////////////////////////////////
-        // Process settings
-
-        try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView());
-        } catch (ODataApplicationException ex) {
-            // [IYI2201] ERROR: Fail to connect database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
-            database.setDescription(OiyokanInitializrMessages.IYI2201);
-        } catch (SQLException ex) {
-            // [IYI2202] ERROR: Fail to close database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
-            database.setDescription(OiyokanInitializrMessages.IYI2202);
-        }
-
-        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
-                initializrBean.isFilterTreatNullAsBlank);
-
-        //////////////////////////////////////////////////////////
-        // Write settings info into oiyokan-settings.json
-
-        String jsonString = null;
-        try {
-            jsonString = OiyokanInitializrUtil.oiyoSettings2String(oiyoSettings);
-        } catch (IOException ex) {
-            // [IYI4201] ERROR: Fail to generate json file.
-            log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
-            database.setDescription(OiyokanInitializrMessages.IYI4201);
-        }
-
-        try {
-            final byte[] zipFile = OiyokanInitializrUtil
-                    .packageZipFile(new File("./src/main/resources/oiyokan-web-template"), jsonString);
-
-            response.setContentType("application/zip");
-            response.setHeader("Content-Disposition", "attachment; filename=oiyokan-demo.zip");
-
-            final OutputStream outStream = response.getOutputStream();
-            IOUtils.copy(new ByteArrayInputStream(zipFile), outStream);
-            outStream.flush();
-
-            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI5102);
-
-            // [IYI5102] Check the `oiyokan-demo.zip`.
-            log.info(OiyokanInitializrMessages.IYI5102 + ": oiyokan-demo.zip");
-        } catch (IOException ex) {
-            // [IYI5201] ERROR: Fail to generate zip file.
-            log.error(OiyokanInitializrMessages.IYI5201, ex);
-        }
-
-        // [IYI1002] Oiyokan Initializr End.
-        log.info(OiyokanInitializrMessages.IYI1002);
-        return null;
-    }
-
     @RequestMapping(value = { "/initializr" }, params = { "preH2" }, method = { RequestMethod.POST })
     public String preH2(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
             BindingResult result) throws IOException {
@@ -359,7 +278,7 @@ public class ThInitializrCtrl {
         if (oiyoSettings != null) {
             initializrBean.getEntitySets().clear();
             for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-                initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName()));
+                initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), false));
             }
 
             model.addAttribute("oiyoSettings", oiyoSettings);
@@ -367,5 +286,61 @@ public class ThInitializrCtrl {
         } else {
             return "oiyokan/initializr01";
         }
+    }
+
+    @RequestMapping(value = { "/initializr" }, params = "download", method = { RequestMethod.POST })
+    public String download(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
+            throws IOException {
+        model.addAttribute("initializrBean", initializrBean);
+        initializrBean.setMsgSuccess(null);
+        initializrBean.setMsgError(null);
+
+        OiyoSettings oiyoSettings = (OiyoSettings) model.getAttribute("oiyoSettings");
+
+        log.error("memo");
+        for (String opts : initializrBean.getCheckboxes()) {
+            log.info("checkbos:" + opts);
+        }
+
+        // [IYI1001] Oiyokan Initializr Begin.
+        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
+
+        //////////////////////////////////////////////////////////
+        // Setup basic settings info
+
+        //////////////////////////////////////////////////////////
+        // Write settings info into oiyokan-settings.json
+
+        String jsonString = null;
+        try {
+            jsonString = OiyokanInitializrUtil.oiyoSettings2String(oiyoSettings);
+        } catch (IOException ex) {
+            // [IYI4201] ERROR: Fail to generate json file.
+            log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
+        }
+
+        try {
+            final byte[] zipFile = OiyokanInitializrUtil
+                    .packageZipFile(new File("./src/main/resources/oiyokan-web-template"), jsonString);
+
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition", "attachment; filename=oiyokan-demo.zip");
+
+            final OutputStream outStream = response.getOutputStream();
+            IOUtils.copy(new ByteArrayInputStream(zipFile), outStream);
+            outStream.flush();
+
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI5102);
+
+            // [IYI5102] Check the `oiyokan-demo.zip`.
+            log.info(OiyokanInitializrMessages.IYI5102 + ": oiyokan-demo.zip");
+        } catch (IOException ex) {
+            // [IYI5201] ERROR: Fail to generate zip file.
+            log.error(OiyokanInitializrMessages.IYI5201, ex);
+        }
+
+        // [IYI1002] Oiyokan Initializr End.
+        log.info(OiyokanInitializrMessages.IYI1002);
+        return null;
     }
 }
