@@ -87,6 +87,7 @@ public class OiyokanInitializrUtil {
 
                 if (mapNameFilter != null && mapNameFilter.get(tableName) == null) {
                     // 処理対象外
+                    log.info("チェックされていないテーブルであるため処理をスキップ: " + tableName);
                     continue;
                 }
 
