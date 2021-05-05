@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -82,12 +84,15 @@ public class ThInitializrCtrl {
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
-        connTestInternal(database, initializrBean);
+        // ひとつもテーブルをマップさせずに接続のみ確認。
+        Map<String, String> mapNameFilter = new HashMap<>();
+        connTestInternal(database, initializrBean, mapNameFilter);
 
         return "oiyokan/initializr01";
     }
 
-    OiyoSettings connTestInternal(OiyoSettingsDatabase database, ThInitializrBean initializrBean) throws IOException {
+    OiyoSettings connTestInternal(OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+            Map<String, String> mapNameFilter) throws IOException {
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
@@ -127,7 +132,7 @@ public class ThInitializrCtrl {
 
         try {
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView(),
-                    initializrBean.isReadWriteAccess());
+                    initializrBean.isReadWriteAccess(), mapNameFilter);
 
             // TODO message
             initializrBean.setMsgSuccess("Connection test success.");
@@ -263,7 +268,7 @@ public class ThInitializrCtrl {
             database.setDescription("Tutorial db sample.");
         }
         database.setJdbcDriver("oracle.jdbc.driver.OracleDriver"); // JDBC Driver class name.
-        database.setJdbcUrl("jdbc:oracle:thin:@10.0.2.15:1521/xepdb1");
+        database.setJdbcUrl("jdbc:oracle:thin:@10.0.1.2:1521/xepdb1");
         database.setJdbcUser("orauser"); // JDBC User.
         database.setJdbcPassPlain("passwd123"); // JDBC Password.
 
@@ -285,7 +290,7 @@ public class ThInitializrCtrl {
 
         log.info("processView:" + initializrBean.isProcessView());
 
-        OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
+        OiyoSettings oiyoSettings = connTestInternal(database, initializrBean, null/* 全件テーブルを処理対象 */);
         if (oiyoSettings != null) {
             // ソートなど
             OiyoInfo oiyoInfo = new OiyoInfo();
@@ -356,22 +361,15 @@ public class ThInitializrCtrl {
             database.setJdbcPassPlain("");
         }
 
-        // 一覧作成のため全体をセット
-        initializrBean.setProcessView(true);
-        final OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
-
-        log.info("選択したEntitySet以外を一旦消し込み");
-        OUTER_LOOP: for (int index = oiyoSettings.getEntitySet().size() - 1; index >= 0; index--) {
-            OiyoSettingsEntitySet look = oiyoSettings.getEntitySet().get(index);
-            for (String opts : initializrBean.getCheckboxes()) {
-                if (look.getName().equals(opts)) {
-                    // チェックされていた。残してよし。
-                    continue OUTER_LOOP;
-                }
-            }
-            // チェックされていなかった。削除。
-            oiyoSettings.getEntitySet().remove(index);
+        log.info("選択したEntitySetをマーク");
+        Map<String, String> mapNameFilter = new HashMap<>();
+        for (String opts : initializrBean.getCheckboxes()) {
+            mapNameFilter.put(opts, opts);
         }
+
+        // 一覧の網羅性のために VIEW も含めて処理
+        initializrBean.setProcessView(true);
+        final OiyoSettings oiyoSettings = connTestInternal(database, initializrBean, mapNameFilter);
 
         // [IYI1001] Oiyokan Initializr Begin.
         log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
