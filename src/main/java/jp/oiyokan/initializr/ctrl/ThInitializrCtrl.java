@@ -10,11 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.olingo.server.api.ODataApplicationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,9 @@ import jp.oiyokan.initializr.OiyokanInitializrUtil;
 @Controller
 public class ThInitializrCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrCtrl.class);
+
+    @Autowired
+    private HttpSession session;
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
@@ -281,7 +286,15 @@ public class ThInitializrCtrl {
                 initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), false));
             }
 
-            model.addAttribute("oiyoSettings", oiyoSettings);
+            // セッションを記憶
+            session.setAttribute("database.name", database.getName());
+            session.setAttribute("database.type", database.getType());
+            session.setAttribute("database.description", database.getDescription());
+            session.setAttribute("database.jdbcDriver", database.getJdbcDriver());
+            session.setAttribute("database.jdbcUrl", database.getJdbcUrl());
+            session.setAttribute("database.jdbcUser", database.getJdbcUser());
+            session.setAttribute("database.jdbcPassEnc", database.getJdbcPassEnc());
+
             return "oiyokan/initializr02";
         } else {
             return "oiyokan/initializr01";
@@ -291,15 +304,30 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, params = "download", method = { RequestMethod.POST })
     public String download(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
-        model.addAttribute("initializrBean", initializrBean);
-        initializrBean.setMsgSuccess(null);
-        initializrBean.setMsgError(null);
 
-        OiyoSettings oiyoSettings = (OiyoSettings) model.getAttribute("oiyoSettings");
+        OiyoSettingsDatabase database = new OiyoSettingsDatabase();
 
-        log.error("memo");
-        for (String opts : initializrBean.getCheckboxes()) {
-            log.info("checkbos:" + opts);
+        database.setName((String) session.getAttribute("database.name"));
+        database.setType((String) session.getAttribute("database.type"));
+        database.setDescription((String) session.getAttribute("database.description"));
+        database.setJdbcDriver((String) session.getAttribute("database.jdbcDriver"));
+        database.setJdbcUrl((String) session.getAttribute("database.jdbcUrl"));
+        database.setJdbcUser((String) session.getAttribute("database.jdbcUser"));
+        database.setJdbcPassEnc((String) session.getAttribute("database.jdbcPassEnc"));
+
+        OiyoSettings oiyoSettings = connTestInternal(database, initializrBean);
+
+        log.info("選択したEntitySet以外を一旦消し込み");
+        OUTER_LOOP: for (int index = oiyoSettings.getEntitySet().size() - 1; index >= 0; index--) {
+            OiyoSettingsEntitySet look = oiyoSettings.getEntitySet().get(index);
+            for (String opts : initializrBean.getCheckboxes()) {
+                if (look.getName().equals(opts)) {
+                    // チェックされていた。残してよし。
+                    continue OUTER_LOOP;
+                }
+            }
+            // チェックされていなかった。削除。
+            oiyoSettings.getEntitySet().remove(index);
         }
 
         // [IYI1001] Oiyokan Initializr Begin.
