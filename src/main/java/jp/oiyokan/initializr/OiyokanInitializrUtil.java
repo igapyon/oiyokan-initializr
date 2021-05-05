@@ -48,7 +48,6 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.dto.OiyoSettingsEntityType;
 import jp.oiyokan.dto.OiyoSettingsProperty;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
-import jp.oiyokan.util.OiyoEncryptUtil;
 
 /**
  * Oiyokan Initializr.
@@ -67,8 +66,8 @@ public class OiyokanInitializrUtil {
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
-    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView)
-            throws SQLException, ODataApplicationException {
+    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView,
+            boolean isReadWriteAccess) throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
         log.info(OiyokanInitializrMessages.IYI2101);
 
@@ -92,6 +91,10 @@ public class OiyokanInitializrUtil {
                     entitySet.setDbSettingName(database.getName());
                     entitySet.setOmitCountAll(false);
 
+                    // TABLE は Create, Update, Delete を指定の状態で設定.
+                    entitySet.setCanCreate(isReadWriteAccess);
+                    entitySet.setCanUpdate(isReadWriteAccess);
+                    entitySet.setCanDelete(isReadWriteAccess);
                 } catch (Exception ex) {
                     // [IYI2113] WARN: Fail to read table.
                     log.warn(OiyokanInitializrMessages.IYI2113 + ": " + tableName);
@@ -138,14 +141,6 @@ public class OiyokanInitializrUtil {
             boolean isFilterTreatNullAsBlank) {
         // [IYI3101] Tune settings info.
         log.info(OiyokanInitializrMessages.IYI3101);
-
-        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
-
-        if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
-            // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
-            database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
-            database.setJdbcPassPlain(null);
-        }
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
             entitySet.setName(adjustName(entitySet.getName(), convertCamel));

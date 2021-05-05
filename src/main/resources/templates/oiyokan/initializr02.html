@@ -50,31 +50,59 @@
     <h3>Table selection</h3>
 
     <form class="needs-validation" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
-      <ul>
-        <li th:each="feat : ${initializrBean.entitySets}">
-          <input type="checkbox" th:field="*{checkboxes}" th:value="${feat.name}" />
-          <label th:for="${#ids.prev('checkboxes')}" 
-                 th:text="${feat.name}">Heating</label>
-        </li>
-      </ul>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <div th:each="feat : ${initializrBean.entitySets}" th:remove="tag">
+            <tr>
+              <td> <input type="checkbox" th:field="*{checkboxes}" th:value="${feat.name}" />
+                <label th:for="${#ids.prev('checkboxes')}" th:text="${feat.name}">Heating</label>
+              </td>
+            </tr>
+          </div>
+        </tbody>
+      </table>
+
+      <br />
 
       <div class="row">
         <div class="col-md-12">
-          <div class="row">
-            <div class="form-group">
-              <input type="checkbox" class="form-check-input" id="convertCamel"
-                th:field="${initializrBean.convertCamel}" />
-              <label for="convertCamel">Convert Camel Name</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group">
-              <input type="checkbox" class="form-check-input" id="FilterTreatNullAsBlank"
-                th:field="${initializrBean.FilterTreatNullAsBlank}" />
-              <label for="FilterTreatNullAsBlank">Treat null as blank.</label>
-            </div>
-          </div>
 
+          <div class="card">
+            <div class="card-header">
+              Option
+            </div>
+            <div class="card-body mx-2">
+              <div class="form-group">
+                <input type="checkbox" class="form-check-input" id="convertCamel"
+                  th:field="${initializrBean.convertCamel}" />
+                <label for="convertCamel">Convert name to Camel Case.</label>
+              </div>
+
+              <div class="form-group">
+                <input type="checkbox" class="form-check-input" id="FilterTreatNullAsBlank"
+                  th:field="${initializrBean.FilterTreatNullAsBlank}" />
+                <label for="FilterTreatNullAsBlank">$filter: Treat null as blank.</label>
+              </div>
+
+              <div class="form-group">
+                <input type="checkbox" class="form-check-input" id="ReadWriteAccess"
+                  th:field="${initializrBean.ReadWriteAccess}" />
+                <label for="ReadWriteAccess">Allows Read/Write access to the table.</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <div class="row">
+        <div class="col-md-12">
           <button class="btn btn-primary btn-lg" type="submit" name="download">GENERATE</button>
         </div>
       </div>

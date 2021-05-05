@@ -28,6 +28,7 @@ import org.apache.olingo.server.api.ODataApplicationException;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
+import jp.oiyokan.util.OiyoEncryptUtil;
 
 /**
  * Oiyokan Initializr.
@@ -70,7 +71,7 @@ public class OiyokanInitializrMain {
         // Process settings
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, processView);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, processView, true/* TODO 現状読み書き許容 */);
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);
@@ -80,6 +81,13 @@ public class OiyokanInitializrMain {
         }
 
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, convertCamel, isSfdcMode);
+
+        // JSON書き込み直前に、プレーンパスワードを除去
+        if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
+            // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
+            database.setJdbcPassEnc(OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), oiyoInfo.getPassphrase()));
+            database.setJdbcPassPlain(null);
+        }
 
         //////////////////////////////////////////////////////////
         // Write settings info into oiyokan-settings.json
