@@ -76,6 +76,16 @@ public class ThInitializrCtrl {
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
+        connTestInternal(database, initializrBean);
+
+        return "oiyokan/initializr01";
+    }
+
+    boolean connTestInternal(OiyoSettingsDatabase database, ThInitializrBean initializrBean) throws IOException {
+
+        //////////////////////////////////////////////////////////
+        // Setup basic settings info
+
         // [IYI1101] Prepare database settings.
         log.info(OiyokanInitializrMessages.IYI1101);
         OiyoInfo oiyoInfo = new OiyoInfo();
@@ -105,25 +115,26 @@ public class ThInitializrCtrl {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
-            return "oiyokan/initializr";
+            return false;
         }
 
         try {
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView());
 
             // TODO message
-            model.addAttribute("msgSuccess", "Connection test success.");
+            initializrBean.setMsgSuccess("Connection test success.");
+            return true;
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
+            return false;
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2202);
+            return false;
         }
-
-        return "oiyokan/initializr01";
     }
 
     @RequestMapping(value = { "/initializr" }, params = "download", method = { RequestMethod.POST })
@@ -332,5 +343,24 @@ public class ThInitializrCtrl {
         initializrBean.setMsgSuccess("Typical ORCL18 preset is loaded.");
 
         return "oiyokan/initializr01";
+    }
+
+    /////////////////////////
+    // Select table
+
+    @RequestMapping(value = { "/initializr" }, params = { "selectTable" }, method = { RequestMethod.POST })
+    public String selectTable(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+            BindingResult result) throws IOException {
+        model.addAttribute("databaseBean", database);
+        model.addAttribute("initializrBean", initializrBean);
+        initializrBean.setMsgSuccess(null);
+        initializrBean.setMsgError(null);
+
+        boolean isConnSuccess = connTestInternal(database, initializrBean);
+        if (isConnSuccess) {
+            return "oiyokan/initializr02";
+        } else {
+            return "oiyokan/initializr01";
+        }
     }
 }
