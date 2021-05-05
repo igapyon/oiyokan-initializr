@@ -125,7 +125,8 @@ public class ThInitializrCtrl {
         }
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView());
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView(),
+                    initializrBean.isReadWriteAccess());
 
             // TODO message
             initializrBean.setMsgSuccess("Connection test success.");

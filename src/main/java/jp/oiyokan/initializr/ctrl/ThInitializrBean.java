@@ -8,6 +8,7 @@ public class ThInitializrBean {
     private String msgError = null;
 
     boolean processView = false;
+    boolean isReadWriteAccess = true;
     boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
     boolean isFilterTreatNullAsBlank = false; // Support Salesforce or not.
 
@@ -52,6 +53,14 @@ public class ThInitializrBean {
 
     public void setProcessView(boolean processView) {
         this.processView = processView;
+    }
+
+    public boolean isReadWriteAccess() {
+        return isReadWriteAccess;
+    }
+
+    public void setReadWriteAccess(boolean isReadWriteAccess) {
+        this.isReadWriteAccess = isReadWriteAccess;
     }
 
     public List<String> getCheckboxes() {

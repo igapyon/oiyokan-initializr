@@ -70,7 +70,7 @@ public class OiyokanInitializrMain {
         // Process settings
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, processView);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, processView, true/* TODO 現状読み書き許容 */);
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString(), ex);

@@ -67,8 +67,8 @@ public class OiyokanInitializrUtil {
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
-    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView)
-            throws SQLException, ODataApplicationException {
+    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView,
+            boolean isReadWriteAccess) throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
         log.info(OiyokanInitializrMessages.IYI2101);
 
@@ -92,6 +92,10 @@ public class OiyokanInitializrUtil {
                     entitySet.setDbSettingName(database.getName());
                     entitySet.setOmitCountAll(false);
 
+                    // TABLE は Create, Update, Delete を指定の状態で設定.
+                    entitySet.setCanCreate(isReadWriteAccess);
+                    entitySet.setCanUpdate(isReadWriteAccess);
+                    entitySet.setCanDelete(isReadWriteAccess);
                 } catch (Exception ex) {
                     // [IYI2113] WARN: Fail to read table.
                     log.warn(OiyokanInitializrMessages.IYI2113 + ": " + tableName);

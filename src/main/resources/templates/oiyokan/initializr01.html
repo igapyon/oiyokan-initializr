@@ -40,7 +40,8 @@
 
   <div class="container">
     <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
-      <div class="alert alert-success" role="alert"><span th:text="${initializrBean.msgSuccess}" th:remove="tag" /></div>
+      <div class="alert alert-success" role="alert"><span th:text="${initializrBean.msgSuccess}" th:remove="tag" />
+      </div>
     </div>
     <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
       <div class="alert alert-danger" role="alert"><span th:text="${initializrBean.msgError}" th:remove="tag" /></div>
@@ -103,16 +104,28 @@
         </div>
       </div>
 
+      <br />
+
       <div class="row">
         <div class="col-md-12">
-          <div class="row">
-            <div class="form-group">
+
+          <div class="card">
+            <div class="card-header">
+              Option
+            </div>
+            <div class="card-body mx-2">
               <input type="checkbox" class="form-check-input" id="processView"
                 th:field="${initializrBean.processView}" />
               <label for="processView">Includes VIEW (for Oiyokan experts)</label>
             </div>
           </div>
+        </div>
+      </div>
 
+      <br />
+
+      <div class="row">
+        <div class="col-md-12">
           <button class="btn btn-secondary btn-lg" type="submit" name="connTest">Connection Test</button>
           <button class="btn btn-primary btn-lg" type="submit" name="selectTable">Select Table</button>
         </div>
