@@ -25,7 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.olingo.server.api.ODataApplicationException;
 
-import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;

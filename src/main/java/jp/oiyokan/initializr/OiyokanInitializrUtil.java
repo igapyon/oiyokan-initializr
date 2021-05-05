@@ -218,8 +218,11 @@ public class OiyokanInitializrUtil {
             "src/main/resources/oiyokan/memo.txt", //
             "src/main/resources/static/index.html", //
             "src/main/resources/static/static/css/bootstrap.min.css", //
+            "src/main/resources/static/static/css/bootstrap.min.css.map", //
             "src/main/resources/static/static/js/bootstrap.min.js", //
+            "src/main/resources/static/static/js/bootstrap.min.js.map", //
             "src/main/resources/static/static/js/jquery-3.6.0.min.js", //
+            "src/main/resources/static/static/js/jquery-3.6.0.min.map", //
             "src/main/resources/templates/error.html", //
             "src/main/resources/application.properties", //
             "src/test/resources/logback-test.xml",//
