@@ -87,7 +87,7 @@ public class OiyokanInitializrUtil {
 
                 if (mapNameFilter != null && mapNameFilter.get(tableName) == null) {
                     // 処理対象外
-                    log.info("チェックされていないTABLEであるため処理をスキップ: " + tableName);
+                    log.trace("チェックされていないTABLEであるため処理をスキップ: " + tableName);
                     continue;
                 }
 
@@ -119,7 +119,7 @@ public class OiyokanInitializrUtil {
 
                     if (mapNameFilter != null && mapNameFilter.get(viewName) == null) {
                         // 処理対象外
-                        log.info("チェックされていないVIEWであるため処理をスキップ: " + viewName);
+                        log.trace("チェックされていないVIEWであるため処理をスキップ: " + viewName);
                         continue;
                     }
 
