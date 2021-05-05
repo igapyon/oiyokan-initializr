@@ -1,9 +1,28 @@
 package jp.oiyokan.initializr.ctrl;
 
 public class ThInitializrBean {
+    private String msgSuccess = null;
+    private String msgError = null;
+
     boolean processView = false;
     boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
     boolean isFilterTreatNullAsBlank = false; // Support Salesforce or not.
+
+    public String getMsgSuccess() {
+        return msgSuccess;
+    }
+
+    public void setMsgSuccess(String msgSuccess) {
+        this.msgSuccess = msgSuccess;
+    }
+
+    public String getMsgError() {
+        return msgError;
+    }
+
+    public void setMsgError(String msgError) {
+        this.msgError = msgError;
+    }
 
     public boolean isConvertCamel() {
         return convertCamel;

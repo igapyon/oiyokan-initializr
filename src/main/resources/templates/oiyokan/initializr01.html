@@ -39,11 +39,11 @@
   </main>
 
   <div class="container">
-    <div th:if="${msgSuccess ne null && msgSuccess != ''}" th:remove="tag">
-      <div class="alert alert-success" role="alert"><span th:text="${msgSuccess}" th:remove="tag" /></div>
+    <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
+      <div class="alert alert-success" role="alert"><span th:text="${initializrBean.msgSuccess}" th:remove="tag" /></div>
     </div>
-    <div th:if="${msgError ne null && msgError != ''}" th:remove="tag">
-      <div class="alert alert-danger" role="alert"><span th:text="${msgError}" th:remove="tag" /></div>
+    <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
+      <div class="alert alert-danger" role="alert"><span th:text="${initializrBean.msgError}" th:remove="tag" /></div>
     </div>
 
     <h3>Database settings for Oiyokan</h3>
@@ -109,21 +109,21 @@
           <div class="row">
             <div class="form-group">
               <input type="checkbox" class="form-check-input" id="convertCamel"
-                th:field="${initializerBean.convertCamel}" />
+                th:field="${initializrBean.convertCamel}" />
               <label for="convertCamel">Convert Camel Name</label>
             </div>
           </div>
           <div class="row">
             <div class="form-group">
               <input type="checkbox" class="form-check-input" id="FilterTreatNullAsBlank"
-                th:field="${initializerBean.FilterTreatNullAsBlank}" />
+                th:field="${initializrBean.FilterTreatNullAsBlank}" />
               <label for="FilterTreatNullAsBlank">Treat null as blank.</label>
             </div>
           </div>
           <div class="row">
             <div class="form-group">
               <input type="checkbox" class="form-check-input" id="processView"
-                th:field="${initializerBean.processView}" />
+                th:field="${initializrBean.processView}" />
               <label for="processView">Includes VIEW (for Oiyokan experts)</label>
             </div>
           </div>
