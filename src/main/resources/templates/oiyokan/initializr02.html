@@ -84,7 +84,7 @@
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
                     <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
                   </span>
-                  </ul>
+                </ul>
               </div>
 
               <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
@@ -108,6 +108,7 @@
                   </tbody>
                 </table>
 
+                <br />
                 <div class="">
                   <div class="">
                     Option
@@ -132,6 +133,7 @@
                       <span class="mdl-checkbox__label">Allows Write access to the table.</span>
                     </label>
                   </div>
+                  <br />
 
                   <div>
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"

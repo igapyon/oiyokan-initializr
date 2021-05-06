@@ -84,7 +84,7 @@
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
                     <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
                   </span>
-                  </ul>
+                </ul>
               </div>
 
               <form class="" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
@@ -100,6 +100,7 @@
                   <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="preH2">h2</button>
                 </div>
 
+                <br />
                 <div>
                   <label for="type" class="">DB type</label>
                   <select class="" id="type" required th:field="*{type}">
@@ -110,6 +111,7 @@
                     <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
                   </select>
                 </div>
+                <br />
 
                 <div>
                   <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -139,14 +141,15 @@
                 </div>
 
                 <div class="">
-                  Option
-                </div>
-                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="processView">
-                  <input type="checkbox" id="processView" th:field="${initializrBean.processView}"
-                    class="mdl-checkbox__input">
-                  <span class="mdl-checkbox__label">Includes VIEW (for Oiyokan experts)</span>
-                </label>
+                  <p class="mdl-cell">Option</p>
 
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="processView">
+                    <input type="checkbox" id="processView" th:field="${initializrBean.processView}"
+                      class="mdl-checkbox__input">
+                    <span class="mdl-checkbox__label">Includes VIEW (for Oiyokan experts)</span>
+                  </label>
+                </div>
+                <br />
                 <div>
                   <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="connTest">Connection
                     Test</button>
