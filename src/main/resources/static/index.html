@@ -2,37 +2,123 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta charset="UTF-8" />
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta http-equiv="Pragma" content="no-cache">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Oiyokan Initializer - Index</title>
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="/static/images/android-desktop.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+  <link rel="apple-touch-icon-precomposed" href="/static/images/ios-desktop.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="/static/images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <link rel="shortcut icon" href="/static/images/favicon.png">
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-pink.min.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+  </style>
+
+  <!-- Material Design Lite -->
+  <link rel="stylesheet" href="/static/css/material.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
-<body>
-  <main role="main">
-    <div class="jumbotron" style="padding:5rem 2rem 1rem 2rem;">
-      <div class="container">
-        <h1 class="display-3">Index</h1>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
       </div>
-    </div>
-  </main>
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        <h3>Oiyokan Initializr</h3>
+      </div>
+      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+      </div>
+      <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+        <a href="/index.hml" class="mdl-layout__tab is-active">Index</a>
+        <a href="/initializr/" class="mdl-layout__tab">Initializr</a>
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      <div class="mdl-layout__tab-panel is-active" id="overview">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+              <h4 class="mdl-cell mdl-cell--12-col">Details</h4>
+              <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                <div class="section__circle-container__circle mdl-color--primary"></div>
+              </div>
+              <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                <h5>About Oiyokan</h5>
+                Oiyokan is an OData v4 server (provider) SDK for RDB. You can use Oiyokan to turn RDBMS into OData v4
+                services using JDBC driver. Based on Apache Olingo / Spring Boot / h2 database.
+              </div>
+              <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                <div class="section__circle-container__circle mdl-color--primary"></div>
+              </div>
+              <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                <h5>About Oiyokan Initializr</h5>
+                Oiyokan Initializr is a generater to create Spring Boot simple project to run OData v4 Server includes `oiyokan-settings.json`.
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section--footer mdl-color--white mdl-grid">
+          <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+            <div class="section__circle-container__circle mdl-color--accent section__circle--big"></div>
+          </div>
+          <div class="section__text mdl-cell mdl-cell--4-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+            <h5>Run Initializr only when using it</h5>
+            Note: Please enable the Oiyokan Initializr site only when using it.
+          </div>
+        </section>
+      </div>
 
-  <div class="container">
-    <p><a href="/initializr/">Oiyokan Initializr</a> : Note: Please enable the Oiyokan Initializr site only when using it.</p>
+      <footer class="mdl-mega-footer">
+        <div class="mdl-mega-footer--bottom-section">
+          <div class="mdl-logo">
+            More Information
+          </div>
+          <ul class="mdl-mega-footer--link-list">
+            <li><a href="https://github.com/igapyon/oiyokan-initializr/">Oiyokan Initializr at GitHub</a></li>
+          </ul>
+        </div>
+      </footer>
+    </main>
   </div>
+  <a href="https://github.com/igapyon/oiyokan-initializr/" target="_blank" id="view-source"
+    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View
+    Source</a>
 
-  <hr />
+  <!-- JavaScript -->
+  <!-- <script src="/static/js/jquery-3.6.0.min.js"></script> -->
 
-  <!-- Bootstrap JavaScript -->
-  <script src="/static/js/jquery-3.6.0.min.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
-
+  <!-- Material Design Lite -->
+  <script src="/static/js/material.min.js"></script>
 </body>
 
 </html>
