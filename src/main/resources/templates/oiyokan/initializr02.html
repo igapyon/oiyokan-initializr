@@ -71,16 +71,20 @@
               <h4 class="mdl-cell mdl-cell--12-col">Table selection</h4>
 
               <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
-                <span class="mdl-chip mdl-chip--contact">
-                  <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">I</span>
-                  <span class="mdl-chip__text" th:text="${initializrBean.msgSuccess}">Contact Chip</span>
-                </span>
+                <ul class="toc">
+                  <span class="mdl-chip mdl-chip--contact">
+                    <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">I</span>
+                    <span class="mdl-chip__text" th:text="${initializrBean.msgSuccess}">Contact Chip</span>
+                  </span>
+                </ul>
               </div>
               <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
-                <span class="mdl-chip mdl-chip--contact">
-                  <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
-                  <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
-                </span>
+                <ul class="toc">
+                  <span class="mdl-chip mdl-chip--contact">
+                    <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
+                    <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
+                  </span>
+                  </ul>
               </div>
 
               <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
@@ -108,7 +112,8 @@
                   <div class="">
                     Option
                   </div>
-                  <div class="">
+                  <div class="mdl-components__warning">
+
                     <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="convertCamel">
                       <input type="checkbox" id="convertCamel" th:field="${initializrBean.convertCamel}"
                         class="mdl-checkbox__input">
@@ -124,7 +129,7 @@
                     <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="ReadWriteAccess">
                       <input type="checkbox" id="ReadWriteAccess" th:field="${initializrBean.ReadWriteAccess}"
                         class="mdl-checkbox__input">
-                      <span class="mdl-checkbox__label">Allows Read/Write access to the table.</span>
+                      <span class="mdl-checkbox__label">Allows Write access to the table.</span>
                     </label>
                   </div>
 

@@ -71,16 +71,20 @@
               <h4 class="mdl-cell mdl-cell--12-col">Database settings</h4>
 
               <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
-                <span class="mdl-chip mdl-chip--contact">
-                  <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">I</span>
-                  <span class="mdl-chip__text" th:text="${initializrBean.msgSuccess}">Contact Chip</span>
-                </span>
+                <ul class="toc">
+                  <span class="mdl-chip mdl-chip--contact">
+                    <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">I</span>
+                    <span class="mdl-chip__text" th:text="${initializrBean.msgSuccess}">Contact Chip</span>
+                  </span>
+                </ul>
               </div>
               <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
-                <span class="mdl-chip mdl-chip--contact">
-                  <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
-                  <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
-                </span>
+                <ul class="toc">
+                  <span class="mdl-chip mdl-chip--contact">
+                    <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
+                    <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
+                  </span>
+                  </ul>
               </div>
 
               <form class="" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
