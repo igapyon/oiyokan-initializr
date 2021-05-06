@@ -139,16 +139,18 @@
                 <div class="">
                   Option
                 </div>
-                <div class="">
-                  <input type="checkbox" class="" id="processView" th:field="${initializrBean.processView}" />
-                  <label for="processView">Includes VIEW (for Oiyokan experts)</label>
-                </div>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="processView">
+                  <input type="checkbox" id="processView" th:field="${initializrBean.processView}" class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Includes VIEW (for Oiyokan experts)</span>
+                </label>
 
 
                 <div>
                   <div class="">
-                    <button class="" type="submit" name="connTest">Connection Test</button>
-                    <button class="" type="submit" name="selectTable">Select Table</button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="connTest">Connection Test</button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" name="selectTable">Select Table</button>
+
+
                   </div>
                 </div>
               </form>
