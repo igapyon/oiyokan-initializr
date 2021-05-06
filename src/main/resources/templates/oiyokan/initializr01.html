@@ -64,116 +64,102 @@
       </div>
     </header>
     <main class="mdl-layout__content">
-
-      <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
-        <div class="alert alert-success" role="alert"><span th:text="${initializrBean.msgSuccess}" th:remove="tag" />
-        </div>
-      </div>
-      <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
-        <div class="alert alert-danger" role="alert"><span th:text="${initializrBean.msgError}" th:remove="tag" /></div>
-      </div>
-
       <div class="mdl-layout__tab-panel is-active" id="overview">
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
               <h4 class="mdl-cell mdl-cell--12-col">Database settings</h4>
 
-              <form class="needs-validation" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
-                <div class="row">
-                  <div class="col-md-8 mb-3">
-                    <button class="btn btn-secondary btn-sm" type="submit" name="prePostgreSQL">PostgreSQL</button>
-                    <button class="btn btn-secondary btn-sm" type="submit" name="preMySQL">MySQL</button>
-                    <button class="btn btn-secondary btn-sm" type="submit" name="preSQLSV2008">SQLSV2008</button>
-                    <button class="btn btn-secondary btn-sm" type="submit" name="preORCL18">ORCL18</button>
-                    <button class="btn btn-secondary btn-sm" type="submit" name="preH2">h2</button>
+              <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
+                <div class="alert alert-success" role="alert"><span th:text="${initializrBean.msgSuccess}"
+                    th:remove="tag" />
+                </div>
+              </div>
+              <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
+                <div class="alert alert-danger" role="alert"><span th:text="${initializrBean.msgError}"
+                    th:remove="tag" /></div>
+              </div>
+
+              <form class="" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
+                <div class="">
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit"
+                    name="prePostgreSQL">PostgreSQL</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit"
+                    name="preMySQL">MySQL</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit"
+                    name="preSQLSV2008">SQLSV2008</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit"
+                    name="preORCL18">ORCL18</button>
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="preH2">h2</button>
+                </div>
+
+                <div>
+                  <label for="type" class="">DB type</label>
+                  <select class="" id="type" required th:field="*{type}">
+                    <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
+                    <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
+                    <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
+                    <option th:value="SQLSV2008" th:text="SQLSV2008" th:selected="${type == 'SQLSV2008'}" />
+                    <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
+                  </select>
+                </div>
+
+                <div>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="name" th:field="*{name}">
+                    <label class="mdl-textfield__label" for="name">DB setting name</label>
+                  </div>
+
+
+
+
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="description" th:field="*{description}">
+                    <label class="mdl-textfield__label" for="description">Description of db settings</label>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="jdbcDriver" th:field="*{jdbcDriver}">
+                    <label class="mdl-textfield__label" for="jdbcDriver">JDBC Driver class name</label>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="jdbcUrl" th:field="*{jdbcUrl}">
+                    <label class="mdl-textfield__label" for="jdbcUrl">JDBC URL</label>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="jdbcUser" th:field="*{jdbcUser}">
+                    <label class="mdl-textfield__label" for="jdbcUser">JDBC User</label>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="jdbcPassPlain" th:field="*{jdbcPassPlain}">
+                    <label class="mdl-textfield__label" for="jdbcPassPlain">JDBC Password (plain text)</label>
                   </div>
                 </div>
-          
-                <div class="row">
-                  <div class="col-md-6 order-md-1">
-                    <div class="row">
-                      <label for="name">DB setting name</label>
-                      <input type="text" class="form-control" id="name" th:field="*{name}" />
-                    </div>
-                    <div class="row">
-                      <label for="type">DB type</label>
-                      <select class="custom-select d-block w-100" id="type" required th:field="*{type}">
-                        <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
-                        <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
-                        <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
-                        <option th:value="SQLSV2008" th:text="SQLSV2008" th:selected="${type == 'SQLSV2008'}" />
-                        <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
-                      </select>
-                      <div class="invalid-feedback">
-                        Please select a valid database.
-                      </div>
-                    </div>
-                    <div class="row">
-                      <label for="description">Description of db settings</label>
-                      <input type="text" class="form-control" id="description" th:field="*{description}" />
-                    </div>
-                    <div class="row">
-                      <label for="jdbcDriver">JDBC Driver class name</label>
-          
-                      <input type="text" class="form-control" id="jdbcDriver" th:field="*{jdbcDriver}" />
-                    </div>
-                    <div class="row">
-                      <label for="jdbcUrl">JDBC URL</label>
-                      <input type="text" class="form-control" id="jdbcUrl" th:field="*{jdbcUrl}" />
-                    </div>
-          
-                    <div class="row">
-                      <label for="jdbcUser">JDBC User</label>
-                      <input type="text" class="form-control" id="jdbcUser" th:field="*{jdbcUser}" />
-                    </div>
-                    <div class="row">
-                      <label for="jdbcPassPlain">JDBC Password (plain text)</label>
-                      <input type="text" class="form-control" id="jdbcPassPlain" th:field="*{jdbcPassPlain}" />
-                    </div>
-                  </div>
+
+
+                <div class="">
+                  Option
                 </div>
-          
-                <br />
-          
-                <div class="row">
-                  <div class="col-md-12">
-          
-                    <div class="card">
-                      <div class="card-header">
-                        Option
-                      </div>
-                      <div class="card-body mx-2">
-                        <input type="checkbox" class="form-check-input" id="processView"
-                          th:field="${initializrBean.processView}" />
-                        <label for="processView">Includes VIEW (for Oiyokan experts)</label>
-                      </div>
-                    </div>
-                  </div>
+                <div class="">
+                  <input type="checkbox" class="" id="processView" th:field="${initializrBean.processView}" />
+                  <label for="processView">Includes VIEW (for Oiyokan experts)</label>
                 </div>
-          
-          
-                <div class="row">
-                  <div class="col-md-12">
-                    <button class="btn btn-secondary btn-lg" type="submit" name="connTest">Connection Test</button>
-                    <button class="btn btn-primary btn-lg" type="submit" name="selectTable">Select Table</button>
+
+
+                <div>
+                  <div class="">
+                    <button class="" type="submit" name="connTest">Connection Test</button>
+                    <button class="" type="submit" name="selectTable">Select Table</button>
                   </div>
                 </div>
               </form>
-      
 
-
-
-
-            </div>
-          </div>
         </section>
       </div>
 
 
 
 
-  
+
 
 
 
