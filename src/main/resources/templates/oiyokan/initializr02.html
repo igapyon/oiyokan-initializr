@@ -71,20 +71,23 @@
               <h4 class="mdl-cell mdl-cell--12-col">Table selection</h4>
 
               <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
-                <ul class="toc">
+                <div class="toc">
                   <span class="mdl-chip mdl-chip--contact">
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">I</span>
-                    <span class="mdl-chip__text" th:text="${initializrBean.msgSuccess}">Contact Chip</span>
+                    <span class="mdl-chip__text">Information</span>
                   </span>
-                </ul>
+                  <div th:text="${initializrBean.msgSuccess}">Contact Chip</div>
+                </div>
               </div>
               <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
-                <ul class="toc">
+                <div class="toc">
                   <span class="mdl-chip mdl-chip--contact">
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
-                    <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
+                    <span class="mdl-chip__text">Error</span>
                   </span>
-                </ul>
+                  <div th:text="${initializrBean.msgError}">Contact Chip</div>
+                  </span>
+                </div>
               </div>
 
               <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
@@ -137,7 +140,7 @@
 
                   <div>
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
-                      name="download">GENERATE</button>
+                      name="download"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg> GENERATE</button>
                   </div>
               </form>
             </div>

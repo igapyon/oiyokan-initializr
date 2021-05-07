@@ -68,21 +68,55 @@
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+              <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                <header
+                  class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
+                  <a href="/initializr/"><i class="material-icons">play_circle_filled</i></a>
+                </header>
+                <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+                  <div class="mdl-card__supporting-text">
+                    <h4>Quickly generate a REST API Server for RDB</h4>
+                    Oiyokan Initializr allows you to create a Spring Boot web app in low code that exposes an RDB as a
+                    REST API Server (OData v4).
+                    You can quickly publish the RDB as a REST web app by entering and clicking parameters.
+                  </div>
+                  <div class="mdl-card__actions">
+                    <a href="/initializr/" class="mdl-button">Start creating Spring Boot web app that can turn RDB into
+                      REST API Server</a>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="mdl-layout__tab-panel is-active" id="overview">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
               <h4 class="mdl-cell mdl-cell--12-col">Details</h4>
               <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
                 <div class="section__circle-container__circle mdl-color--primary"></div>
               </div>
               <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                <h5>About Oiyokan</h5>
-                Oiyokan is an OData v4 server (provider) SDK for RDB. You can use Oiyokan to turn RDBMS into OData v4
-                services using JDBC driver. Based on Apache Olingo / Spring Boot / h2 database.
+                <h5>Java, Maven required</h5>
+                Java, Maven required for Oiyokan Initializr to execute.
               </div>
               <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
                 <div class="section__circle-container__circle mdl-color--primary"></div>
               </div>
               <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
-                <h5>About Oiyokan Initializr</h5>
-                Oiyokan Initializr is a generater to create Spring Boot simple project to run OData v4 Server includes `oiyokan-settings.json`.
+                <h5>JDBC connection required</h5>
+                An RDB JDBC connection is required to run Oiyokan Initializr and the REST API Server created. Examine
+                the JDBC configuration information before running Oiyokan Initializr.
+              </div>
+              <div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">
+                <div class="section__circle-container__circle mdl-color--primary"></div>
+              </div>
+              <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone">
+                <h5>Knowledge of Spring Boot</h5>
+                A series of operations related to Oiyokan Initializr will require Spring Boot knowledge.
               </div>
             </div>
           </div>

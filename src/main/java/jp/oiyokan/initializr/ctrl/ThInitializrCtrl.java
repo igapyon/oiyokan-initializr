@@ -126,7 +126,7 @@ public class ThInitializrCtrl {
         } catch (SQLException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
-            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201+ ": " + ex.toString());
             return null;
         }
 
