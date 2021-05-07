@@ -71,20 +71,23 @@
               <h4 class="mdl-cell mdl-cell--12-col">Database JDBC settings</h4>
 
               <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
-                <ul class="toc">
+                <div class="toc">
                   <span class="mdl-chip mdl-chip--contact">
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">I</span>
-                    <span class="mdl-chip__text" th:text="${initializrBean.msgSuccess}">Contact Chip</span>
+                    <span class="mdl-chip__text">Information</span>
                   </span>
-                </ul>
+                  <div th:text="${initializrBean.msgSuccess}">Contact Chip</div>
+                </div>
               </div>
               <div th:if="${initializrBean.msgError ne null && initializrBean.msgError != ''}" th:remove="tag">
-                <ul class="toc">
+                <div class="toc">
                   <span class="mdl-chip mdl-chip--contact">
                     <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">E</span>
-                    <span class="mdl-chip__text" th:text="${initializrBean.msgError}">Contact Chip</span>
+                    <span class="mdl-chip__text">Error</span>
                   </span>
-                </ul>
+                  <div th:text="${initializrBean.msgError}">Contact Chip</div>
+                  </span>
+                </div>
               </div>
 
               <form class="" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
