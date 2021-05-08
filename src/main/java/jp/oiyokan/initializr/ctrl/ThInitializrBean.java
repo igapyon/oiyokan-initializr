@@ -1,9 +1,16 @@
 package jp.oiyokan.initializr.ctrl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThInitializrBean {
+import org.springframework.stereotype.Component;
+
+@Component
+// @Scope(value = WebApplicationContext.SCOPE_SESSION)
+public class ThInitializrBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String msgSuccess = null;
     private String msgError = null;
 
@@ -99,6 +106,5 @@ public class ThInitializrBean {
         public void setName(String name) {
             this.name = name;
         }
-
     }
 }

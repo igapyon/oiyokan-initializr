@@ -22,8 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
@@ -35,11 +37,17 @@ import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
 
 @Controller
+@SessionAttributes(value = { "initializrBean" })
 public class ThInitializrCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrCtrl.class);
 
     @Autowired
     private HttpSession session;
+
+    @ModelAttribute(value = "initializrBean")
+    public ThInitializrBean setupBean() {
+        return new ThInitializrBean();
+    }
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
@@ -126,7 +134,7 @@ public class ThInitializrCtrl {
         } catch (SQLException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
-            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201+ ": " + ex.toString());
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             return null;
         }
 
