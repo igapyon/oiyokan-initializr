@@ -1,11 +1,26 @@
 package jp.oiyokan.initializr.ctrl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThInitializrBean {
+import org.springframework.stereotype.Component;
+
+import jp.oiyokan.dto.OiyoSettings;
+import jp.oiyokan.dto.OiyoSettingsDatabase;
+
+@Component
+// @Scope(value = WebApplicationContext.SCOPE_SESSION)
+public class ThInitializrBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String msgSuccess = null;
     private String msgError = null;
+
+    private final OiyoSettings settings = new OiyoSettings();
+
+    ///////////////////////////////////////////////
+    // 画面項目
 
     boolean processView = false;
     boolean isReadWriteAccess = true;
@@ -14,6 +29,59 @@ public class ThInitializrBean {
 
     private List<String> checkboxes = new ArrayList<>();
     private List<EntitySet> entitySets = new ArrayList<>();
+
+    public ThInitializrBean() {
+
+        if (settings.getNamespace() == null) {
+            settings.setNamespace("Oiyokan"); // Namespace of OData
+        }
+        if (settings.getContainerName() == null) {
+            settings.setContainerName("Container"); // Container of OData
+        }
+        if (settings.getDatabase() == null) {
+            settings.setDatabase(new ArrayList<>());
+        }
+        if (settings.getEntitySet() == null) {
+            settings.setEntitySet(new ArrayList<>());
+        }
+
+        final OiyoSettingsDatabase database = getFirstDatabase();
+        if (database.getName() == null) {
+            database.setName("mydbsetting1");
+        }
+        if (database.getType() == null) {
+            database.setType("PostgreSQL"); // h2, PostgreSQL, MySQL, SQLSV2008, ORCL18
+        }
+        if (database.getDescription() == null) {
+            database.setDescription("Tutorial db sample.");
+        }
+        if (database.getJdbcDriver() == null) {
+            database.setJdbcDriver("org.postgresql.Driver"); // JDBC Driver class name.
+        }
+        if (database.getJdbcUrl() == null) {
+            database.setJdbcUrl("jdbc:postgresql://localhost:5432/dvdrental"); // JDBC URL.
+        }
+        database.setJdbcUser(""); // JDBC User.
+        database.setJdbcPassPlain(""); // JDBC Password.
+    }
+
+    ///////////////////////////////////////////////
+    // Method
+
+    public OiyoSettings getSettings() {
+        return settings;
+    }
+
+    public OiyoSettingsDatabase getFirstDatabase() {
+        if (settings.getDatabase() == null) {
+            settings.setDatabase(new ArrayList<>());
+        }
+        if (settings.getDatabase().size() == 0) {
+            settings.getDatabase().add(new OiyoSettingsDatabase());
+        }
+
+        return settings.getDatabase().get(0);
+    }
 
     public String getMsgSuccess() {
         return msgSuccess;
@@ -75,6 +143,9 @@ public class ThInitializrBean {
         return entitySets;
     }
 
+    ///////////////////////////////////////////////
+    // 画面のチェックボッスで利用する EntitySet
+
     public static class EntitySet {
         private boolean selected = false;
         private String name = null;
@@ -99,6 +170,5 @@ public class ThInitializrBean {
         public void setName(String name) {
             this.name = name;
         }
-
     }
 }

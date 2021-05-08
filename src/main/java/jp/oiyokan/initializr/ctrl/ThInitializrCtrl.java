@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
@@ -35,45 +36,29 @@ import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
 
 @Controller
+@SessionAttributes(value = { "initializrBean" })
 public class ThInitializrCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrCtrl.class);
 
     @Autowired
     private HttpSession session;
 
+    @ModelAttribute(value = "initializrBean")
+    public ThInitializrBean setupBean() {
+        return new ThInitializrBean();
+    }
+
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
-    public String index(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String index(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
-
-        if (database.getName() == null) {
-            database.setName("mydbsetting1");
-        }
-        if (database.getType() == null) {
-            database.setType("PostgreSQL"); // h2, PostgreSQL, MySQL, SQLSV2008, ORCL18
-        }
-        if (database.getDescription() == null) {
-            database.setDescription("Tutorial db sample.");
-        }
-        if (database.getJdbcDriver() == null) {
-            database.setJdbcDriver("org.postgresql.Driver"); // JDBC Driver class name.
-        }
-        if (database.getJdbcUrl() == null) {
-            database.setJdbcUrl("jdbc:postgresql://localhost:5432/dvdrental"); // JDBC URL.
-        }
-        database.setJdbcUser(""); // JDBC User.
-        database.setJdbcPassPlain(""); // JDBC Password.
 
         return "oiyokan/initializr01";
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "connTest" }, method = { RequestMethod.POST })
-    public String connTest(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String connTest(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
@@ -86,32 +71,24 @@ public class ThInitializrCtrl {
 
         // ひとつもテーブルをマップさせずに接続のみ確認。
         Map<String, String> mapNameFilter = new HashMap<>();
-        connTestInternal(database, initializrBean, mapNameFilter);
+        connTestInternal(initializrBean, mapNameFilter);
 
         return "oiyokan/initializr01";
     }
 
-    OiyoSettings connTestInternal(OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            Map<String, String> mapNameFilter) throws IOException {
+    OiyoSettings connTestInternal(ThInitializrBean initializrBean, Map<String, String> mapNameFilter)
+            throws IOException {
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
         // [IYI1101] Prepare database settings.
         log.info(OiyokanInitializrMessages.IYI1101);
-        OiyoInfo oiyoInfo = new OiyoInfo();
-
-        OiyoSettings oiyoSettings = new OiyoSettings();
-        oiyoSettings.setNamespace("Oiyokan"); // Namespace of OData
-        oiyoSettings.setContainerName("Container"); // Container of OData
-        oiyoSettings.setDatabase(new ArrayList<>());
-        oiyoSettings.setEntitySet(new ArrayList<>());
-
-        oiyoSettings.getDatabase().add(database);
 
         //////////////////////////////////////////////////////////
         // Process settings
-
+        final OiyoInfo oiyoInfo = new OiyoInfo();
+        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         try {
             // Enc pass は一旦クリア.
             database.setJdbcPassEnc("");
@@ -126,17 +103,17 @@ public class ThInitializrCtrl {
         } catch (SQLException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
-            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201+ ": " + ex.toString());
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             return null;
         }
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView(),
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, initializrBean.getSettings(), initializrBean.isProcessView(),
                     initializrBean.isReadWriteAccess(), mapNameFilter);
 
             // TODO message
             initializrBean.setMsgSuccess("Connection test success.");
-            return oiyoSettings;
+            return initializrBean.getSettings();
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
@@ -151,13 +128,12 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preH2" }, method = { RequestMethod.POST })
-    public String preH2(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String preH2(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getName() == null) {
             database.setName("mydbsetting1");
         }
@@ -177,13 +153,12 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "prePostgreSQL" }, method = { RequestMethod.POST })
-    public String prePostgreSQL(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String prePostgreSQL(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getName() == null) {
             database.setName("mydbsetting1");
         }
@@ -202,13 +177,12 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preMySQL" }, method = { RequestMethod.POST })
-    public String preMySQL(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String preMySQL(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getName() == null) {
             database.setName("mydbsetting1");
         }
@@ -228,13 +202,12 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preSQLSV2008" }, method = { RequestMethod.POST })
-    public String preSQLSV2008(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String preSQLSV2008(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getName() == null) {
             database.setName("mydbsetting1");
         }
@@ -253,13 +226,12 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preORCL18" }, method = { RequestMethod.POST })
-    public String preORCL18(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String preORCL18(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getName() == null) {
             database.setName("mydbsetting1");
         }
@@ -281,16 +253,14 @@ public class ThInitializrCtrl {
     // Select table
 
     @RequestMapping(value = { "/initializr" }, params = { "selectTable" }, method = { RequestMethod.POST })
-    public String selectTable(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
-            BindingResult result) throws IOException {
-        model.addAttribute("databaseBean", database);
+    public String selectTable(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
         log.info("processView:" + initializrBean.isProcessView());
 
-        OiyoSettings oiyoSettings = connTestInternal(database, initializrBean, null/* 全件テーブルを処理対象 */);
+        OiyoSettings oiyoSettings = initializrBean.getSettings();
         if (oiyoSettings != null) {
             // ソートなど
             OiyoInfo oiyoInfo = new OiyoInfo();
@@ -302,6 +272,7 @@ public class ThInitializrCtrl {
                 initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), false));
             }
 
+            OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
             if (database.getJdbcUser() == null) {
                 log.info("selectTable: database.jdbcUser was null");
                 database.setJdbcUser("");
@@ -336,18 +307,7 @@ public class ThInitializrCtrl {
     public String download(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
 
-        final OiyoSettingsDatabase database = new OiyoSettingsDatabase();
-
-        // TODO FIXME そもそも Form Bean を作成して、通常のセッション処理を行うこと。
-        database.setName((String) session.getAttribute("database.name"));
-        database.setType((String) session.getAttribute("database.type"));
-        database.setDescription((String) session.getAttribute("database.description"));
-        database.setJdbcDriver((String) session.getAttribute("database.jdbcDriver"));
-        database.setJdbcUrl((String) session.getAttribute("database.jdbcUrl"));
-        database.setJdbcUser((String) session.getAttribute("database.jdbcUser"));
-        database.setJdbcPassPlain((String) session.getAttribute("database.jdbcPassPlain"));
-        database.setJdbcPassEnc((String) session.getAttribute("database.jdbcPassEnc"));
-
+        OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getJdbcUser() == null) {
             log.info("download: database.jdbcUser was null");
             database.setJdbcUser("");
@@ -369,7 +329,7 @@ public class ThInitializrCtrl {
 
         // 一覧の網羅性のために VIEW も含めて処理
         initializrBean.setProcessView(true);
-        final OiyoSettings oiyoSettings = connTestInternal(database, initializrBean, mapNameFilter);
+        final OiyoSettings oiyoSettings = connTestInternal(initializrBean, mapNameFilter);
 
         // [IYI1001] Oiyokan Initializr Begin.
         log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");

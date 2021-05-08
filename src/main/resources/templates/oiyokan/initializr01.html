@@ -90,7 +90,7 @@
                 </div>
               </div>
 
-              <form class="" th:action="@{/initializr}" th:object="${databaseBean}" method="post">
+              <form class="" th:action="@{/initializr}" th:object="${initializrBean.firstDatabase}" method="post">
                 <div class="">
                   <button class="mdl-button mdl-js-button mdl-button--raised" type="submit"
                     name="prePostgreSQL">PostgreSQL</button>
