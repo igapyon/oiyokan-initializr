@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 
@@ -47,13 +48,14 @@ public class ThInitializrBean implements Serializable {
 
         final OiyoSettingsDatabase database = getFirstDatabase();
         if (database.getName() == null) {
-            database.setName("mydbsetting1");
+            database.setName("connDef1");
         }
         if (database.getType() == null) {
-            database.setType("PostgreSQL"); // h2, PostgreSQL, MySQL, SQLSV2008, ORCL18
+            database.setType(OiyokanConstants.DatabaseType.PostgreSQL.name()); // h2, PostgreSQL, MySQL, SQLSV2008,
+                                                                               // ORCL18
         }
         if (database.getDescription() == null) {
-            database.setDescription("Tutorial db sample.");
+            database.setDescription("Description of this database jdbc settings.");
         }
         if (database.getJdbcDriver() == null) {
             database.setJdbcDriver("org.postgresql.Driver"); // JDBC Driver class name.
