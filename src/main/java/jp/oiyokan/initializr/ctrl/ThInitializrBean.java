@@ -8,9 +8,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-import jp.oiyokan.dto.OiyoSettings;
-import jp.oiyokan.dto.OiyoSettingsDatabase;
-
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class ThInitializrBean implements Serializable {
@@ -18,8 +15,6 @@ public class ThInitializrBean implements Serializable {
 
     private String msgSuccess = null;
     private String msgError = null;
-
-    private final OiyoSettings settings = new OiyoSettings();
 
     ///////////////////////////////////////////////
     // 画面項目
@@ -32,38 +27,8 @@ public class ThInitializrBean implements Serializable {
     private List<String> checkboxes = new ArrayList<>();
     private List<EntitySet> entitySets = new ArrayList<>();
 
-    public ThInitializrBean() {
-        if (settings.getNamespace() == null) {
-            settings.setNamespace("Oiyokan"); // Namespace of OData
-        }
-        if (settings.getContainerName() == null) {
-            settings.setContainerName("Container"); // Container of OData
-        }
-        if (settings.getDatabase() == null) {
-            settings.setDatabase(new ArrayList<>());
-        }
-        if (settings.getEntitySet() == null) {
-            settings.setEntitySet(new ArrayList<>());
-        }
-    }
-
     ///////////////////////////////////////////////
     // Method
-
-    public OiyoSettings getSettings() {
-        return settings;
-    }
-
-    public OiyoSettingsDatabase getFirstDatabase() {
-        if (settings.getDatabase() == null) {
-            settings.setDatabase(new ArrayList<>());
-        }
-        if (settings.getDatabase().size() == 0) {
-            settings.getDatabase().add(new OiyoSettingsDatabase());
-        }
-
-        return settings.getDatabase().get(0);
-    }
 
     public String getMsgSuccess() {
         return msgSuccess;

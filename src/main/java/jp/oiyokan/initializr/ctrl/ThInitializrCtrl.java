@@ -55,40 +55,38 @@ public class ThInitializrCtrl {
 
         log.info("processView:" + initializrBean.isProcessView());
 
-        OiyoSettings oiyoSettings = initializrBean.getSettings();
-        if (oiyoSettings != null) {
-            // ソートなど
-            OiyoInfo oiyoInfo = new OiyoInfo();
+        OiyoSettings oiyoSettings = settingsBean.getSettings();
 
-            ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, initializrBean.getFirstDatabase(), null);
+        // ソートなど
+        OiyoInfo oiyoInfo = new OiyoInfo();
 
-            OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
-                    initializrBean.isFilterTreatNullAsBlank);
+        // TODO FIXME どのデータベースか確認。
+        ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, oiyoSettings.getDatabase().get(0), null);
 
-            initializrBean.getEntitySets().clear();
-            for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-                initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), true, false));
-            }
+        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
+                initializrBean.isFilterTreatNullAsBlank);
 
-            OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
-            if (database.getJdbcUser() == null) {
-                log.info("selectTable: database.jdbcUser was null");
-                database.setJdbcUser("");
-            }
-            if (database.getJdbcPassPlain() == null) {
-                log.info("selectTable: database.jdbcPassPlain was null");
-                database.setJdbcPassPlain("");
-            }
-            if (database.getJdbcPassEnc() == null) {
-                log.info("selectTable: database.jdbcPassEnc was null");
-                database.setJdbcPassPlain("");
-            }
-
-            // TODO Entityの設定状況により分岐
-            return "oiyokan/initializrSelectEntity";
-        } else {
-            return "oiyokan/initializrSetupDatabase";
+        initializrBean.getEntitySets().clear();
+        for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
+            initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), true, false));
         }
+
+        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
+        if (database.getJdbcUser() == null) {
+            log.info("selectTable: database.jdbcUser was null");
+            database.setJdbcUser("");
+        }
+        if (database.getJdbcPassPlain() == null) {
+            log.info("selectTable: database.jdbcPassPlain was null");
+            database.setJdbcPassPlain("");
+        }
+        if (database.getJdbcPassEnc() == null) {
+            log.info("selectTable: database.jdbcPassEnc was null");
+            database.setJdbcPassPlain("");
+        }
+
+        // TODO Entityの設定状況により分岐
+        return "oiyokan/initializrSelectEntity";
     }
 
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
@@ -96,19 +94,8 @@ public class ThInitializrCtrl {
             throws IOException {
         model.addAttribute("settings", settingsBean.getSettings());
 
-        OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
-        if (database.getJdbcUser() == null) {
-            log.info("download: database.jdbcUser was null");
-            database.setJdbcUser("");
-        }
-        if (database.getJdbcPassPlain() == null) {
-            log.info("download: database.jdbcPassPlain was null");
-            database.setJdbcPassPlain("");
-        }
-        if (database.getJdbcPassEnc() == null) {
-            log.info("download: database.jdbcPassEnc was null");
-            database.setJdbcPassPlain("");
-        }
+        // TODO すべてデータベースにこの同様処理が必要。
+        OiyoSettingsDatabase database = settingsBean.getSettings().getDatabase().get(0);
 
         // JSON書き込み直前に、プレーンパスワードを除去
         if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
@@ -123,7 +110,7 @@ public class ThInitializrCtrl {
 
         String jsonString = null;
         try {
-            jsonString = OiyokanInitializrUtil.oiyoSettings2String(initializrBean.getSettings());
+            jsonString = OiyokanInitializrUtil.oiyoSettings2String(settingsBean.getSettings());
         } catch (IOException ex) {
             // [IYI4201] ERROR: Fail to generate json file.
             log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);

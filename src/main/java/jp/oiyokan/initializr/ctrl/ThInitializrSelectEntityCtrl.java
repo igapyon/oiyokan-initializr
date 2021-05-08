@@ -85,7 +85,7 @@ public class ThInitializrSelectEntityCtrl {
 
         // 一覧の網羅性のために VIEW も含めて処理
         initializrBean.setProcessView(true);
-        final OiyoSettings oiyoSettings = initializrBean.getSettings();
+        final OiyoSettings oiyoSettings = settingsBean.getSettings();
 
         // [IYI1001] Oiyokan Initializr Begin.
         log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
