@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,8 +29,12 @@ import jp.oiyokan.util.OiyoEncryptUtil;
 public class ThInitializrCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrCtrl.class);
 
+    @Autowired
+    private OiyokanSettingsWrapper settingsBean;
+
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
@@ -43,6 +48,7 @@ public class ThInitializrCtrl {
     // TODO これまだ実装してない
     @RequestMapping(value = { "/initializr" }, params = { "selectTable" }, method = { RequestMethod.POST })
     public String selectTable(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
@@ -88,6 +94,7 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
     public String generate(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
 
         OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         if (database.getJdbcUser() == null) {

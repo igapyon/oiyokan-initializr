@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.olingo.server.api.ODataApplicationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,12 +33,16 @@ import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
 public class ThInitializrSelectEntityCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrSelectEntityCtrl.class);
 
+    @Autowired
+    private OiyokanSettingsWrapper settingsBean;
+
     /////////////////////////
     // Select table
 
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
@@ -67,6 +72,7 @@ public class ThInitializrSelectEntityCtrl {
             RequestMethod.POST })
     public String saveEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result)
             throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);

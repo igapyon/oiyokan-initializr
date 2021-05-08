@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +25,12 @@ import jp.oiyokan.initializr.OiyokanInitializrMessages;
 public class ThInitializrSetupDatabaseCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrSetupDatabaseCtrl.class);
 
+    @Autowired
+    private OiyokanSettingsWrapper settingsBean;
+
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "new" }, method = { RequestMethod.POST })
     public String open(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         OiyoSettingsDatabase database = new OiyoSettingsDatabase();
 
@@ -58,6 +63,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "connTest" }, method = { RequestMethod.POST })
     public String connTest(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
@@ -113,6 +119,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preH2" }, method = { RequestMethod.POST })
     public String preH2(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
@@ -137,6 +144,7 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String prePostgreSQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
@@ -159,6 +167,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preMySQL" }, method = { RequestMethod.POST })
     public String preMySQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
@@ -183,6 +192,7 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String preSQLSV2008(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
@@ -205,6 +215,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preORCL18" }, method = { RequestMethod.POST })
     public String preORCL18(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
@@ -228,6 +239,7 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String saveDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
