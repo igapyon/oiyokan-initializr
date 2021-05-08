@@ -30,6 +30,41 @@ public class ThInitializrBean implements Serializable {
     private List<String> checkboxes = new ArrayList<>();
     private List<EntitySet> entitySets = new ArrayList<>();
 
+    public ThInitializrBean() {
+
+        if (settings.getNamespace() == null) {
+            settings.setNamespace("Oiyokan"); // Namespace of OData
+        }
+        if (settings.getContainerName() == null) {
+            settings.setContainerName("Container"); // Container of OData
+        }
+        if (settings.getDatabase() == null) {
+            settings.setDatabase(new ArrayList<>());
+        }
+        if (settings.getEntitySet() == null) {
+            settings.setEntitySet(new ArrayList<>());
+        }
+
+        final OiyoSettingsDatabase database = getFirstDatabase();
+        if (database.getName() == null) {
+            database.setName("mydbsetting1");
+        }
+        if (database.getType() == null) {
+            database.setType("PostgreSQL"); // h2, PostgreSQL, MySQL, SQLSV2008, ORCL18
+        }
+        if (database.getDescription() == null) {
+            database.setDescription("Tutorial db sample.");
+        }
+        if (database.getJdbcDriver() == null) {
+            database.setJdbcDriver("org.postgresql.Driver"); // JDBC Driver class name.
+        }
+        if (database.getJdbcUrl() == null) {
+            database.setJdbcUrl("jdbc:postgresql://localhost:5432/dvdrental"); // JDBC URL.
+        }
+        database.setJdbcUser(""); // JDBC User.
+        database.setJdbcPassPlain(""); // JDBC Password.
+    }
+
     ///////////////////////////////////////////////
     // Method
 
@@ -44,6 +79,7 @@ public class ThInitializrBean implements Serializable {
         if (settings.getDatabase().size() == 0) {
             settings.getDatabase().add(new OiyoSettingsDatabase());
         }
+
         return settings.getDatabase().get(0);
     }
 
