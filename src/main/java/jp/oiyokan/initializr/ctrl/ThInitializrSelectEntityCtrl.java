@@ -3,6 +3,7 @@ package jp.oiyokan.initializr.ctrl;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,8 +86,6 @@ public class ThInitializrSelectEntityCtrl {
             mapNameFilter.put(opts, opts);
         }
 
-        // 一覧の網羅性のために VIEW も含めて処理
-        initializrBean.setProcessView(true);
         final OiyoSettings oiyoSettings = settingsBean.getSettings();
 
         // [IYI1001] Oiyokan Initializr Begin.
@@ -95,6 +94,14 @@ public class ThInitializrSelectEntityCtrl {
         //////////////////////////////////////////////////////////
         // Setup basic settings info
         OiyoInfo oiyoInfo = new OiyoInfo();
+
+        try {
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView(),
+                    initializrBean.isReadWriteAccess(), mapNameFilter);
+        } catch (ODataApplicationException | SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                 initializrBean.isFilterTreatNullAsBlank);
