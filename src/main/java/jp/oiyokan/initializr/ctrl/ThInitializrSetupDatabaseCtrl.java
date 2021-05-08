@@ -264,6 +264,7 @@ public class ThInitializrSetupDatabaseCtrl {
             // TODO 既存のものがあれば置き換えること。
 
             settingsBean.getSettings().getDatabase().add(database);
+            initializrBean.setMsgSuccess("Database settings addded.");
             return "oiyokan/initializrTop";
         }
     }

@@ -98,15 +98,17 @@ public class ThInitializrSelectEntityCtrl {
         try {
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView(),
                     initializrBean.isReadWriteAccess(), mapNameFilter);
+
+            OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
+                    initializrBean.isFilterTreatNullAsBlank);
+            initializrBean.setMsgSuccess("Entity selection applied");
+            return "oiyokan/initializrTop";
         } catch (ODataApplicationException | SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return "oiyokan/initializrSelectEntity";
         }
 
-        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
-                initializrBean.isFilterTreatNullAsBlank);
-
-        return "oiyokan/initializrTop";
     }
 
     public static void selectEntityInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database)
