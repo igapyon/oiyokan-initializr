@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import jp.oiyokan.dto.OiyoSettings;
+import jp.oiyokan.dto.OiyoSettingsDatabase;
+
 @Component
 // @Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class ThInitializrBean implements Serializable {
@@ -14,6 +17,11 @@ public class ThInitializrBean implements Serializable {
     private String msgSuccess = null;
     private String msgError = null;
 
+    private final OiyoSettings settings = new OiyoSettings();
+
+    ///////////////////////////////////////////////
+    // 画面項目
+
     boolean processView = false;
     boolean isReadWriteAccess = true;
     boolean convertCamel = false; // EntitySetなどの名称を Camel case にするかどうか。通常は false で良い
@@ -21,6 +29,23 @@ public class ThInitializrBean implements Serializable {
 
     private List<String> checkboxes = new ArrayList<>();
     private List<EntitySet> entitySets = new ArrayList<>();
+
+    ///////////////////////////////////////////////
+    // Method
+
+    public OiyoSettings getSettings() {
+        return settings;
+    }
+
+    public OiyoSettingsDatabase getFirstDatabase() {
+        if (settings.getDatabase() == null) {
+            settings.setDatabase(new ArrayList<>());
+        }
+        if (settings.getDatabase().size() == 0) {
+            settings.getDatabase().add(new OiyoSettingsDatabase());
+        }
+        return settings.getDatabase().get(0);
+    }
 
     public String getMsgSuccess() {
         return msgSuccess;
@@ -81,6 +106,9 @@ public class ThInitializrBean implements Serializable {
     public List<EntitySet> getEntitySets() {
         return entitySets;
     }
+
+    ///////////////////////////////////////////////
+    // 画面のチェックボッスで利用する EntitySet
 
     public static class EntitySet {
         private boolean selected = false;
