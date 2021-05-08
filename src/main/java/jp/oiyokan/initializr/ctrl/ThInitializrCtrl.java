@@ -11,13 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.olingo.server.api.ODataApplicationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,9 +38,6 @@ import jp.oiyokan.util.OiyoEncryptUtil;
 public class ThInitializrCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrCtrl.class);
 
-    @Autowired
-    private HttpSession session;
-
     @ModelAttribute(value = "initializrBean")
     public ThInitializrBean setupBean() {
         return new ThInitializrBean();
@@ -54,7 +49,9 @@ public class ThInitializrCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        return "oiyokan/initializr01";
+        // TODO 必要に応じて分岐。
+
+        return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "connTest" }, method = { RequestMethod.POST })
@@ -73,7 +70,7 @@ public class ThInitializrCtrl {
         Map<String, String> mapNameFilter = new HashMap<>();
         connTestInternal(initializrBean, mapNameFilter);
 
-        return "oiyokan/initializr01";
+        return "oiyokan/initializrSetupDatabase";
     }
 
     OiyoSettings connTestInternal(ThInitializrBean initializrBean, Map<String, String> mapNameFilter)
@@ -149,7 +146,7 @@ public class ThInitializrCtrl {
 
         initializrBean.setMsgSuccess("Typical h2 preset is loaded.");
 
-        return "oiyokan/initializr01";
+        return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "prePostgreSQL" }, method = { RequestMethod.POST })
@@ -173,7 +170,7 @@ public class ThInitializrCtrl {
 
         initializrBean.setMsgSuccess("Typical PostgreSQL preset is loaded.");
 
-        return "oiyokan/initializr01";
+        return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preMySQL" }, method = { RequestMethod.POST })
@@ -198,7 +195,7 @@ public class ThInitializrCtrl {
 
         initializrBean.setMsgSuccess("Typical MySQL preset is loaded.");
 
-        return "oiyokan/initializr01";
+        return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preSQLSV2008" }, method = { RequestMethod.POST })
@@ -222,7 +219,7 @@ public class ThInitializrCtrl {
 
         initializrBean.setMsgSuccess("Typical SQLSV2008 preset is loaded.");
 
-        return "oiyokan/initializr01";
+        return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preORCL18" }, method = { RequestMethod.POST })
@@ -246,7 +243,7 @@ public class ThInitializrCtrl {
 
         initializrBean.setMsgSuccess("Typical ORCL18 preset is loaded.");
 
-        return "oiyokan/initializr01";
+        return "oiyokan/initializrSetupDatabase";
     }
 
     /////////////////////////
@@ -264,6 +261,9 @@ public class ThInitializrCtrl {
         if (oiyoSettings != null) {
             // ソートなど
             OiyoInfo oiyoInfo = new OiyoInfo();
+
+            connTestInternal(initializrBean, null);
+
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);
 
@@ -286,20 +286,9 @@ public class ThInitializrCtrl {
                 database.setJdbcPassPlain("");
             }
 
-            // セッションを記憶
-            // TODO FIXME そもそも Form Bean を作成して、通常のセッション処理を行うこと。
-            session.setAttribute("database.name", database.getName());
-            session.setAttribute("database.type", database.getType());
-            session.setAttribute("database.description", database.getDescription());
-            session.setAttribute("database.jdbcDriver", database.getJdbcDriver());
-            session.setAttribute("database.jdbcUrl", database.getJdbcUrl());
-            session.setAttribute("database.jdbcUser", database.getJdbcUser());
-            session.setAttribute("database.jdbcPassPlain", database.getJdbcPassPlain());
-            session.setAttribute("database.jdbcPassEnc", database.getJdbcPassEnc());
-
             return "oiyokan/initializr02";
         } else {
-            return "oiyokan/initializr01";
+            return "oiyokan/initializrSetupDatabase";
         }
     }
 
