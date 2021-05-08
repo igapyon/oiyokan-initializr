@@ -15,9 +15,9 @@ import jp.oiyokan.dto.OiyoSettings;
 public class OiyokanSettingsWrapper implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final OiyoSettings settings = new OiyoSettings();
+    private OiyoSettings settings = new OiyoSettings();
 
-    public OiyokanSettingsWrapper() {
+    public OiyoSettings getSettings() {
         if (settings.getNamespace() == null) {
             settings.setNamespace("Oiyokan"); // Namespace of OData
         }
@@ -30,9 +30,11 @@ public class OiyokanSettingsWrapper implements Serializable {
         if (settings.getEntitySet() == null) {
             settings.setEntitySet(new ArrayList<>());
         }
+
+        return settings;
     }
 
-    public OiyoSettings getSettings() {
-        return settings;
+    public void setSettings(OiyoSettings settings) {
+        this.settings = settings;
     }
 }

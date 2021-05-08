@@ -110,13 +110,24 @@
                             <div th:text="${db.type}"></div>
                           </td>
                           <td class="mdl-data-table__cell--non-numeric">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                              type="submit" name="new" th:value="${db.name}"><svg xmlns="http://www.w3.org/2000/svg"
-                                height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
-                                <path d="M0 0h24v24H0V0z" fill="none" />
-                                <path
-                                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-                              </svg> Add Entity settings</button>
+                            <div th:if="${settings.entitySet.size() == 0}" th:remove="tag">
+                              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                                type="submit" name="new" th:value="${db.name}"><svg xmlns="http://www.w3.org/2000/svg"
+                                  height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                                  <path d="M0 0h24v24H0V0z" fill="none" />
+                                  <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                                </svg> Add Entity</button>
+                            </div>
+                            <div th:if="${settings.entitySet.size() != 0}" th:remove="tag">
+                              <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="new"
+                                th:value="${db.name}"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                  viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                                  <path d="M0 0h24v24H0V0z" fill="none" />
+                                  <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                                </svg> Add Entity</button>
+                            </div>
                           </td>
                         </tr>
                       </div>
@@ -133,7 +144,7 @@
                       <path d="M0 0h24v24H0V0z" fill="none" />
                       <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-                    </svg> Add Database settings</button>
+                    </svg> Add Database</button>
                 </form>
               </div>
             </div>
@@ -160,13 +171,8 @@
                             <div>まってて。。。CRUDとかproperty数かしら</div>
                           </td>
                           <td class="mdl-data-table__cell--non-numeric">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                              type="submit" name="new" th:value="${entitySet.name}"><svg xmlns="http://www.w3.org/2000/svg"
-                                height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
-                                <path d="M0 0h24v24H0V0z" fill="none" />
-                                <path
-                                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-                              </svg> Edit Entity settings</button>
+                            <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="edit"
+                              th:value="${entitySet.name}">Edit Entity</button>
                           </td>
                         </tr>
                       </div>
@@ -174,12 +180,17 @@
                   </table>
                 </form>
               </div>
-
             </div>
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-
               <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
-                <div>
+                <div th:if="${settings.entitySet.size() == 0}" th:remove="tag">
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="generate"><svg
+                      xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
+                    </svg> Generate REST API Server</button>
+                </div>
+                <div th:if="${settings.entitySet.size() != 0}" th:remove="tag">
                   <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
                     name="generate"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
                       width="24px" fill="#FFFFFF">
@@ -187,8 +198,6 @@
                       <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
                     </svg> Generate REST API Server</button>
                 </div>
-
-
               </form>
             </div> <!-- mdl-card__supporting-text mdl-grid mdl-grid--no-spacing -->
           </div>

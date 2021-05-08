@@ -41,6 +41,9 @@ public class ThInitializrCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        // 一旦内容クリア
+        settingsBean.setSettings(new OiyoSettings());
+
         return "oiyokan/initializrTop";
     }
 
