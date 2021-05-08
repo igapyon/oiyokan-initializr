@@ -50,7 +50,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
-    public String index(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String index(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -79,7 +79,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "connTest" }, method = { RequestMethod.POST })
-    public String connTest(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String connTest(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -159,7 +159,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preH2" }, method = { RequestMethod.POST })
-    public String preH2(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String preH2(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -185,7 +185,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "prePostgreSQL" }, method = { RequestMethod.POST })
-    public String prePostgreSQL(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String prePostgreSQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -210,7 +210,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preMySQL" }, method = { RequestMethod.POST })
-    public String preMySQL(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String preMySQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -236,7 +236,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preSQLSV2008" }, method = { RequestMethod.POST })
-    public String preSQLSV2008(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String preSQLSV2008(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -261,7 +261,7 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializr" }, params = { "preORCL18" }, method = { RequestMethod.POST })
-    public String preORCL18(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String preORCL18(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
@@ -289,7 +289,7 @@ public class ThInitializrCtrl {
     // Select table
 
     @RequestMapping(value = { "/initializr" }, params = { "selectTable" }, method = { RequestMethod.POST })
-    public String selectTable(Model model, OiyoSettingsDatabase database, ThInitializrBean initializrBean,
+    public String selectTable(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("databaseBean", database);
         model.addAttribute("initializrBean", initializrBean);
