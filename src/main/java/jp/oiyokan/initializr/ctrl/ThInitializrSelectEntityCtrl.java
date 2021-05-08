@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.OiyokanMessages;
@@ -34,12 +35,14 @@ public class ThInitializrSelectEntityCtrl {
     /////////////////////////
     // Select table
 
-    @RequestMapping(value = { "/initializr" }, params = { "selectEntity" }, method = { RequestMethod.POST })
-    public String selectEntity(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+    @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
+    public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
+            BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        log.info("dbName:" + dbName);
         log.info("processView:" + initializrBean.isProcessView());
 
         OiyoSettings oiyoSettings = initializrBean.getSettings();

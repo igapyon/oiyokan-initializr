@@ -68,10 +68,6 @@
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-              <h4 class="mdl-cell mdl-cell--12-col">Database settings</h4>
-
-              <h4 class="mdl-cell mdl-cell--12-col">Entity settings</h4>
-
               <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
                 <div class="toc">
                   <span class="mdl-chip mdl-chip--contact">
@@ -92,6 +88,58 @@
                 </div>
               </div>
 
+              <h4 class="mdl-cell mdl-cell--12-col">Database settings</h4>
+
+              <div th:if="${initializrBean.settings.database.size() > 0}" th:remove="tag">
+                <form class="" th:action="@{/initializrSelectEntity}" th:object="${initializrBean}" method="post">
+                  <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                      <tr>
+                        <th class="mdl-data-table__cell--non-numeric">Name</th>
+                        <th class="mdl-data-table__cell--non-numeric">Type</th>
+                        <th class="mdl-data-table__cell--non-numeric">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <div th:each="db : ${initializrBean.settings.database}" th:remove="tag">
+                        <tr>
+                          <td class="mdl-data-table__cell--non-numeric">
+                            <div th:text="${db.name}"></div>
+                          </td>
+                          <td class="mdl-data-table__cell--non-numeric">
+                            <div th:text="${db.type}"></div>
+                          </td>
+                          <td class="mdl-data-table__cell--non-numeric">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                              type="submit" name="new" th:value="${db.name}"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                                <path d="M0 0h24v24H0V0z" fill="none" />
+                                <path
+                                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                              </svg> Create Entity definition</button>
+                          </td>
+                        </tr>
+                      </div>
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+
+              <div th:if="${initializrBean.settings.database.size() == 0}" th:remove="tag">
+                <form class="" th:action="@{/initializrSetupDatabase}" method="post">
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
+                    name="new"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                      fill="#FFFFFF">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                    </svg> Create Database definition</button>
+                </form>
+              </div>
+              <br />
+
+              <h4 class="mdl-cell mdl-cell--12-col">Entity settings</h4>
+
               <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
 
                 <p>ここにDatabase一覧。そしてEntity選択ボタンを配置。</p>
@@ -100,7 +148,11 @@
 
                 <div>
                   <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
-                    name="generate"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg> GENERATE</button>
+                    name="generate"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                      width="24px" fill="#FFFFFF">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
+                    </svg> GENERATE</button>
                 </div>
 
 
