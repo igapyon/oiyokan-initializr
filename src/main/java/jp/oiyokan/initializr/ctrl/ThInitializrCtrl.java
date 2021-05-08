@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
@@ -35,8 +36,34 @@ public class ThInitializrCtrl {
         initializrBean.setMsgError(null);
 
         // TODO 必要に応じて分岐。
+        if (initializrBean.getSettings().getDatabase().size() == 0) {
+            final OiyoSettingsDatabase database = new OiyoSettingsDatabase();
+            if (database.getName() == null) {
+                database.setName("connDef1");
+            }
+            if (database.getType() == null) {
+                database.setType(OiyokanConstants.DatabaseType.PostgreSQL.name()); // h2, PostgreSQL, MySQL, SQLSV2008,
+                                                                                   // ORCL18
+            }
+            if (database.getDescription() == null) {
+                database.setDescription("Description of this database jdbc settings.");
+            }
+            if (database.getJdbcDriver() == null) {
+                database.setJdbcDriver("org.postgresql.Driver"); // JDBC Driver class name.
+            }
+            if (database.getJdbcUrl() == null) {
+                database.setJdbcUrl("jdbc:postgresql://localhost:5432/dvdrental"); // JDBC URL.
+            }
+            database.setJdbcUser(""); // JDBC User.
+            database.setJdbcPassPlain(""); // JDBC Password.
 
-        return "oiyokan/initializrSetupDatabase";
+            model.addAttribute("database", database);
+            return "oiyokan/initializrSetupDatabase";
+        } else if (initializrBean.getSettings().getEntitySet().size() == 0) {
+            return "oiyokan/initializrSelectEntity";
+        } else {
+            return "oiyokan/initializr";
+        }
     }
 
     /////////////////////////
@@ -56,7 +83,7 @@ public class ThInitializrCtrl {
             // ソートなど
             OiyoInfo oiyoInfo = new OiyoInfo();
 
-            ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, null);
+            ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, initializrBean.getFirstDatabase(), null);
 
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);

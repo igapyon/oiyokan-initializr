@@ -26,7 +26,6 @@ import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
-import jp.oiyokan.util.OiyoEncryptUtil;
 
 @Controller
 public class ThInitializrSelectEntityCtrl {
@@ -48,7 +47,7 @@ public class ThInitializrSelectEntityCtrl {
 
             // TODO Entityの設定状況により分岐
             try {
-                selectEntityInternal(initializrBean);
+                selectEntityInternal(initializrBean, initializrBean.getFirstDatabase());
             } catch (ODataApplicationException | IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -69,11 +68,6 @@ public class ThInitializrSelectEntityCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        
-        
-        
-        
-        
         log.info("選択したEntitySetをマーク");
         Map<String, String> mapNameFilter = new HashMap<>();
         for (String opts : initializrBean.getCheckboxes()) {
@@ -94,18 +88,15 @@ public class ThInitializrSelectEntityCtrl {
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                 initializrBean.isFilterTreatNullAsBlank);
 
-
         return "oiyokan/initializrTop";
     }
 
-    public static void selectEntityInternal(ThInitializrBean initializrBean)
+    public static void selectEntityInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database)
             throws IOException, ODataApplicationException {
 
-        ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, null);
+        ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, database, null);
 
         initializrBean.getEntitySets().clear();
-
-        OiyoSettingsDatabase database = initializrBean.getSettings().getDatabase().get(0);
 
         // [IYI2111] Connect to database.
         log.info(OiyokanInitializrMessages.IYI2111 + ": " + database.getName());

@@ -21,7 +21,6 @@ import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
-import jp.oiyokan.initializr.OiyokanInitializrUtil;
 
 @Controller
 public class ThInitializrSetupDatabaseCtrl {
@@ -33,8 +32,10 @@ public class ThInitializrSetupDatabaseCtrl {
     }
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "connTest" }, method = { RequestMethod.POST })
-    public String connTest(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+    public String connTest(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
+            BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
+        model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
@@ -46,13 +47,13 @@ public class ThInitializrSetupDatabaseCtrl {
 
         // ひとつもテーブルをマップさせずに接続のみ確認。
         Map<String, String> mapNameFilter = new HashMap<>();
-        connTestInternal(initializrBean, mapNameFilter);
+        connTestInternal(initializrBean, database, mapNameFilter);
 
         return "oiyokan/initializrSetupDatabase";
     }
 
-    static boolean connTestInternal(ThInitializrBean initializrBean, Map<String, String> mapNameFilter)
-            throws IOException {
+    static boolean connTestInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database,
+            Map<String, String> mapNameFilter) throws IOException {
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
@@ -63,7 +64,6 @@ public class ThInitializrSetupDatabaseCtrl {
         //////////////////////////////////////////////////////////
         // Process settings
         final OiyoInfo oiyoInfo = new OiyoInfo();
-        final OiyoSettingsDatabase database = initializrBean.getFirstDatabase();
         try {
             // Enc pass は一旦クリア.
             database.setJdbcPassEnc("");
@@ -82,24 +82,9 @@ public class ThInitializrSetupDatabaseCtrl {
             return false;
         }
 
-        try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, initializrBean.getSettings(), initializrBean.isProcessView(),
-                    initializrBean.isReadWriteAccess(), mapNameFilter);
-
-            // TODO message
-            initializrBean.setMsgSuccess("Connection test success.");
-            return true;
-        } catch (ODataApplicationException ex) {
-            // [IYI2201] ERROR: Fail to connect database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
-            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
-            return false;
-        } catch (SQLException ex) {
-            // [IYI2202] ERROR: Fail to close database. Check database settings.
-            log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
-            initializrBean.setMsgError(OiyokanInitializrMessages.IYI2202);
-            return false;
-        }
+        // TODO message
+        initializrBean.setMsgSuccess("Connection test success.");
+        return true;
     }
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preH2" }, method = { RequestMethod.POST })
@@ -228,8 +213,8 @@ public class ThInitializrSetupDatabaseCtrl {
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "saveDatabaseSettings" }, method = {
             RequestMethod.POST })
-    public String saveDatabaseSettings(Model model, ThInitializrBean initializrBean, BindingResult result)
-            throws IOException {
+    public String saveDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
+            BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
@@ -243,11 +228,15 @@ public class ThInitializrSetupDatabaseCtrl {
 
         // ひとつもテーブルをマップさせずに接続のみ確認。
         Map<String, String> mapNameFilter = new HashMap<>();
-        if (connTestInternal(initializrBean, mapNameFilter) == false) {
+        if (connTestInternal(initializrBean, database, mapNameFilter) == false) {
+            // データベース接続失敗。やりなおし。
             return "oiyokan/initializrSetupDatabase";
         } else {
+            // 接続成功した。これを保存する。
+            // TODO 既存のものがあれば置き換えること。
+            initializrBean.getSettings().getDatabase().add(database);
             try {
-                ThInitializrSelectEntityCtrl.selectEntityInternal(initializrBean);
+                ThInitializrSelectEntityCtrl.selectEntityInternal(initializrBean, database);
             } catch (ODataApplicationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -255,12 +244,9 @@ public class ThInitializrSetupDatabaseCtrl {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
-            
+
             return "oiyokan/initializrSelectEntity";
-            
-            
-            
+
 //            return "oiyokan/initializrTop";
         }
     }

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 
@@ -34,7 +33,6 @@ public class ThInitializrBean implements Serializable {
     private List<EntitySet> entitySets = new ArrayList<>();
 
     public ThInitializrBean() {
-
         if (settings.getNamespace() == null) {
             settings.setNamespace("Oiyokan"); // Namespace of OData
         }
@@ -47,26 +45,6 @@ public class ThInitializrBean implements Serializable {
         if (settings.getEntitySet() == null) {
             settings.setEntitySet(new ArrayList<>());
         }
-
-        final OiyoSettingsDatabase database = getFirstDatabase();
-        if (database.getName() == null) {
-            database.setName("connDef1");
-        }
-        if (database.getType() == null) {
-            database.setType(OiyokanConstants.DatabaseType.PostgreSQL.name()); // h2, PostgreSQL, MySQL, SQLSV2008,
-                                                                               // ORCL18
-        }
-        if (database.getDescription() == null) {
-            database.setDescription("Description of this database jdbc settings.");
-        }
-        if (database.getJdbcDriver() == null) {
-            database.setJdbcDriver("org.postgresql.Driver"); // JDBC Driver class name.
-        }
-        if (database.getJdbcUrl() == null) {
-            database.setJdbcUrl("jdbc:postgresql://localhost:5432/dvdrental"); // JDBC URL.
-        }
-        database.setJdbcUser(""); // JDBC User.
-        database.setJdbcPassPlain(""); // JDBC Password.
     }
 
     ///////////////////////////////////////////////
