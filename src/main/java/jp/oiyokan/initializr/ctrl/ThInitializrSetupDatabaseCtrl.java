@@ -260,7 +260,8 @@ public class ThInitializrSetupDatabaseCtrl {
         } else {
             // 接続成功した。これを保存する。
             // TODO 既存のものがあれば置き換えること。
-            initializrBean.getSettings().getDatabase().add(database);
+
+            settingsBean.getSettings().getDatabase().add(database);
             return "oiyokan/initializrTop";
         }
     }

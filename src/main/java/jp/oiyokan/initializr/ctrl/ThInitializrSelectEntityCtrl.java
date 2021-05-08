@@ -50,12 +50,12 @@ public class ThInitializrSelectEntityCtrl {
         log.info("dbName:" + dbName);
         log.info("processView:" + initializrBean.isProcessView());
 
-        OiyoSettings oiyoSettings = initializrBean.getSettings();
+        OiyoSettings oiyoSettings = settingsBean.getSettings();
         if (oiyoSettings != null) {
 
             // TODO Entityの設定状況により分岐
             try {
-                selectEntityInternal(initializrBean, initializrBean.getFirstDatabase());
+                selectEntityInternal(initializrBean, settingsBean.getSettings().getDatabase().get(0));
             } catch (ODataApplicationException | IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

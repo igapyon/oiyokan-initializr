@@ -90,7 +90,7 @@
 
               <h4 class="mdl-cell mdl-cell--12-col">Database settings</h4>
 
-              <div th:if="${initializrBean.settings.database.size() > 0}" th:remove="tag">
+              <div th:if="${settings.database.size() > 0}" th:remove="tag">
                 <form class="" th:action="@{/initializrSelectEntity}" th:object="${initializrBean}" method="post">
                   <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                     <thead>
@@ -101,7 +101,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <div th:each="db : ${initializrBean.settings.database}" th:remove="tag">
+                      <div th:each="db : ${settings.database}" th:remove="tag">
                         <tr>
                           <td class="mdl-data-table__cell--non-numeric">
                             <div th:text="${db.name}"></div>
@@ -125,7 +125,7 @@
                 </form>
               </div>
 
-              <div th:if="${initializrBean.settings.database.size() == 0}" th:remove="tag">
+              <div th:if="${settings.database.size() == 0}" th:remove="tag">
                 <form class="" th:action="@{/initializrSetupDatabase}" method="post">
                   <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
                     name="new"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
