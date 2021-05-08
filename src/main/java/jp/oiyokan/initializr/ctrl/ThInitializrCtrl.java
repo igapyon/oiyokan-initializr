@@ -73,8 +73,7 @@ public class ThInitializrCtrl {
         return "oiyokan/initializrSetupDatabase";
     }
 
-    OiyoSettings connTestInternal(ThInitializrBean initializrBean, Map<String, String> mapNameFilter)
-            throws IOException {
+    boolean connTestInternal(ThInitializrBean initializrBean, Map<String, String> mapNameFilter) throws IOException {
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
@@ -101,7 +100,7 @@ public class ThInitializrCtrl {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
-            return null;
+            return false;
         }
 
         try {
@@ -110,17 +109,17 @@ public class ThInitializrCtrl {
 
             // TODO message
             initializrBean.setMsgSuccess("Connection test success.");
-            return initializrBean.getSettings();
+            return true;
         } catch (ODataApplicationException ex) {
             // [IYI2201] ERROR: Fail to connect database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2201 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2201);
-            return null;
+            return false;
         } catch (SQLException ex) {
             // [IYI2202] ERROR: Fail to close database. Check database settings.
             log.error(OiyokanInitializrMessages.IYI2202 + ": " + ex.toString());
             initializrBean.setMsgError(OiyokanInitializrMessages.IYI2202);
-            return null;
+            return false;
         }
     }
 
@@ -246,6 +245,29 @@ public class ThInitializrCtrl {
         return "oiyokan/initializrSetupDatabase";
     }
 
+    @RequestMapping(value = { "/initializr" }, params = { "saveDatabaseSettings" }, method = { RequestMethod.POST })
+    public String saveDatabaseSettings(Model model, ThInitializrBean initializrBean, BindingResult result)
+            throws IOException {
+        model.addAttribute("initializrBean", initializrBean);
+        initializrBean.setMsgSuccess(null);
+        initializrBean.setMsgError(null);
+
+        // TODO ここで 指定の Database 設定を保存.
+
+        // 接続確認
+
+        //////////////////////////////////////////////////////////
+        // Setup basic settings info
+
+        // ひとつもテーブルをマップさせずに接続のみ確認。
+        Map<String, String> mapNameFilter = new HashMap<>();
+        if (connTestInternal(initializrBean, mapNameFilter) == false) {
+            return "oiyokan/initializrSetupDatabase";
+        } else {
+            return "oiyokan/initializrTop";
+        }
+    }
+
     /////////////////////////
     // Select table
 
@@ -318,7 +340,7 @@ public class ThInitializrCtrl {
 
         // 一覧の網羅性のために VIEW も含めて処理
         initializrBean.setProcessView(true);
-        final OiyoSettings oiyoSettings = connTestInternal(initializrBean, mapNameFilter);
+        final OiyoSettings oiyoSettings = initializrBean.getSettings();
 
         // [IYI1001] Oiyokan Initializr Begin.
         log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
