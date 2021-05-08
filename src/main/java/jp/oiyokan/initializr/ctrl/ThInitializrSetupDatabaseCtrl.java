@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
@@ -22,6 +23,7 @@ import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 
 @Controller
+@SessionAttributes("scopedTarget.settingsBean")
 public class ThInitializrSetupDatabaseCtrl {
     private static final Log log = LogFactory.getLog(ThInitializrSetupDatabaseCtrl.class);
 
