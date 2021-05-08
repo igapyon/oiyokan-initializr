@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import jp.oiyokan.dto.OiyoSettingsEntitySet;
+
 @Controller
 @SessionAttributes("scopedTarget.settingsBean")
 public class ThInitializrEditEntityCtrl {
@@ -32,6 +34,18 @@ public class ThInitializrEditEntityCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        OiyoSettingsEntitySet entitySet = null;
+        for (OiyoSettingsEntitySet look : settingsBean.getSettings().getEntitySet()) {
+            if (look.getName().equals(entityName)) {
+                entitySet = look;
+                break;
+            }
+        }
+        if (entitySet == null) {
+            return "oiyokan/initializrTop";
+        }
+
+        model.addAttribute("entitySet", entitySet);
         return "oiyokan/initializrEditEntity";
     }
 }

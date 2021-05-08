@@ -90,8 +90,55 @@
                 </div>
               </div>
 
-              <form class="" th:action="@{/initializrSelectEntity}" th:object="${initializrBean}" method="post">
-        <p>ここにEntityの編集情報を</p>
+              <form class="" th:action="@{/initializrSelectEntity}" th:object="${entitySet}" method="post">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="name" th:field="*{name}" readonly>
+                  <label class="mdl-textfield__label" for="name">EntitySet name</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="dbName" th:field="*{entityType.dbName}" readonly>
+                  <label class="mdl-textfield__label" for="dbName">DB entity name</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="dbSettingName" th:field="*{dbSettingName}" readonly>
+                  <label class="mdl-textfield__label" for="dbSettingName">DB Settings</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="description" th:field="*{description}">
+                  <label class="mdl-textfield__label" for="description">Description</label>
+                </div>
+
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canCreate">
+                  <input type="checkbox" id="canCreate" th:field="*{canCreate}"
+                    class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Can Create</span>
+                </label>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canRead">
+                  <input type="checkbox" id="canRead" th:field="*{canRead}"
+                    class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Can Read</span>
+                </label>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canUpdate">
+                  <input type="checkbox" id="canUpdate" th:field="*{canUpdate}"
+                    class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Can Update</span>
+                </label>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canDelete">
+                  <input type="checkbox" id="canDelete" th:field="*{canDelete}"
+                    class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Can Delete</span>
+                </label>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="omitCountAll">
+                  <input type="checkbox" id="omitCountAll" th:field="*{omitCountAll}"
+                    class="mdl-checkbox__input">
+                  <span class="mdl-checkbox__label">Omit count all</span>
+                </label>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="jdbcStmtTimeout" th:field="*{jdbcStmtTimeout}">
+                  <label class="mdl-textfield__label" for="jdbcStmtTimeout">JDBC Statement Timeout</label>
+                </div>
+
               </form>
             </div>
           </div>
