@@ -4,14 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 
 @Component
-// @Scope(value = WebApplicationContext.SCOPE_SESSION)
+@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class ThInitializrBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -149,12 +151,14 @@ public class ThInitializrBean implements Serializable {
     // 画面のチェックボッスで利用する EntitySet
 
     public static class EntitySet {
-        private boolean selected = false;
         private String name = null;
+        private boolean selected = false;
+        private boolean isView = false;
 
-        public EntitySet(String name, boolean selected) {
+        public EntitySet(String name, boolean selected, boolean isView) {
             this.name = name;
             this.selected = selected;
+            this.isView = isView;
         }
 
         public boolean isSelected() {
@@ -171,6 +175,14 @@ public class ThInitializrBean implements Serializable {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public boolean isView() {
+            return isView;
+        }
+
+        public void setView(boolean isView) {
+            this.isView = isView;
         }
     }
 }

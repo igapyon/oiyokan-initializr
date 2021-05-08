@@ -68,7 +68,9 @@
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-              <h4 class="mdl-cell mdl-cell--12-col">Database JDBC settings</h4>
+              <h4 class="mdl-cell mdl-cell--12-col">Database settings</h4>
+
+              <h4 class="mdl-cell mdl-cell--12-col">Entity settings</h4>
 
               <div th:if="${initializrBean.msgSuccess ne null && initializrBean.msgSuccess != ''}" th:remove="tag">
                 <div class="toc">
@@ -90,9 +92,17 @@
                 </div>
               </div>
 
-              <form class="" th:action="@{/initializr}" th:object="${initializrBean.firstDatabase}" method="post">
+              <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
 
-                <p>ここに一覧とか。</p>
+                <p>ここにDatabase一覧。そしてEntity選択ボタンを配置。</p>
+
+                <p>ここにEntity一覧</p>
+
+                <div>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
+                    name="generate"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg> GENERATE</button>
+                </div>
+
 
               </form>
             </div>
