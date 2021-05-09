@@ -63,7 +63,7 @@ public class ThInitializrSelectEntityCtrl {
             Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
                 @Override
                 public int compare(TableInfo o1, TableInfo o2) {
-                    return o1.getName().compareTo(o2.getName());
+                    return o1.getName().compareToIgnoreCase(o2.getName());
                 }
             });
 
