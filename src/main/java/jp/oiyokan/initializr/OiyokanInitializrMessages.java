@@ -33,8 +33,8 @@ public class OiyokanInitializrMessages {
     public static final String IYI2114 = "[IYI2114] DEBUG: Read view.";
     public static final String IYI2115 = "[IYI2115] WARN: Fail to read view.";
     public static final String IYI2201 = "[IYI2201] ERROR: Fail to connect database. Check database settings.";
-    public static final String IYI2202 = "[IYI2202] ERROR: Fail to close database. Check database settings."; // 未使用
-    public static final String IYI2203 = "[IYI2203] UNEXPECTED: 指定のDB settings が見つかりませんでした。";
+    // IYI2202
+    public static final String IYI2203 = "[IYI2203] UNEXPECTED: Specified DB settings NOT found.";
 
     public static final String IYI3101 = "[IYI3101] Tune settings info.";
 
@@ -46,21 +46,21 @@ public class OiyokanInitializrMessages {
     public static final String IYI5102 = "[IYI5102] Check the `oiyokan-demo.zip`.";
     public static final String IYI5201 = "[IYI5201] ERROR: Fail to generate zip file.";
 
-    public static final String IYI6101 = "[IYI6101] INFO: ルート `/initializr`(GET) が開かれた.";
-    public static final String IYI6102 = "[IYI6102] INFO: Exit `/initializrExit`(GET) が開かれた.";
-    public static final String IYI6103 = "[IYI6103] INFO: GENERATE `/initializr`(POST:generate) がクリックされた.";
-    public static final String IYI6104 = "[IYI6104] INFO: `/initializrEditEntity`(POST:edit) が開かれた.";
-    public static final String IYI6105 = "[IYI6105] INFO: `/initializrEditEntity`(POST:applyChanges) が開かれた.";
-    public static final String IYI6106 = "[IYI6106] INFO: `/initializrSelectEntity`(POST:new) が開かれた.";
-    public static final String IYI6107 = "[IYI6107] INFO: `/initializrSelectEntity`(POST:applyEntitySelection) が開かれた.";
-    public static final String IYI6108 = "[IYI6108] INFO: `/initializrSetupDatabase`(POST:new) が開かれた.";
-    public static final String IYI6109 = "[IYI6109] INFO: `/initializrSetupDatabase`(POST:connTest) が開かれた.";
-    public static final String IYI6110 = "[IYI6110] INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings) が開かれた.";
-    public static final String IYI6111 = "[IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) が開かれた.";
+    public static final String IYI6101 = "[IYI6101] INFO: Entry point `/initializr`(GET) clicked.";
+    public static final String IYI6102 = "[IYI6102] INFO: Exit `/initializrExit`(GET) clicked.";
+    public static final String IYI6103 = "[IYI6103] INFO: GENERATE `/initializr`(POST:generate) clicked.";
+    public static final String IYI6104 = "[IYI6104] INFO: `/initializrEditEntity`(POST:edit) clicked.";
+    public static final String IYI6105 = "[IYI6105] INFO: `/initializrEditEntity`(POST:applyChanges) clicked.";
+    public static final String IYI6106 = "[IYI6106] INFO: `/initializrSelectEntity`(POST:new) clicked.";
+    public static final String IYI6107 = "[IYI6107] INFO: `/initializrSelectEntity`(POST:applyEntitySelection) clicked.";
+    public static final String IYI6108 = "[IYI6108] INFO: `/initializrSetupDatabase`(POST:new) clicked.";
+    public static final String IYI6109 = "[IYI6109] INFO: `/initializrSetupDatabase`(POST:connTest) clicked.";
+    public static final String IYI6110 = "[IYI6110] INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings) clicked.";
+    public static final String IYI6111 = "[IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.";
 
-    public static final String IYI7101 = "[IYI7101] INFO: 最初にデータベース設定をセットアップしてください。";
-    public static final String IYI7102 = "[IYI7102] INFO: Oiyokan Initializr のセッション情報を初期化しました。";
-    public static final String IYI7103 = "[IYI7103] INFO: Entity を選択してください。";
+    public static final String IYI7101 = "[IYI7101] INFO: Setup database settings first.";
+    public static final String IYI7102 = "[IYI7102] INFO: Session info of Oiyokan Initializr initialized.";
+    public static final String IYI7103 = "[IYI7103] INFO: Select Entity.";
     public static final String IYI7104 = "[IYI7104] INFO: Entity selection applied.";
     public static final String IYI7105 = "[IYI7105] INFO: Connection test success.";
     public static final String IYI7106 = "[IYI7106] INFO: Database settings addded.";
@@ -72,8 +72,8 @@ public class OiyokanInitializrMessages {
     public static final String IYI7115 = "[IYI7115] INFO: Typical ORCL18 preset is loaded.";
     public static final String IYI7121 = "[IYI7121] WARN: Fail to test connect to database.";
     public static final String IYI7122 = "[IYI7122] DEBUG: Success to test connect to database.";
-    public static final String IYI7131 = "[IYI7131] WARN: 同名の database 登録がすでに存在します.";
-    public static final String IYI7132 = "[IYI7132] WARN: 同名の EntitySet 登録がすでに存在します.";
+    public static final String IYI7131 = "[IYI7131] WARN: Same name database already exists.";
+    public static final String IYI7132 = "[IYI7132] WARN: Same name EntitySet already exists.";
 
     public static final String IYI7501 = "[IYI7501] UNEXPECTED: EntitySet NOT found.";
     public static final String IYI7502 = "[IYI7502] UNEXPECTED: Database NOT found.";

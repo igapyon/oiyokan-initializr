@@ -28,7 +28,7 @@ public class ThInitializrEditEntityCtrl {
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "edit" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("edit") String entityName,
             BindingResult result) {
-        // [IYI6104] INFO: `/initializrEditEntity`(POST:edit) が開かれた."
+        // [IYI6104] INFO: `/initializrEditEntity`(POST:edit) clicked.
         log.info(OiyokanInitializrMessages.IYI6104);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -54,7 +54,7 @@ public class ThInitializrEditEntityCtrl {
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "applyChanges" }, method = { RequestMethod.POST })
     public String applyEntityChanges(Model model, ThInitializrBean initializrBean, OiyoSettingsEntitySet entitySet,
             BindingResult result) {
-        // [IYI6105] INFO: `/initializrEditEntity`(POST:applyChanges) が開かれた.
+        // [IYI6105] INFO: `/initializrEditEntity`(POST:applyChanges) clicked.
         log.info(OiyokanInitializrMessages.IYI6105);
 
         model.addAttribute("settings", settingsBean.getSettings());

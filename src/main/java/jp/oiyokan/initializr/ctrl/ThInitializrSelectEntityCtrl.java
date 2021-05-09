@@ -45,7 +45,7 @@ public class ThInitializrSelectEntityCtrl {
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
             BindingResult result) {
-        // [IYI6106] INFO: `/initializrSelectEntity`(POST:new) が開かれた.
+        // [IYI6106] INFO: `/initializrSelectEntity`(POST:new) clicked.
         log.info(OiyokanInitializrMessages.IYI6106);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -77,7 +77,7 @@ public class ThInitializrSelectEntityCtrl {
             }
         });
 
-        // [IYI7103] INFO: Entity を選択してください。
+        // [IYI7103] INFO: Select Entity.
         initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7103);
         log.info(OiyokanInitializrMessages.IYI7103);
         return "oiyokan/initializrSelectEntity";
@@ -86,7 +86,7 @@ public class ThInitializrSelectEntityCtrl {
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "applyEntitySelection" }, method = {
             RequestMethod.POST })
     public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result) {
-        // [IYI6107] INFO: `/initializrSelectEntity`(POST:applyEntitySelection) が開かれた.
+        // [IYI6107] INFO: `/initializrSelectEntity`(POST:applyEntitySelection) clicked.
         log.info(OiyokanInitializrMessages.IYI6107);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -101,12 +101,13 @@ public class ThInitializrSelectEntityCtrl {
             mapNameFilter.put(opts, opts);
 
             final String entityName = OiyokanInitializrUtil.adjustName(opts, initializrBean.isConvertCamel());
-            // 同名のEntitySet設定があるかどうか確認O。
+            // 同名のEntitySet設定があるかどうか確認
             for (OiyoSettingsEntitySet lookup : oiyoSettings.getEntitySet()) {
                 if (lookup.getName().equals(entityName)) {
-                    // [IYI7132] WARN: 同名の EntitySet 登録がすでに存在します.
-                    initializrBean.setMsgError(OiyokanInitializrMessages.IYI7501 + ": " + entityName);
-                    log.error(OiyokanInitializrMessages.IYI7501 + ": " + entityName);
+                    // [IYI7132] WARN: Same name EntitySet already exists.
+                    initializrBean.setMsgError(OiyokanInitializrMessages.IYI7132 + ": " + entityName);
+                    log.error(OiyokanInitializrMessages.IYI7132 + ": " + entityName);
+
                     return "oiyokan/initializrSelectEntity";
                 }
             }

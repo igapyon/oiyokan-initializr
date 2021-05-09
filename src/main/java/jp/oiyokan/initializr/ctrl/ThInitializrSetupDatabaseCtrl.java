@@ -32,7 +32,7 @@ public class ThInitializrSetupDatabaseCtrl {
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "new" }, method = { RequestMethod.POST })
     public String open(Model model, ThInitializrBean initializrBean, BindingResult result) {
-        // [IYI6108] INFO: `/initializrSetupDatabase`(POST:new) が開かれた.
+        // [IYI6108] INFO: `/initializrSetupDatabase`(POST:new) clicked.
         log.info(OiyokanInitializrMessages.IYI6108);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -69,7 +69,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "connTest" }, method = { RequestMethod.POST })
     public String connTest(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6109] INFO: `/initializrSetupDatabase`(POST:connTest) が開かれた.
+        // [IYI6109] INFO: `/initializrSetupDatabase`(POST:connTest) clicked.
         log.info(OiyokanInitializrMessages.IYI6109);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -128,7 +128,8 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String applyDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6110] INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings) が開かれた.
+        // [IYI6110] INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings)
+        // clicked.
         log.info(OiyokanInitializrMessages.IYI6110);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -154,7 +155,7 @@ public class ThInitializrSetupDatabaseCtrl {
 
             for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
                 if (lookup.getName().equals(database.getName())) {
-                    // [IYI7131] WARN: 同名の database 登録がすでに存在します.
+                    // [IYI7131] WARN: Same name database already exists.
                     initializrBean.setMsgError(OiyokanInitializrMessages.IYI7131 + ": " + database.getName());
                     log.error(OiyokanInitializrMessages.IYI7131 + ": " + database.getName());
                     return "oiyokan/initializrSetupDatabase";
@@ -177,7 +178,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preH2" }, method = { RequestMethod.POST })
     public String preH2(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) が開かれた.
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
         log.info(OiyokanInitializrMessages.IYI6111);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -207,7 +208,7 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String prePostgreSQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) が開かれた.
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
         log.info(OiyokanInitializrMessages.IYI6111);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -235,7 +236,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preMySQL" }, method = { RequestMethod.POST })
     public String preMySQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) が開かれた.
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
         log.info(OiyokanInitializrMessages.IYI6111);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -265,7 +266,7 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String preSQLSV2008(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) が開かれた.
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
         log.info(OiyokanInitializrMessages.IYI6111);
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -293,7 +294,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preORCL18" }, method = { RequestMethod.POST })
     public String preORCL18(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) {
-        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) が開かれた.
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
         log.info(OiyokanInitializrMessages.IYI6111);
 
         model.addAttribute("settings", settingsBean.getSettings());

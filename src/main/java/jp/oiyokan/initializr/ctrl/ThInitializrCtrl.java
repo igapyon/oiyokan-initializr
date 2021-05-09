@@ -56,13 +56,13 @@ public class ThInitializrCtrl {
 
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
     public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) {
-        // [IYI6102] INFO: Exit `/initializrExit`(GET) が開かれた.
+        // [IYI6102] INFO: Exit `/initializrExit`(GET) clicked.
         log.info(OiyokanInitializrMessages.IYI6102);
 
         initializrBean = new ThInitializrBean();
         model.addAttribute("initializrBean", initializrBean);
 
-        // [IYI7102] INFO: Oiyokan Initializr のセッション情報を初期化しました。
+        // [IYI7102] INFO: Session info of Oiyokan Initializr initialized.
         initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7102);
         log.info(OiyokanInitializrMessages.IYI7102);
         initializrBean.setMsgError(null);
@@ -77,7 +77,7 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
     public String generate(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
-        // [IYI6103] INFO: GENERATE `/initializr`(POST:generate) がクリックされた.
+        // [IYI6103] INFO: GENERATE `/initializr`(POST:generate) clicked.
         log.info(OiyokanInitializrMessages.IYI6103);
 
         model.addAttribute("settings", settingsBean.getSettings());
