@@ -19,7 +19,8 @@ package jp.oiyokan.initializr;
  * Oiyokan Initializr の定数.
  */
 public class OiyokanInitializrMessages {
-    public static final String IYI1001 = "[IYI1001] Oiyokan Initializr Begin.";
+    public static final String IYI1001 = "[IYI1001] Oiyokan Initializr";
+    public static final String IYI1002 = "[IYI1002] Oiyokan Library   ";
     public static final String IYI1009 = "[IYI1009] Download ZIP successfully.";
     public static final String IYI1101 = "[IYI1101] Prepare database settings.";
 
