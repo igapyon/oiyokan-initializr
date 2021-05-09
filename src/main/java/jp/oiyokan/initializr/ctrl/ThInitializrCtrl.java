@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
-import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
@@ -59,54 +58,6 @@ public class ThInitializrCtrl {
         model.addAttribute("settings", settingsBean.getSettings());
 
         return "oiyokan/initializrTop";
-    }
-
-    /////////////////////////
-    // Select table
-
-    // TODO これまだ実装してない
-    @RequestMapping(value = { "/initializr" }, params = { "selectTable" }, method = { RequestMethod.POST })
-    public String selectTable(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
-        model.addAttribute("settings", settingsBean.getSettings());
-        model.addAttribute("initializrBean", initializrBean);
-        initializrBean.setMsgSuccess(null);
-        initializrBean.setMsgError(null);
-
-        log.info("processView:" + initializrBean.isProcessView());
-
-        OiyoSettings oiyoSettings = settingsBean.getSettings();
-
-        // ソートなど
-        OiyoInfo oiyoInfo = new OiyoInfo();
-
-        // TODO FIXME どのデータベースか確認。
-        ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, oiyoSettings.getDatabase().get(0), null);
-
-        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
-                initializrBean.isFilterTreatNullAsBlank);
-
-        initializrBean.getTableInfos().clear();
-        for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-            initializrBean.getTableInfos()
-                    .add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, false));
-        }
-
-        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
-        if (database.getJdbcUser() == null) {
-            log.info("selectTable: database.jdbcUser was null");
-            database.setJdbcUser("");
-        }
-        if (database.getJdbcPassPlain() == null) {
-            log.info("selectTable: database.jdbcPassPlain was null");
-            database.setJdbcPassPlain("");
-        }
-        if (database.getJdbcPassEnc() == null) {
-            log.info("selectTable: database.jdbcPassEnc was null");
-            database.setJdbcPassPlain("");
-        }
-
-        // TODO Entityの設定状況により分岐
-        return "oiyokan/initializrSelectEntity";
     }
 
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })

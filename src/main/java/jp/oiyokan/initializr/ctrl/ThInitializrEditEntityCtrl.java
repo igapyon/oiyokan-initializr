@@ -18,6 +18,7 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 @Controller
 @SessionAttributes("scopedTarget.settingsBean")
 public class ThInitializrEditEntityCtrl {
+    @SuppressWarnings("unused")
     private static final Log log = LogFactory.getLog(ThInitializrEditEntityCtrl.class);
 
     @Autowired
