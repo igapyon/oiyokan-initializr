@@ -69,8 +69,9 @@ public class ThInitializrEditEntityCtrl {
             }
         }
         if (entitySetTarget == null) {
-            // TODO message 想定外のエラー。
-            initializrBean.setMsgSuccess("ERROR.");
+            // [IYI7501] UNEXPECTED: EntitySet NOT found.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7501);
+            log.error(OiyokanInitializrMessages.IYI7501);
             return "oiyokan/initializrEditEntity";
         }
 
@@ -83,8 +84,9 @@ public class ThInitializrEditEntityCtrl {
         entitySetTarget.setOmitCountAll(entitySet.getOmitCountAll());
         entitySetTarget.setJdbcStmtTimeout(entitySet.getJdbcStmtTimeout());
 
-        // TODO message
-        initializrBean.setMsgSuccess("Entity Change applied.");
+        // [IYI7107] INFO: Entity Change applied.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7107);
+        log.info(OiyokanInitializrMessages.IYI7107);
         return "oiyokan/initializrTop";
     }
 }

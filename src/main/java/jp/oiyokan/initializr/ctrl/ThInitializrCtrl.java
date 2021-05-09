@@ -124,8 +124,8 @@ public class ThInitializrCtrl {
             throw ex;
         }
 
-        // [IYI1002] Oiyokan Initializr End.
-        log.info(OiyokanInitializrMessages.IYI1002);
+        // [IYI1009] Download ZIP successfully
+        log.info(OiyokanInitializrMessages.IYI1009);
         return null;
     }
 }

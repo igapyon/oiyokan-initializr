@@ -15,15 +15,25 @@
  */
 package jp.oiyokan.initializr;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import jp.oiyokan.OiyokanConstants;
 
 /**
  * Oiyokan Initializr.
  */
 @SpringBootApplication
 public class OiyokanInitializrApp {
+    private static final Log log = LogFactory.getLog(OiyokanInitializrApp.class);
+
     public static void main(String[] args) {
+        // [IYI1001] Oiyokan Initializr Begin.
+        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
+        log.info("Oiyokan Lib: v" + OiyokanConstants.VERSION);
+
         SpringApplication.run(OiyokanInitializrApp.class, args);
     }
 }

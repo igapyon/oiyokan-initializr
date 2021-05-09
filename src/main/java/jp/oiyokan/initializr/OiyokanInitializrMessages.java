@@ -20,7 +20,7 @@ package jp.oiyokan.initializr;
  */
 public class OiyokanInitializrMessages {
     public static final String IYI1001 = "[IYI1001] Oiyokan Initializr Begin.";
-    public static final String IYI1002 = "[IYI1002] Oiyokan Initializr End.";
+    public static final String IYI1009 = "[IYI1009] Download ZIP successfully.";
     public static final String IYI1101 = "[IYI1101] Prepare database settings.";
 
     public static final String IYI2101 = "[IYI2101] Traverse tables in database.";
@@ -63,10 +63,20 @@ public class OiyokanInitializrMessages {
     public static final String IYI7104 = "[IYI7104] INFO: Entity selection applied.";
     public static final String IYI7105 = "[IYI7105] INFO: Connection test success.";
     public static final String IYI7106 = "[IYI7106] INFO: Database settings addded.";
+    public static final String IYI7107 = "[IYI7107] INFO: Entity Change applied.";
     public static final String IYI7111 = "[IYI7111] INFO: Typical h2 preset is loaded.";
     public static final String IYI7112 = "[IYI7112] INFO: Typical PostgreSQL preset is loaded.";
     public static final String IYI7113 = "[IYI7113] INFO: Typical MySQL preset is loaded.";
     public static final String IYI7114 = "[IYI7114] INFO: Typical SQLSV2008 preset is loaded.";
     public static final String IYI7115 = "[IYI7115] INFO: Typical ORCL18 preset is loaded.";
+    public static final String IYI7121 = "[IYI7121] WARN: Fail to test connect to database.";
+    public static final String IYI7122 = "[IYI7122] DEBUG: Success to test connect to database.";
+
+    public static final String IYI7501 = "[IYI7501] UNEXPECTED: EntitySet NOT found.";
+    public static final String IYI7502 = "[IYI7502] UNEXPECTED: Database NOT found.";
+    public static final String IYI7503 = "[IYI7503] UNEXPECTED: Fail to traverse tables.";
+    public static final String IYI7504 = "[IYI7504] UNEXPECTED: Fail to process database.";
+    public static final String IYI7505 = "[IYI7505] UNEXPECTED: Fail to select entity.";
+    public static final String IYI7506 = "[IYI7506] UNEXPECTED: Fail to process database during select entity.";
 
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
-import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.util.OiyoEncryptUtil;
 
@@ -79,9 +78,6 @@ public class ThInitializrSetupDatabaseCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        // [IYI1001] Oiyokan Initializr Begin.
-        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
-
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
@@ -96,7 +92,7 @@ public class ThInitializrSetupDatabaseCtrl {
             Map<String, String> mapNameFilter) {
 
         // [IYI1101] Prepare database settings.
-        log.info(OiyokanInitializrMessages.IYI1101);
+        log.debug(OiyokanInitializrMessages.IYI1101);
 
         //////////////////////////////////////////////////////////
         // Process settings
@@ -147,13 +143,17 @@ public class ThInitializrSetupDatabaseCtrl {
         // ひとつもテーブルをマップさせずに接続のみ確認。
         final Map<String, String> mapNameFilter = new HashMap<>();
         if (connTestInternal(initializrBean, database, mapNameFilter) == false) {
-            // データベース接続失敗。やりなおし。
-            // TODO message しっぱい
+            // [IYI7121] WARN: Fail to test connect to database.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7121);
+            log.warn(OiyokanInitializrMessages.IYI7121);
             return "oiyokan/initializrSetupDatabase";
         } else {
-            // 接続成功した。これを保存する。
-            // TODO 既存のものがあれば置き換えること。
+            // [IYI7122] DEBUG: Success to test connect to database.
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7122);
+            log.debug(OiyokanInitializrMessages.IYI7122);
 
+            // TODO 同名の接続設定があったらこれをリジェクトすること。
+            // 接続成功。これを記憶する。
             settingsBean.getSettings().getDatabase().add(database);
 
             // [IYI7106] INFO: Database settings addded.

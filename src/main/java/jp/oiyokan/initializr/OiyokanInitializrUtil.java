@@ -74,7 +74,7 @@ public class OiyokanInitializrUtil {
             boolean isProcessView, boolean isReadWriteAccess, Map<String, String> mapNameFilter)
             throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
-        log.info(OiyokanInitializrMessages.IYI2101);
+        log.debug(OiyokanInitializrMessages.IYI2101);
 
         OiyoSettingsDatabase database = null;
         for (OiyoSettingsDatabase look : oiyoSettings.getDatabase()) {
@@ -168,7 +168,7 @@ public class OiyokanInitializrUtil {
     public static void tuneSettings(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean convertCamel,
             boolean isFilterTreatNullAsBlank) {
         // [IYI3101] Tune settings info.
-        log.info(OiyokanInitializrMessages.IYI3101);
+        log.debug(OiyokanInitializrMessages.IYI3101);
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
             entitySet.setName(adjustName(entitySet.getName(), convertCamel));
