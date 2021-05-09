@@ -101,8 +101,9 @@ public class ThInitializrSelectEntityCtrl {
         OiyoInfo oiyoInfo = new OiyoInfo();
 
         try {
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, initializrBean.isProcessView(),
-                    initializrBean.isReadWriteAccess(), mapNameFilter);
+            // 常にVIEWつきでトラバース。ただし先にて名前フィルタリングあるため大丈夫。
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, true, initializrBean.isReadWriteAccess(),
+                    mapNameFilter);
 
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);
