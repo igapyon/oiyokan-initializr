@@ -36,13 +36,14 @@ public class ThInitializrCtrl {
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
-        model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
         // 一旦内容クリア
         settingsBean.setSettings(new OiyoSettings());
+
+        model.addAttribute("settings", settingsBean.getSettings());
 
         return "oiyokan/initializrTop";
     }
