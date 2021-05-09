@@ -57,6 +57,25 @@ public class ThInitializrEditEntityCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        OiyoSettingsEntitySet entitySetTarget = null;
+        for (OiyoSettingsEntitySet lookup : settingsBean.getSettings().getEntitySet()) {
+            if (lookup.getName().equals(entitySet.getName())) {
+                entitySetTarget = lookup;
+            }
+        }
+        if (entitySetTarget == null) {
+            initializrBean.setMsgSuccess("ERROR.");
+            return "oiyokan/initializrEditEntity";
+        }
+
+        entitySetTarget.setDescription(entitySet.getDescription());
+        entitySetTarget.setCanCreate(entitySet.getCanCreate());
+        entitySetTarget.setCanRead(entitySet.getCanRead());
+        entitySetTarget.setCanUpdate(entitySet.getCanUpdate());
+        entitySetTarget.setCanDelete(entitySet.getCanDelete());
+        entitySetTarget.setOmitCountAll(entitySet.getOmitCountAll());
+        entitySetTarget.setJdbcStmtTimeout(entitySet.getJdbcStmtTimeout());
+
         initializrBean.setMsgSuccess("Entity Change applied.");
         return "oiyokan/initializrTop";
     }
