@@ -72,6 +72,8 @@ public class OiyokanInitializrMessages {
     public static final String IYI7115 = "[IYI7115] INFO: Typical ORCL18 preset is loaded.";
     public static final String IYI7121 = "[IYI7121] WARN: Fail to test connect to database.";
     public static final String IYI7122 = "[IYI7122] DEBUG: Success to test connect to database.";
+    public static final String IYI7131 = "[IYI7131] WARN: 同名の database 登録がすでに存在します.";
+    public static final String IYI7132 = "[IYI7132] WARN: 同名の EntitySet 登録がすでに存在します.";
 
     public static final String IYI7501 = "[IYI7501] UNEXPECTED: EntitySet NOT found.";
     public static final String IYI7502 = "[IYI7502] UNEXPECTED: Database NOT found.";

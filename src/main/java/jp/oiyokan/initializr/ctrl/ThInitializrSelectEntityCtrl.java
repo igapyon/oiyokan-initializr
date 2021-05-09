@@ -94,20 +94,29 @@ public class ThInitializrSelectEntityCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        final OiyoSettings oiyoSettings = settingsBean.getSettings();
+
         final Map<String, String> mapNameFilter = new HashMap<>();
         for (String opts : initializrBean.getCheckboxes()) {
             mapNameFilter.put(opts, opts);
-        }
 
-        final OiyoSettings oiyoSettings = settingsBean.getSettings();
+            final String entityName = OiyokanInitializrUtil.adjustName(opts, initializrBean.isConvertCamel());
+            // 同名のEntitySet設定があるかどうか確認O。
+            for (OiyoSettingsEntitySet lookup : oiyoSettings.getEntitySet()) {
+                if (lookup.getName().equals(entityName)) {
+                    // [IYI7132] WARN: 同名の EntitySet 登録がすでに存在します.
+                    initializrBean.setMsgError(OiyokanInitializrMessages.IYI7501 + ": " + entityName);
+                    log.error(OiyokanInitializrMessages.IYI7501 + ": " + entityName);
+                    return "oiyokan/initializrSelectEntity";
+                }
+            }
+        }
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
         OiyoInfo oiyoInfo = new OiyoInfo();
 
         try {
-            // TODO 同名のEntitySet設定があったらこれをリジェクトすること。
-
             // 常にVIEWつきでトラバース。ただし先にて名前フィルタリングあるため大丈夫。
             OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, settingsBean.getCurrentDbSettingName(), true,
                     initializrBean.isReadWriteAccess(), mapNameFilter);

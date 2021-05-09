@@ -152,7 +152,15 @@ public class ThInitializrSetupDatabaseCtrl {
             initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7122);
             log.debug(OiyokanInitializrMessages.IYI7122);
 
-            // TODO 同名の接続設定があったらこれをリジェクトすること。
+            for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
+                if (lookup.getName().equals(database.getName())) {
+                    // [IYI7131] WARN: 同名の database 登録がすでに存在します.
+                    initializrBean.setMsgError(OiyokanInitializrMessages.IYI7131 + ": " + database.getName());
+                    log.error(OiyokanInitializrMessages.IYI7131 + ": " + database.getName());
+                    return "oiyokan/initializrSetupDatabase";
+                }
+            }
+
             // 接続成功。これを記憶する。
             settingsBean.getSettings().getDatabase().add(database);
 

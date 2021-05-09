@@ -224,7 +224,7 @@ public class OiyokanInitializrUtil {
         return writer.toString();
     }
 
-    static String adjustName(String input, boolean convertCamel) {
+    public static String adjustName(String input, boolean convertCamel) {
         if (!convertCamel) {
             for (int index = 0; index < CAMEL_DELIMITER_CHARS.length; index++) {
                 input = input.replaceAll("[" + CAMEL_DELIMITER_CHARS[index] + "]", "_");
