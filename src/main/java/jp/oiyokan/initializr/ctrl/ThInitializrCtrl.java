@@ -36,6 +36,7 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, ThInitializrBean initializrBean, BindingResult result) {
         log.info("INFO: ルート `/initializr`(GET) が開かれた.");
+
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess("最初にデータベース設定をセットアップしてください。");
         initializrBean.setMsgError(null);

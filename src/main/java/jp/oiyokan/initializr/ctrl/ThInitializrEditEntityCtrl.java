@@ -1,7 +1,5 @@
 package jp.oiyokan.initializr.ctrl;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 @Controller
 @SessionAttributes("scopedTarget.settingsBean")
 public class ThInitializrEditEntityCtrl {
-    @SuppressWarnings("unused")
     private static final Log log = LogFactory.getLog(ThInitializrEditEntityCtrl.class);
 
     @Autowired
@@ -29,7 +26,7 @@ public class ThInitializrEditEntityCtrl {
 
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "edit" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("edit") String entityName,
-            BindingResult result) throws IOException {
+            BindingResult result) {
         log.info("INFO: `/initializrEditEntity`(POST:edit) が開かれた.");
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -54,7 +51,7 @@ public class ThInitializrEditEntityCtrl {
 
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "applyChanges" }, method = { RequestMethod.POST })
     public String applyEntityChanges(Model model, ThInitializrBean initializrBean, OiyoSettingsEntitySet entitySet,
-            BindingResult result) throws IOException {
+            BindingResult result) {
         log.info("INFO: `/initializrEditEntity`(POST:applyChanges) が開かれた.");
 
         model.addAttribute("settings", settingsBean.getSettings());
