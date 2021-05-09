@@ -41,6 +41,7 @@ public class ThInitializrCtrl {
 
         // 一旦内容クリア
         settingsBean.setSettings(new OiyoSettings());
+        settingsBean.setCurrentDbSettingName(null);
 
         model.addAttribute("settings", settingsBean.getSettings());
 
@@ -49,11 +50,13 @@ public class ThInitializrCtrl {
 
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
     public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
-        model.addAttribute("initializrBean", new ThInitializrBean());
-        initializrBean.setMsgSuccess("データは初期化されました");
+        // 初期化!
+        initializrBean = new ThInitializrBean();
+        model.addAttribute("initializrBean", initializrBean);
+        initializrBean.setMsgSuccess("Oiyokan Initializr のセッション情報を初期化しました。");
         initializrBean.setMsgError(null);
 
-        // 一旦内容クリア
+        // セッション情報の内容も一旦クリア
         settingsBean.setSettings(new OiyoSettings());
         model.addAttribute("settings", settingsBean.getSettings());
 
