@@ -142,9 +142,9 @@
                       <th class="mdl-data-table__cell--non-numeric">DB Name</th>
                       <th class="mdl-data-table__cell--non-numeric">EDM Type</th>
                       <th class="mdl-data-table__cell--non-numeric">JDBC Type</th>
-                      <th class="mdl-data-table__cell--non-numeric">DB Type</th>
-                      <th class="mdl-data-table__cell--non-numeric">AutoGenKey</th>
-                      <th class="mdl-data-table__cell--non-numeric">Nullable</th>
+                      <th class="mdl-data-table__cell--non-numeric">Null</th>
+                      <th class="mdl-data-table__cell--non-numeric">MaxLen</th>
+                      <th class="mdl-data-table__cell--non-numeric">Prec/Scale</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -153,8 +153,28 @@
                         <td class="mdl-data-table__cell--non-numeric">
                           <div th:text="${property.name}"></div>
                         </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:text="${property.dbName}"></div>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:text="${property.edmType}"></div>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:text="${property.jdbcType}"></div>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:text="${property.nullable}"></div>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:text="${property.maxLength}"></div>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:if="${property.precision > 0}" th:remove="tag">
+                            <div th:text="${property.precision}"></div>.
+                            <div th:text="${property.scale}"></div>
+                          </div>
+                        </td>
                       </tr>
-
                     </div>
                   </tbody>
                 </table>
