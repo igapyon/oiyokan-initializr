@@ -34,7 +34,8 @@ public class ThInitializrCtrl {
     private OiyokanSettingsWrapper settingsBean;
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
-    public String index(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+    public String index(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        log.info("INFO: ルート `/initializr`(GET) が開かれた.");
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess("最初にデータベース設定をセットアップしてください。");
         initializrBean.setMsgError(null);
@@ -49,8 +50,8 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
-    public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
-        // 初期化!
+    public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        log.info("INFO: Exit `/initializrExit`(GET) が開かれた.");
         initializrBean = new ThInitializrBean();
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess("Oiyokan Initializr のセッション情報を初期化しました。");
@@ -66,6 +67,7 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
     public String generate(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
+        log.info("INFO: GENERATE `/initializr`(POST:generate) がクリックされた.");
         model.addAttribute("settings", settingsBean.getSettings());
 
         for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
@@ -90,6 +92,7 @@ public class ThInitializrCtrl {
         } catch (IOException ex) {
             // [IYI4201] ERROR: Fail to generate json file.
             log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
+            throw ex;
         }
 
         try {
@@ -110,6 +113,7 @@ public class ThInitializrCtrl {
         } catch (IOException ex) {
             // [IYI5201] ERROR: Fail to generate zip file.
             log.error(OiyokanInitializrMessages.IYI5201, ex);
+            throw ex;
         }
 
         // [IYI1002] Oiyokan Initializr End.

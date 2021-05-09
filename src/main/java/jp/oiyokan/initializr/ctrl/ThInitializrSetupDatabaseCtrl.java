@@ -34,6 +34,8 @@ public class ThInitializrSetupDatabaseCtrl {
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "new" }, method = { RequestMethod.POST })
     public String open(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:new) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         OiyoSettingsDatabase database = new OiyoSettingsDatabase();
@@ -68,6 +70,8 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "connTest" }, method = { RequestMethod.POST })
     public String connTest(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:connTest) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -128,6 +132,8 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preH2" }, method = { RequestMethod.POST })
     public String preH2(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:preH2) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -153,6 +159,8 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String prePostgreSQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:prePostgreSQL) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -176,6 +184,8 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preMySQL" }, method = { RequestMethod.POST })
     public String preMySQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:preMySQL) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -201,6 +211,8 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String preSQLSV2008(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:preSQLSV2008) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -224,6 +236,8 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preORCL18" }, method = { RequestMethod.POST })
     public String preORCL18(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:preORCL18) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -248,6 +262,8 @@ public class ThInitializrSetupDatabaseCtrl {
             RequestMethod.POST })
     public String applyDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);

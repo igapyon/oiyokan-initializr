@@ -48,6 +48,8 @@ public class ThInitializrSelectEntityCtrl {
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
             BindingResult result) throws IOException {
+        log.info("INFO: `/initializrSelectEntity`(POST:new) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
@@ -92,6 +94,8 @@ public class ThInitializrSelectEntityCtrl {
             RequestMethod.POST })
     public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result)
             throws IOException {
+        log.info("INFO: `/initializrSelectEntity`(POST:applyEntitySelection) が開かれた.");
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
