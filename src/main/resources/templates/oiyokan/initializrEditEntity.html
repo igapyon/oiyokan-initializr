@@ -100,7 +100,8 @@
                   <label class="mdl-textfield__label" for="dbName">DB entity name</label>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input class="mdl-textfield__input" type="text" id="dbSettingName" th:field="*{dbSettingName}" readonly>
+                  <input class="mdl-textfield__input" type="text" id="dbSettingName" th:field="*{dbSettingName}"
+                    readonly>
                   <label class="mdl-textfield__label" for="dbSettingName">DB Settings</label>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -109,28 +110,23 @@
                 </div>
 
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canCreate">
-                  <input type="checkbox" id="canCreate" th:field="*{canCreate}"
-                    class="mdl-checkbox__input">
+                  <input type="checkbox" id="canCreate" th:field="*{canCreate}" class="mdl-checkbox__input">
                   <span class="mdl-checkbox__label">Can Create</span>
                 </label>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canRead">
-                  <input type="checkbox" id="canRead" th:field="*{canRead}"
-                    class="mdl-checkbox__input">
+                  <input type="checkbox" id="canRead" th:field="*{canRead}" class="mdl-checkbox__input">
                   <span class="mdl-checkbox__label">Can Read</span>
                 </label>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canUpdate">
-                  <input type="checkbox" id="canUpdate" th:field="*{canUpdate}"
-                    class="mdl-checkbox__input">
+                  <input type="checkbox" id="canUpdate" th:field="*{canUpdate}" class="mdl-checkbox__input">
                   <span class="mdl-checkbox__label">Can Update</span>
                 </label>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="canDelete">
-                  <input type="checkbox" id="canDelete" th:field="*{canDelete}"
-                    class="mdl-checkbox__input">
+                  <input type="checkbox" id="canDelete" th:field="*{canDelete}" class="mdl-checkbox__input">
                   <span class="mdl-checkbox__label">Can Delete</span>
                 </label>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="omitCountAll">
-                  <input type="checkbox" id="omitCountAll" th:field="*{omitCountAll}"
-                    class="mdl-checkbox__input">
+                  <input type="checkbox" id="omitCountAll" th:field="*{omitCountAll}" class="mdl-checkbox__input">
                   <span class="mdl-checkbox__label">Omit count all</span>
                 </label>
 
@@ -139,6 +135,29 @@
                   <label class="mdl-textfield__label" for="jdbcStmtTimeout">JDBC Statement Timeout</label>
                 </div>
 
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                  <thead>
+                    <tr>
+                      <th class="mdl-data-table__cell--non-numeric">Name</th>
+                      <th class="mdl-data-table__cell--non-numeric">DB Name</th>
+                      <th class="mdl-data-table__cell--non-numeric">EDM Type</th>
+                      <th class="mdl-data-table__cell--non-numeric">JDBC Type</th>
+                      <th class="mdl-data-table__cell--non-numeric">DB Type</th>
+                      <th class="mdl-data-table__cell--non-numeric">AutoGenKey</th>
+                      <th class="mdl-data-table__cell--non-numeric">Nullable</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <div th:each="property : *{entityType.property}" th:remove="tag">
+                      <tr>
+                        <td class="mdl-data-table__cell--non-numeric">
+                          <div th:text="${property.name}"></div>
+                        </td>
+                      </tr>
+
+                    </div>
+                  </tbody>
+                </table>
               </form>
             </div>
           </div>
