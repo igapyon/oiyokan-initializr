@@ -25,7 +25,7 @@ public class ThInitializrBean implements Serializable {
     boolean isFilterTreatNullAsBlank = false; // Support Salesforce or not.
 
     private List<String> checkboxes = new ArrayList<>();
-    private List<EntitySet> entitySets = new ArrayList<>();
+    private List<TableInfo> tableInfos = new ArrayList<>();
 
     ///////////////////////////////////////////////
     // Method
@@ -86,19 +86,19 @@ public class ThInitializrBean implements Serializable {
         this.checkboxes = checkboxes;
     }
 
-    public List<EntitySet> getEntitySets() {
-        return entitySets;
+    public List<TableInfo> getTableInfos() {
+        return tableInfos;
     }
 
     ///////////////////////////////////////////////
     // 画面のチェックボッスで利用する EntitySet
 
-    public static class EntitySet {
+    public static class TableInfo {
         private String name = null;
         private boolean selected = false;
         private boolean isView = false;
 
-        public EntitySet(String name, boolean selected, boolean isView) {
+        public TableInfo(String name, boolean selected, boolean isView) {
             this.name = name;
             this.selected = selected;
             this.isView = isView;

@@ -72,9 +72,9 @@ public class ThInitializrCtrl {
         OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                 initializrBean.isFilterTreatNullAsBlank);
 
-        initializrBean.getEntitySets().clear();
+        initializrBean.getTableInfos().clear();
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-            initializrBean.getEntitySets().add(new ThInitializrBean.EntitySet(entitySet.getName(), true, false));
+            initializrBean.getTableInfos().add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, false));
         }
 
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);

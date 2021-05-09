@@ -31,7 +31,7 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
-import jp.oiyokan.initializr.ctrl.ThInitializrBean.EntitySet;
+import jp.oiyokan.initializr.ctrl.ThInitializrBean.TableInfo;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
 
 @Controller
@@ -60,9 +60,9 @@ public class ThInitializrSelectEntityCtrl {
         try {
             selectEntityInternal(initializrBean, settingsBean.getSettings().getDatabase().get(0));
 
-            Collections.sort(initializrBean.getEntitySets(), new Comparator<EntitySet>() {
+            Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
                 @Override
-                public int compare(EntitySet o1, EntitySet o2) {
+                public int compare(TableInfo o1, TableInfo o2) {
                     return o1.getName().compareTo(o2.getName());
                 }
             });
@@ -121,7 +121,7 @@ public class ThInitializrSelectEntityCtrl {
 
         ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, database, null);
 
-        initializrBean.getEntitySets().clear();
+        initializrBean.getTableInfos().clear();
 
         // [IYI2111] Connect to database.
         log.info(OiyokanInitializrMessages.IYI2111 + ": " + database.getName());
@@ -138,8 +138,8 @@ public class ThInitializrSelectEntityCtrl {
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
 
-                    initializrBean.getEntitySets()
-                            .add(new ThInitializrBean.EntitySet(entitySet.getName(), true, false));
+                    initializrBean.getTableInfos()
+                            .add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, false));
                 } catch (Exception ex) {
                     // [IYI2113] WARN: Fail to read table.
                     log.warn(OiyokanInitializrMessages.IYI2113 + ": " + tableName);
@@ -159,8 +159,8 @@ public class ThInitializrSelectEntityCtrl {
                         final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                                 connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
 
-                        initializrBean.getEntitySets()
-                                .add(new ThInitializrBean.EntitySet(entitySet.getName(), true, true));
+                        initializrBean.getTableInfos()
+                                .add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, true));
                     } catch (Exception ex) {
                         // [IYI2115] WARN: Fail to read view.
                         log.warn(OiyokanInitializrMessages.IYI2115 + ": " + viewName);

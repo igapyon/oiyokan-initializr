@@ -98,7 +98,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <div th:each="feat : ${initializrBean.entitySets}" th:remove="tag">
+                    <div th:each="feat : ${initializrBean.tableInfos}" th:remove="tag">
                       <tr>
                         <td class="mdl-data-table__cell--non-numeric">
                           <input type="checkbox" th:field="*{checkboxes}" th:value="${feat.name}" />
