@@ -114,15 +114,17 @@ public class ThInitializrCtrl {
             throws IOException {
         model.addAttribute("settings", settingsBean.getSettings());
 
-        // TODO すべてデータベースにこの同様処理が必要。
-        OiyoSettingsDatabase database = settingsBean.getSettings().getDatabase().get(0);
-
-        // JSON書き込み直前に、プレーンパスワードを除去
-        if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
-            // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
-            database.setJdbcPassEnc(
-                    OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), new OiyoInfo().getPassphrase()));
-            database.setJdbcPassPlain(null);
+        for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
+            // JSON書き込み直前に、プレーンパスワードを除去
+            if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
+                // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
+                if (database.getJdbcPassPlain() == null) {
+                    database.setJdbcPassPlain("");
+                }
+                database.setJdbcPassEnc(
+                        OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), new OiyoInfo().getPassphrase()));
+                database.setJdbcPassPlain(null);
+            }
         }
 
         //////////////////////////////////////////////////////////
