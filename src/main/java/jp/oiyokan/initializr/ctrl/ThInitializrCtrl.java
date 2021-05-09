@@ -37,7 +37,7 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", initializrBean);
-        initializrBean.setMsgSuccess(null);
+        initializrBean.setMsgSuccess("最初にデータベース設定をセットアップしてください。");
         initializrBean.setMsgError(null);
 
         // 一旦内容クリア
@@ -51,7 +51,7 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
     public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
         model.addAttribute("initializrBean", new ThInitializrBean());
-        initializrBean.setMsgSuccess("Exited");
+        initializrBean.setMsgSuccess("データは初期化されました");
         initializrBean.setMsgError(null);
 
         // 一旦内容クリア

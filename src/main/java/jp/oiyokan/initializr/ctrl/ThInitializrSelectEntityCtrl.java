@@ -79,6 +79,7 @@ public class ThInitializrSelectEntityCtrl {
             });
 
             // TODO Entityの設定状況により分岐
+            initializrBean.setMsgSuccess("エンティティを選択してください。");
             return "oiyokan/initializrSelectEntity";
         } catch (ODataApplicationException | IOException e) {
             // TODO Auto-generated catch block
