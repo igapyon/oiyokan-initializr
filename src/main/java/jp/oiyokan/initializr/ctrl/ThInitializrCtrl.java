@@ -48,6 +48,19 @@ public class ThInitializrCtrl {
         return "oiyokan/initializrTop";
     }
 
+    @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
+    public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+        model.addAttribute("initializrBean", new ThInitializrBean());
+        initializrBean.setMsgSuccess("Exited");
+        initializrBean.setMsgError(null);
+
+        // 一旦内容クリア
+        settingsBean.setSettings(new OiyoSettings());
+        model.addAttribute("settings", settingsBean.getSettings());
+
+        return "oiyokan/initializrTop";
+    }
+
     /////////////////////////
     // Select table
 
@@ -74,7 +87,8 @@ public class ThInitializrCtrl {
 
         initializrBean.getTableInfos().clear();
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-            initializrBean.getTableInfos().add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, false));
+            initializrBean.getTableInfos()
+                    .add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, false));
         }
 
         OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
