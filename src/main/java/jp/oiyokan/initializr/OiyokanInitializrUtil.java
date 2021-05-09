@@ -63,18 +63,28 @@ public class OiyokanInitializrUtil {
      * 
      * @param oiyoInfo      OiyoInfo info for passphrase.
      * @param oiyoSettings  OiyoSettings info.
+     * @param dbSettingName DB setting name.
      * @param isProcessView Process View. default:false.
      * @param mapNameFilter Filter of table name.
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
-    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView,
-            boolean isReadWriteAccess, Map<String, String> mapNameFilter)
+    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, String dbSettingName,
+            boolean isProcessView, boolean isReadWriteAccess, Map<String, String> mapNameFilter)
             throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
         log.info(OiyokanInitializrMessages.IYI2101);
 
-        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
+        OiyoSettingsDatabase database = null;
+        for (OiyoSettingsDatabase look : oiyoSettings.getDatabase()) {
+            if (look.getName().equals(dbSettingName)) {
+                database = look;
+            }
+        }
+        if (database == null) {
+            // TODO message
+            log.error("DBみつからず");
+        }
 
         // [IYI2111] Connect to database.
         log.info(OiyokanInitializrMessages.IYI2111 + ": " + database.getName());

@@ -53,12 +53,23 @@ public class ThInitializrSelectEntityCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
+        settingsBean.setCurrentDbSettingName(dbName);
         log.info("dbName:" + dbName);
         log.info("processView:" + initializrBean.isProcessView());
 
-        // TODO Entityの設定状況により分岐
         try {
-            selectEntityInternal(initializrBean, settingsBean.getSettings().getDatabase().get(0));
+            OiyoSettingsDatabase database = null;
+            for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
+                if (lookup.getName().equals(dbName)) {
+                    database = lookup;
+                }
+            }
+            if (database == null) {
+                initializrBean.setMsgError("データベース発見できず。");
+                return "oiyokan/initializrTop";
+            }
+
+            selectEntityInternal(initializrBean, database);
 
             Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
                 @Override
@@ -102,8 +113,8 @@ public class ThInitializrSelectEntityCtrl {
 
         try {
             // 常にVIEWつきでトラバース。ただし先にて名前フィルタリングあるため大丈夫。
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, true, initializrBean.isReadWriteAccess(),
-                    mapNameFilter);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, settingsBean.getCurrentDbSettingName(), true,
+                    initializrBean.isReadWriteAccess(), mapNameFilter);
 
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);

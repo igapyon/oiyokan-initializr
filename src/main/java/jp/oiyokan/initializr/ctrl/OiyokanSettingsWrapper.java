@@ -15,6 +15,8 @@ import jp.oiyokan.dto.OiyoSettings;
 public class OiyokanSettingsWrapper implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private String currentDbSettingName = null;
+
     private OiyoSettings settings = new OiyoSettings();
 
     public OiyoSettings getSettings() {
@@ -36,5 +38,13 @@ public class OiyokanSettingsWrapper implements Serializable {
 
     public void setSettings(OiyoSettings settings) {
         this.settings = settings;
+    }
+
+    public String getCurrentDbSettingName() {
+        return currentDbSettingName;
+    }
+
+    public void setCurrentDbSettingName(String currentDbSettingName) {
+        this.currentDbSettingName = currentDbSettingName;
     }
 }

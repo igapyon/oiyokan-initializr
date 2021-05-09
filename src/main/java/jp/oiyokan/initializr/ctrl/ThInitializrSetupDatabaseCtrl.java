@@ -39,7 +39,8 @@ public class ThInitializrSetupDatabaseCtrl {
         OiyoSettingsDatabase database = new OiyoSettingsDatabase();
 
         if (database.getName() == null) {
-            database.setName("connDef1");
+            final int nextNumber = settingsBean.getSettings().getDatabase().size() + 1;
+            database.setName("connDef" + nextNumber);
         }
         if (database.getType() == null) {
             database.setType(OiyokanConstants.DatabaseType.PostgreSQL.name()); // h2, PostgreSQL, MySQL, SQLSV2008,

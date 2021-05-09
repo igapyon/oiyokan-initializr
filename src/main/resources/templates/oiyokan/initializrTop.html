@@ -106,6 +106,7 @@
                     <thead>
                       <tr>
                         <th class="mdl-data-table__cell--non-numeric">Name</th>
+                        <th class="mdl-data-table__cell--non-numeric">Description</th>
                         <th class="mdl-data-table__cell--non-numeric">Type</th>
                         <th class="mdl-data-table__cell--non-numeric">Action</th>
                       </tr>
@@ -115,6 +116,9 @@
                         <tr>
                           <td class="mdl-data-table__cell--non-numeric">
                             <div th:text="${db.name}"></div>
+                          </td>
+                          <td class="mdl-data-table__cell--non-numeric">
+                            <div th:text="${db.description}"></div>
                           </td>
                           <td class="mdl-data-table__cell--non-numeric">
                             <div th:text="${db.type}"></div>
@@ -187,6 +191,7 @@
                       <thead>
                         <tr>
                           <th class="mdl-data-table__cell--non-numeric">Name</th>
+                          <th class="mdl-data-table__cell--non-numeric">DB Settings</th>
                           <th class="mdl-data-table__cell--non-numeric">Action</th>
                         </tr>
                       </thead>
@@ -195,6 +200,9 @@
                           <tr>
                             <td class="mdl-data-table__cell--non-numeric">
                               <div th:text="${entitySet.name}"></div>
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                              <div th:text="${entitySet.dbSettingName}"></div>
                             </td>
                             <td class="mdl-data-table__cell--non-numeric">
                               <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="edit"
