@@ -32,7 +32,7 @@ public class OiyokanInitializrMessages {
     public static final String IYI2114 = "[IYI2114] DEBUG: Read view.";
     public static final String IYI2115 = "[IYI2115] WARN: Fail to read view.";
     public static final String IYI2201 = "[IYI2201] ERROR: Fail to connect database. Check database settings.";
-    public static final String IYI2202 = "[IYI2202] ERROR: Fail to close database. Check database settings.";
+    public static final String IYI2202 = "[IYI2202] ERROR: Fail to close database. Check database settings."; // 未使用
 
     public static final String IYI3101 = "[IYI3101] Tune settings info.";
 

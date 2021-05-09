@@ -10,6 +10,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import jp.oiyokan.dto.OiyoSettings;
 
+/**
+ * セッション上に記憶する情報。
+ */
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OiyokanSettingsWrapper implements Serializable {
