@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -82,8 +83,10 @@ public class OiyokanInitializrUtil {
             }
         }
         if (database == null) {
-            // TODO message
-            log.error("DBみつからず");
+            // [IYI2203] UNEXPECTED: 指定のDB settings が見つかりませんでした。
+            log.error(OiyokanInitializrMessages.IYI2203 + ": " + dbSettingName);
+            throw new ODataApplicationException(OiyokanInitializrMessages.IYI2203 + ": " + dbSettingName, 500,
+                    Locale.ENGLISH);
         }
 
         // [IYI2111] Connect to database.

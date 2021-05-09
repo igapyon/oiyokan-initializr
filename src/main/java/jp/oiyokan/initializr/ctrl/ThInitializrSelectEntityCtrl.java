@@ -47,8 +47,8 @@ public class ThInitializrSelectEntityCtrl {
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
             BindingResult result) {
-        // TODO message
-        log.info("INFO: `/initializrSelectEntity`(POST:new) が開かれた.");
+        // [IYI6106] INFO: `/initializrSelectEntity`(POST:new) が開かれた.
+        log.info(OiyokanInitializrMessages.IYI6106);
 
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
@@ -78,16 +78,17 @@ public class ThInitializrSelectEntityCtrl {
             }
         });
 
-        // TODO message
-        initializrBean.setMsgSuccess("エンティティを選択してください。");
+        // [IYI7103] INFO: Entity を選択してください。
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7103);
+        log.info(OiyokanInitializrMessages.IYI7103);
         return "oiyokan/initializrSelectEntity";
     }
 
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "applyEntitySelection" }, method = {
             RequestMethod.POST })
     public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result) {
-        // TODO message
-        log.info("INFO: `/initializrSelectEntity`(POST:applyEntitySelection) が開かれた.");
+        // [IYI6107] INFO: `/initializrSelectEntity`(POST:applyEntitySelection) が開かれた.
+        log.info(OiyokanInitializrMessages.IYI6107);
 
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
@@ -115,8 +116,10 @@ public class ThInitializrSelectEntityCtrl {
 
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);
-            // TODO message
-            initializrBean.setMsgSuccess("INFO: Entity selection applied");
+
+            // [IYI7104] INFO: Entity selection applied
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7104);
+            log.info(OiyokanInitializrMessages.IYI7104);
             return "oiyokan/initializrTop";
         } catch (ODataApplicationException | SQLException e) {
             // TODO message

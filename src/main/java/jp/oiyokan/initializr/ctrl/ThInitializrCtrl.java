@@ -35,11 +35,14 @@ public class ThInitializrCtrl {
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
     public String index(Model model, ThInitializrBean initializrBean, BindingResult result) {
-        log.info("INFO: ルート `/initializr`(GET) が開かれた.");
+        // [IYI6101] INFO: ルート `/initializr`(GET) が開かれた.
+        log.info(OiyokanInitializrMessages.IYI6101);
 
         model.addAttribute("initializrBean", initializrBean);
-        // TODO message
-        initializrBean.setMsgSuccess("最初にデータベース設定をセットアップしてください。");
+
+        // [IYI7101] INFO: 最初にデータベース設定をセットアップしてください。
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7101);
+        log.info(OiyokanInitializrMessages.IYI7101);
         initializrBean.setMsgError(null);
 
         // 一旦内容クリア
@@ -53,13 +56,15 @@ public class ThInitializrCtrl {
 
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
     public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) {
-        // TODO message
-        log.info("INFO: Exit `/initializrExit`(GET) が開かれた.");
+        // [IYI6102] INFO: Exit `/initializrExit`(GET) が開かれた.
+        log.info(OiyokanInitializrMessages.IYI6102);
+
         initializrBean = new ThInitializrBean();
         model.addAttribute("initializrBean", initializrBean);
-        
-        // TODO message
-        initializrBean.setMsgSuccess("Oiyokan Initializr のセッション情報を初期化しました。");
+
+        // [IYI7102] INFO: Oiyokan Initializr のセッション情報を初期化しました。
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7102);
+        log.info(OiyokanInitializrMessages.IYI7102);
         initializrBean.setMsgError(null);
 
         // セッション情報の内容も一旦クリア
@@ -72,8 +77,9 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
     public String generate(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
-        // TODO message
-        log.info("INFO: GENERATE `/initializr`(POST:generate) がクリックされた.");
+        // [IYI6103] INFO: GENERATE `/initializr`(POST:generate) がクリックされた.
+        log.info(OiyokanInitializrMessages.IYI6103);
+
         model.addAttribute("settings", settingsBean.getSettings());
 
         for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
@@ -109,9 +115,8 @@ public class ThInitializrCtrl {
             IOUtils.copy(new ByteArrayInputStream(zipFile), outStream);
             outStream.flush();
 
-            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI5102);
-
             // [IYI5102] Check the `oiyokan-demo.zip`.
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI5102);
             log.info(OiyokanInitializrMessages.IYI5102 + ": oiyokan-demo.zip");
         } catch (IOException ex) {
             // [IYI5201] ERROR: Fail to generate zip file.

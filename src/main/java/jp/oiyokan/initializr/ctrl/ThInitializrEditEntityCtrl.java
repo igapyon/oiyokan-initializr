@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.dto.OiyoSettingsEntitySet;
+import jp.oiyokan.initializr.OiyokanInitializrMessages;
 
 @Controller
 @SessionAttributes("scopedTarget.settingsBean")
@@ -27,8 +28,8 @@ public class ThInitializrEditEntityCtrl {
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "edit" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("edit") String entityName,
             BindingResult result) {
-        // TODO message
-        log.info("INFO: `/initializrEditEntity`(POST:edit) が開かれた.");
+        // [IYI6104] INFO: `/initializrEditEntity`(POST:edit) が開かれた."
+        log.info(OiyokanInitializrMessages.IYI6104);
 
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
@@ -53,8 +54,8 @@ public class ThInitializrEditEntityCtrl {
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "applyChanges" }, method = { RequestMethod.POST })
     public String applyEntityChanges(Model model, ThInitializrBean initializrBean, OiyoSettingsEntitySet entitySet,
             BindingResult result) {
-        // TODO message
-        log.info("INFO: `/initializrEditEntity`(POST:applyChanges) が開かれた.");
+        // [IYI6105] INFO: `/initializrEditEntity`(POST:applyChanges) が開かれた.
+        log.info(OiyokanInitializrMessages.IYI6105);
 
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
