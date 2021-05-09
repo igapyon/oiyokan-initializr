@@ -27,7 +27,7 @@ mvn install spring-boot:run
 3. 起動後の `oiyokan-initializr` に Web ブラウザで接続
 
 ```sh
-http://localhost:8080/
+http://localhost:8082/
 ```
 
 4. Click `Oiyokan Initializr`
