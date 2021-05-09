@@ -237,9 +237,9 @@ public class ThInitializrSetupDatabaseCtrl {
         return "oiyokan/initializrSetupDatabase";
     }
 
-    @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "saveDatabaseSettings" }, method = {
+    @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "applyDatabaseSettings" }, method = {
             RequestMethod.POST })
-    public String saveDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
+    public String applyDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
             BindingResult result) throws IOException {
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);

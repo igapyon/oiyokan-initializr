@@ -76,9 +76,9 @@ public class ThInitializrSelectEntityCtrl {
         }
     }
 
-    @RequestMapping(value = { "/initializrSelectEntity" }, params = { "saveEntitySelection" }, method = {
+    @RequestMapping(value = { "/initializrSelectEntity" }, params = { "applyEntitySelection" }, method = {
             RequestMethod.POST })
-    public String saveEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result)
+    public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result)
             throws IOException {
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
