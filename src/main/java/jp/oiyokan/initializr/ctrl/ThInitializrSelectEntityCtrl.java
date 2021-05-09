@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
+import jp.oiyokan.initializr.ctrl.ThInitializrBean.EntitySet;
 import jp.oiyokan.oiyogen.OiyokanSettingsGenUtil;
 
 @Controller
@@ -53,21 +56,23 @@ public class ThInitializrSelectEntityCtrl {
         log.info("dbName:" + dbName);
         log.info("processView:" + initializrBean.isProcessView());
 
-        OiyoSettings oiyoSettings = settingsBean.getSettings();
-        if (oiyoSettings != null) {
+        // TODO Entityの設定状況により分岐
+        try {
+            selectEntityInternal(initializrBean, settingsBean.getSettings().getDatabase().get(0));
 
-            // TODO Entityの設定状況により分岐
-            try {
-                selectEntityInternal(initializrBean, settingsBean.getSettings().getDatabase().get(0));
-            } catch (ODataApplicationException | IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            Collections.sort(initializrBean.getEntitySets(), new Comparator<EntitySet>() {
+                @Override
+                public int compare(EntitySet o1, EntitySet o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
 
             // TODO Entityの設定状況により分岐
             return "oiyokan/initializrSelectEntity";
-        } else {
-            return "oiyokan/initializrSetupDatabase";
+        } catch (ODataApplicationException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "oiyokan/initializrTop";
         }
     }
 
@@ -129,7 +134,7 @@ public class ThInitializrSelectEntityCtrl {
 
                 try {
                     // [IYI2112] DEBUG: Read table.
-                    log.debug(OiyokanInitializrMessages.IYI2112 + ": " + tableName);
+                    log.info(OiyokanInitializrMessages.IYI2112 + ": " + tableName);
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
 
@@ -150,7 +155,7 @@ public class ThInitializrSelectEntityCtrl {
 
                     try {
                         // [IYI2114] DEBUG: Read view.
-                        log.debug(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
+                        log.info(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
                         final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                                 connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
 
