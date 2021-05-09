@@ -1,6 +1,5 @@
 package jp.oiyokan.initializr.ctrl;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,6 +47,7 @@ public class ThInitializrSelectEntityCtrl {
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
             BindingResult result) {
+        // TODO message
         log.info("INFO: `/initializrSelectEntity`(POST:new) が開かれた.");
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -56,43 +56,37 @@ public class ThInitializrSelectEntityCtrl {
         initializrBean.setMsgError(null);
 
         settingsBean.setCurrentDbSettingName(dbName);
-        log.info("dbName:" + dbName);
-        log.info("processView:" + initializrBean.isProcessView());
 
-        try {
-            OiyoSettingsDatabase database = null;
-            for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
-                if (lookup.getName().equals(dbName)) {
-                    database = lookup;
-                }
+        OiyoSettingsDatabase database = null;
+        for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
+            if (lookup.getName().equals(dbName)) {
+                database = lookup;
             }
-            if (database == null) {
-                initializrBean.setMsgError("データベース発見できず。");
-                return "oiyokan/initializrTop";
-            }
-
-            selectEntityInternal(initializrBean, database);
-
-            Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
-                @Override
-                public int compare(TableInfo o1, TableInfo o2) {
-                    return o1.getName().compareToIgnoreCase(o2.getName());
-                }
-            });
-
-            // TODO Entityの設定状況により分岐
-            initializrBean.setMsgSuccess("エンティティを選択してください。");
-            return "oiyokan/initializrSelectEntity";
-        } catch (ODataApplicationException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        }
+        if (database == null) {
+            // TODO message
+            initializrBean.setMsgError("ERROR: データベース発見できず。");
             return "oiyokan/initializrTop";
         }
+
+        selectEntityInternal(initializrBean, database);
+
+        Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
+            @Override
+            public int compare(TableInfo o1, TableInfo o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+
+        // TODO message
+        initializrBean.setMsgSuccess("エンティティを選択してください。");
+        return "oiyokan/initializrSelectEntity";
     }
 
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "applyEntitySelection" }, method = {
             RequestMethod.POST })
     public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        // TODO message
         log.info("INFO: `/initializrSelectEntity`(POST:applyEntitySelection) が開かれた.");
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -100,8 +94,7 @@ public class ThInitializrSelectEntityCtrl {
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        log.info("選択したEntitySetをマーク");
-        Map<String, String> mapNameFilter = new HashMap<>();
+        final Map<String, String> mapNameFilter = new HashMap<>();
         for (String opts : initializrBean.getCheckboxes()) {
             mapNameFilter.put(opts, opts);
         }
@@ -122,18 +115,17 @@ public class ThInitializrSelectEntityCtrl {
 
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);
-            initializrBean.setMsgSuccess("Entity selection applied");
+            // TODO message
+            initializrBean.setMsgSuccess("INFO: Entity selection applied");
             return "oiyokan/initializrTop";
         } catch (ODataApplicationException | SQLException e) {
-            // TODO Auto-generated catch block
+            // TODO message
             e.printStackTrace();
             return "oiyokan/initializrSelectEntity";
         }
-
     }
 
-    public static void selectEntityInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database)
-            throws IOException, ODataApplicationException {
+    static void selectEntityInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database) {
 
         ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, database, null);
 
@@ -183,7 +175,10 @@ public class ThInitializrSelectEntityCtrl {
                     }
                 }
             }
-        } catch (Exception ex) {
+        } catch (ODataApplicationException ex) {
+            // TODO message
+            log.warn(OiyokanMessages.IY9999 + ": ");
+        } catch (SQLException ex) {
             // TODO message
             log.warn(OiyokanMessages.IY9999 + ": ");
         }

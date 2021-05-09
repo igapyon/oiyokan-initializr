@@ -38,6 +38,7 @@ public class ThInitializrCtrl {
         log.info("INFO: ルート `/initializr`(GET) が開かれた.");
 
         model.addAttribute("initializrBean", initializrBean);
+        // TODO message
         initializrBean.setMsgSuccess("最初にデータベース設定をセットアップしてください。");
         initializrBean.setMsgError(null);
 
@@ -52,9 +53,12 @@ public class ThInitializrCtrl {
 
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
     public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        // TODO message
         log.info("INFO: Exit `/initializrExit`(GET) が開かれた.");
         initializrBean = new ThInitializrBean();
         model.addAttribute("initializrBean", initializrBean);
+        
+        // TODO message
         initializrBean.setMsgSuccess("Oiyokan Initializr のセッション情報を初期化しました。");
         initializrBean.setMsgError(null);
 
@@ -68,24 +72,22 @@ public class ThInitializrCtrl {
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
     public String generate(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
+        // TODO message
         log.info("INFO: GENERATE `/initializr`(POST:generate) がクリックされた.");
         model.addAttribute("settings", settingsBean.getSettings());
 
         for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
-            // JSON書き込み直前に、プレーンパスワードを除去
+            // JSON書き込み直前に、JDBCの暗号化パスワードが未設定であればこれを設定
             if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
-                // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
                 if (database.getJdbcPassPlain() == null) {
                     database.setJdbcPassPlain("");
                 }
                 database.setJdbcPassEnc(
                         OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), new OiyoInfo().getPassphrase()));
-                database.setJdbcPassPlain(null);
             }
+            // JSON書き込み直前に、JDBCの平文パスワードを除去
+            database.setJdbcPassPlain(null);
         }
-
-        //////////////////////////////////////////////////////////
-        // Write settings info into oiyokan-settings.json
 
         String jsonString = null;
         try {

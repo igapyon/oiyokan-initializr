@@ -27,6 +27,7 @@ public class ThInitializrEditEntityCtrl {
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "edit" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("edit") String entityName,
             BindingResult result) {
+        // TODO message
         log.info("INFO: `/initializrEditEntity`(POST:edit) が開かれた.");
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -52,6 +53,7 @@ public class ThInitializrEditEntityCtrl {
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "applyChanges" }, method = { RequestMethod.POST })
     public String applyEntityChanges(Model model, ThInitializrBean initializrBean, OiyoSettingsEntitySet entitySet,
             BindingResult result) {
+        // TODO message
         log.info("INFO: `/initializrEditEntity`(POST:applyChanges) が開かれた.");
 
         model.addAttribute("settings", settingsBean.getSettings());
@@ -66,10 +68,12 @@ public class ThInitializrEditEntityCtrl {
             }
         }
         if (entitySetTarget == null) {
+            // TODO message 想定外のエラー。
             initializrBean.setMsgSuccess("ERROR.");
             return "oiyokan/initializrEditEntity";
         }
 
+        // 取得できた EntitySet 情報を複写設定。
         entitySetTarget.setDescription(entitySet.getDescription());
         entitySetTarget.setCanCreate(entitySet.getCanCreate());
         entitySetTarget.setCanRead(entitySet.getCanRead());
@@ -78,6 +82,7 @@ public class ThInitializrEditEntityCtrl {
         entitySetTarget.setOmitCountAll(entitySet.getOmitCountAll());
         entitySetTarget.setJdbcStmtTimeout(entitySet.getJdbcStmtTimeout());
 
+        // TODO message
         initializrBean.setMsgSuccess("Entity Change applied.");
         return "oiyokan/initializrTop";
     }
