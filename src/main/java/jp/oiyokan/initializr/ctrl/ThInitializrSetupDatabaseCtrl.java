@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.OiyokanConstants;
+import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
+import jp.oiyokan.util.OiyoEncryptUtil;
 
 @Controller
 @SessionAttributes("scopedTarget.settingsBean")
@@ -96,12 +98,16 @@ public class ThInitializrSetupDatabaseCtrl {
         //////////////////////////////////////////////////////////
         // Process settings
         try {
-            // Enc pass は一旦クリア.
-            database.setJdbcPassEnc("");
             if (database.getJdbcUser() == null || database.getJdbcUser().trim().length() == 0) {
                 try (Connection conn = DriverManager.getConnection(database.getJdbcUrl())) {
                 }
             } else {
+                if (database.getJdbcPassEnc() != null && database.getJdbcPassEnc().trim().length() > 0) {
+                    if (database.getJdbcPassPlain() == null || database.getJdbcPassPlain().trim().length() == 0) {
+                        database.setJdbcPassPlain(
+                                OiyoEncryptUtil.decrypt(database.getJdbcPassEnc(), new OiyoInfo().getPassphrase()));
+                    }
+                }
                 try (Connection conn = DriverManager.getConnection(database.getJdbcUrl(), database.getJdbcUser(),
                         database.getJdbcPassPlain())) {
                 }
