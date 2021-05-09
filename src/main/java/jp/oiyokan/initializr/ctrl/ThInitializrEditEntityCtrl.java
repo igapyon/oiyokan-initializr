@@ -1,7 +1,5 @@
 package jp.oiyokan.initializr.ctrl;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.dto.OiyoSettingsEntitySet;
+import jp.oiyokan.initializr.OiyokanInitializrMessages;
 
 @Controller
 @SessionAttributes("scopedTarget.settingsBean")
@@ -28,7 +27,10 @@ public class ThInitializrEditEntityCtrl {
 
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "edit" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("edit") String entityName,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6104] INFO: `/initializrEditEntity`(POST:edit) clicked.
+        log.info(OiyokanInitializrMessages.IYI6104);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
@@ -51,7 +53,10 @@ public class ThInitializrEditEntityCtrl {
 
     @RequestMapping(value = { "/initializrEditEntity" }, params = { "applyChanges" }, method = { RequestMethod.POST })
     public String applyEntityChanges(Model model, ThInitializrBean initializrBean, OiyoSettingsEntitySet entitySet,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6105] INFO: `/initializrEditEntity`(POST:applyChanges) clicked.
+        log.info(OiyokanInitializrMessages.IYI6105);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
@@ -64,10 +69,13 @@ public class ThInitializrEditEntityCtrl {
             }
         }
         if (entitySetTarget == null) {
-            initializrBean.setMsgSuccess("ERROR.");
+            // [IYI7501] UNEXPECTED: EntitySet NOT found.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7501);
+            log.error(OiyokanInitializrMessages.IYI7501);
             return "oiyokan/initializrEditEntity";
         }
 
+        // 取得できた EntitySet 情報を複写設定。
         entitySetTarget.setDescription(entitySet.getDescription());
         entitySetTarget.setCanCreate(entitySet.getCanCreate());
         entitySetTarget.setCanRead(entitySet.getCanRead());
@@ -76,7 +84,9 @@ public class ThInitializrEditEntityCtrl {
         entitySetTarget.setOmitCountAll(entitySet.getOmitCountAll());
         entitySetTarget.setJdbcStmtTimeout(entitySet.getJdbcStmtTimeout());
 
-        initializrBean.setMsgSuccess("Entity Change applied.");
+        // [IYI7107] INFO: Entity Change applied.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7107);
+        log.info(OiyokanInitializrMessages.IYI7107);
         return "oiyokan/initializrTop";
     }
 }

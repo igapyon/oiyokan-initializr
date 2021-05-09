@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+/**
+ * Thymeleaf画面とやりとりに利用するBean.
+ */
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class ThInitializrBean implements Serializable {

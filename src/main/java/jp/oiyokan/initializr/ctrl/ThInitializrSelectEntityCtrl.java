@@ -1,6 +1,5 @@
 package jp.oiyokan.initializr.ctrl;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,13 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jp.oiyokan.OiyokanConstants;
-import jp.oiyokan.OiyokanMessages;
 import jp.oiyokan.common.OiyoCommonJdbcUtil;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
 import jp.oiyokan.dto.OiyoSettingsEntitySet;
-import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.initializr.ctrl.ThInitializrBean.TableInfo;
@@ -47,54 +44,74 @@ public class ThInitializrSelectEntityCtrl {
 
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
     public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6106] INFO: `/initializrSelectEntity`(POST:new) clicked.
+        log.info(OiyokanInitializrMessages.IYI6106);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        log.info("dbName:" + dbName);
-        log.info("processView:" + initializrBean.isProcessView());
+        settingsBean.setCurrentDbSettingName(dbName);
 
-        // TODO Entityの設定状況により分岐
-        try {
-            selectEntityInternal(initializrBean, settingsBean.getSettings().getDatabase().get(0));
-
-            Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
-                @Override
-                public int compare(TableInfo o1, TableInfo o2) {
-                    return o1.getName().compareToIgnoreCase(o2.getName());
-                }
-            });
-
-            // TODO Entityの設定状況により分岐
-            return "oiyokan/initializrSelectEntity";
-        } catch (ODataApplicationException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        OiyoSettingsDatabase database = null;
+        for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
+            if (lookup.getName().equals(dbName)) {
+                database = lookup;
+            }
+        }
+        if (database == null) {
+            // [IYI7502] UNEXPECTED: Database NOT found.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7502);
+            log.error(OiyokanInitializrMessages.IYI7502);
             return "oiyokan/initializrTop";
         }
+
+        selectEntityInternal(initializrBean, database);
+
+        Collections.sort(initializrBean.getTableInfos(), new Comparator<ThInitializrBean.TableInfo>() {
+            @Override
+            public int compare(TableInfo o1, TableInfo o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+
+        // [IYI7103] INFO: Select Entity.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7103);
+        log.info(OiyokanInitializrMessages.IYI7103);
+        return "oiyokan/initializrSelectEntity";
     }
 
     @RequestMapping(value = { "/initializrSelectEntity" }, params = { "applyEntitySelection" }, method = {
             RequestMethod.POST })
-    public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result)
-            throws IOException {
+    public String applyEntitySelection(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        // [IYI6107] INFO: `/initializrSelectEntity`(POST:applyEntitySelection) clicked.
+        log.info(OiyokanInitializrMessages.IYI6107);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        log.info("選択したEntitySetをマーク");
-        Map<String, String> mapNameFilter = new HashMap<>();
-        for (String opts : initializrBean.getCheckboxes()) {
-            mapNameFilter.put(opts, opts);
-        }
-
         final OiyoSettings oiyoSettings = settingsBean.getSettings();
 
-        // [IYI1001] Oiyokan Initializr Begin.
-        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
+        final Map<String, String> mapNameFilter = new HashMap<>();
+        for (String opts : initializrBean.getCheckboxes()) {
+            mapNameFilter.put(opts, opts);
+
+            final String entityName = OiyokanInitializrUtil.adjustName(opts, initializrBean.isConvertCamel());
+            // 同名のEntitySet設定があるかどうか確認
+            for (OiyoSettingsEntitySet lookup : oiyoSettings.getEntitySet()) {
+                if (lookup.getName().equals(entityName)) {
+                    // [IYI7132] WARN: Same name EntitySet already exists.
+                    initializrBean.setMsgError(OiyokanInitializrMessages.IYI7132 + ": " + entityName);
+                    log.error(OiyokanInitializrMessages.IYI7132 + ": " + entityName);
+
+                    return "oiyokan/initializrSelectEntity";
+                }
+            }
+        }
 
         //////////////////////////////////////////////////////////
         // Setup basic settings info
@@ -102,23 +119,30 @@ public class ThInitializrSelectEntityCtrl {
 
         try {
             // 常にVIEWつきでトラバース。ただし先にて名前フィルタリングあるため大丈夫。
-            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, true, initializrBean.isReadWriteAccess(),
-                    mapNameFilter);
+            OiyokanInitializrUtil.traverseTable(oiyoInfo, oiyoSettings, settingsBean.getCurrentDbSettingName(), true,
+                    initializrBean.isReadWriteAccess(), mapNameFilter);
 
             OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
                     initializrBean.isFilterTreatNullAsBlank);
-            initializrBean.setMsgSuccess("Entity selection applied");
+
+            // [IYI7104] INFO: Entity selection applied
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7104);
+            log.info(OiyokanInitializrMessages.IYI7104);
             return "oiyokan/initializrTop";
-        } catch (ODataApplicationException | SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (ODataApplicationException ex) {
+            // [IYI7503] UNEXPECTED: Fail to traverse tables.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7503);
+            log.error(OiyokanInitializrMessages.IYI7503, ex);
+            return "oiyokan/initializrSelectEntity";
+        } catch (SQLException ex) {
+            // [IYI7504] UNEXPECTED: Fail to process database.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7504);
+            log.error(OiyokanInitializrMessages.IYI7504);
             return "oiyokan/initializrSelectEntity";
         }
-
     }
 
-    public static void selectEntityInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database)
-            throws IOException, ODataApplicationException {
+    static void selectEntityInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database) {
 
         ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, database, null);
 
@@ -135,7 +159,7 @@ public class ThInitializrSelectEntityCtrl {
 
                 try {
                     // [IYI2112] DEBUG: Read table.
-                    log.info(OiyokanInitializrMessages.IYI2112 + ": " + tableName);
+                    log.debug(OiyokanInitializrMessages.IYI2112 + ": " + tableName);
                     final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                             connTargetDb, tableName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
 
@@ -156,7 +180,7 @@ public class ThInitializrSelectEntityCtrl {
 
                     try {
                         // [IYI2114] DEBUG: Read view.
-                        log.info(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
+                        log.debug(OiyokanInitializrMessages.IYI2114 + ": " + viewName);
                         final OiyoSettingsEntitySet entitySet = OiyokanSettingsGenUtil.generateSettingsEntitySet(
                                 connTargetDb, viewName, OiyokanConstants.DatabaseType.valueOf(database.getType()));
 
@@ -168,9 +192,14 @@ public class ThInitializrSelectEntityCtrl {
                     }
                 }
             }
-        } catch (Exception ex) {
-            // TODO message
-            log.warn(OiyokanMessages.IY9999 + ": ");
+        } catch (ODataApplicationException ex) {
+            // [IYI7505] UNEXPECTED: Fail to select entity.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7505);
+            log.error(OiyokanInitializrMessages.IYI7505);
+        } catch (SQLException ex) {
+            // [IYI7506] UNEXPECTED: Fail to process database during select entity.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7506);
+            log.error(OiyokanInitializrMessages.IYI7506);
         }
     }
 }

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
-import jp.oiyokan.dto.OiyoSettingsEntitySet;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
@@ -35,13 +34,20 @@ public class ThInitializrCtrl {
     private OiyokanSettingsWrapper settingsBean;
 
     @RequestMapping(value = { "/initializr" }, method = { RequestMethod.GET })
-    public String index(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+    public String index(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        // [IYI6101] INFO: ルート `/initializr`(GET) が開かれた.
+        log.info(OiyokanInitializrMessages.IYI6101);
+
         model.addAttribute("initializrBean", initializrBean);
-        initializrBean.setMsgSuccess(null);
+
+        // [IYI7101] INFO: 最初にデータベース設定をセットアップしてください。
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7101);
+        log.info(OiyokanInitializrMessages.IYI7101);
         initializrBean.setMsgError(null);
 
         // 一旦内容クリア
         settingsBean.setSettings(new OiyoSettings());
+        settingsBean.setCurrentDbSettingName(null);
 
         model.addAttribute("settings", settingsBean.getSettings());
 
@@ -49,86 +55,45 @@ public class ThInitializrCtrl {
     }
 
     @RequestMapping(value = { "/initializrExit" }, method = { RequestMethod.GET })
-    public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
-        model.addAttribute("initializrBean", new ThInitializrBean());
-        initializrBean.setMsgSuccess("Exited");
+    public String exit(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        // [IYI6102] INFO: Exit `/initializrExit`(GET) clicked.
+        log.info(OiyokanInitializrMessages.IYI6102);
+
+        initializrBean = new ThInitializrBean();
+        model.addAttribute("initializrBean", initializrBean);
+
+        // [IYI7102] INFO: Session info of Oiyokan Initializr initialized.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7102);
+        log.info(OiyokanInitializrMessages.IYI7102);
         initializrBean.setMsgError(null);
 
-        // 一旦内容クリア
+        // セッション情報の内容も一旦クリア
         settingsBean.setSettings(new OiyoSettings());
         model.addAttribute("settings", settingsBean.getSettings());
 
         return "oiyokan/initializrTop";
     }
 
-    /////////////////////////
-    // Select table
-
-    // TODO これまだ実装してない
-    @RequestMapping(value = { "/initializr" }, params = { "selectTable" }, method = { RequestMethod.POST })
-    public String selectTable(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
-        model.addAttribute("settings", settingsBean.getSettings());
-        model.addAttribute("initializrBean", initializrBean);
-        initializrBean.setMsgSuccess(null);
-        initializrBean.setMsgError(null);
-
-        log.info("processView:" + initializrBean.isProcessView());
-
-        OiyoSettings oiyoSettings = settingsBean.getSettings();
-
-        // ソートなど
-        OiyoInfo oiyoInfo = new OiyoInfo();
-
-        // TODO FIXME どのデータベースか確認。
-        ThInitializrSetupDatabaseCtrl.connTestInternal(initializrBean, oiyoSettings.getDatabase().get(0), null);
-
-        OiyokanInitializrUtil.tuneSettings(oiyoInfo, oiyoSettings, initializrBean.isConvertCamel(),
-                initializrBean.isFilterTreatNullAsBlank);
-
-        initializrBean.getTableInfos().clear();
-        for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
-            initializrBean.getTableInfos()
-                    .add(new ThInitializrBean.TableInfo(entitySet.getEntityType().getDbName(), true, false));
-        }
-
-        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
-        if (database.getJdbcUser() == null) {
-            log.info("selectTable: database.jdbcUser was null");
-            database.setJdbcUser("");
-        }
-        if (database.getJdbcPassPlain() == null) {
-            log.info("selectTable: database.jdbcPassPlain was null");
-            database.setJdbcPassPlain("");
-        }
-        if (database.getJdbcPassEnc() == null) {
-            log.info("selectTable: database.jdbcPassEnc was null");
-            database.setJdbcPassPlain("");
-        }
-
-        // TODO Entityの設定状況により分岐
-        return "oiyokan/initializrSelectEntity";
-    }
-
     @RequestMapping(value = { "/initializr" }, params = "generate", method = { RequestMethod.POST })
     public String generate(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
             throws IOException {
+        // [IYI6103] INFO: GENERATE `/initializr`(POST:generate) clicked.
+        log.info(OiyokanInitializrMessages.IYI6103);
+
         model.addAttribute("settings", settingsBean.getSettings());
 
         for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
-            // JSON書き込み直前に、プレーンパスワードを除去
+            // JSON書き込み直前に、JDBCの暗号化パスワードが未設定であればこれを設定
             if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
-                // データベース設定を暗号化。もとのプレーンテキストパスワードは除去.
                 if (database.getJdbcPassPlain() == null) {
                     database.setJdbcPassPlain("");
                 }
                 database.setJdbcPassEnc(
                         OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), new OiyoInfo().getPassphrase()));
-                database.setJdbcPassPlain(null);
             }
+            // JSON書き込み直前に、JDBCの平文パスワードを除去
+            database.setJdbcPassPlain(null);
         }
-
-        //////////////////////////////////////////////////////////
-        // Write settings info into oiyokan-settings.json
 
         String jsonString = null;
         try {
@@ -136,6 +101,7 @@ public class ThInitializrCtrl {
         } catch (IOException ex) {
             // [IYI4201] ERROR: Fail to generate json file.
             log.error(OiyokanInitializrMessages.IYI4201 + ": " + ex.toString(), ex);
+            throw ex;
         }
 
         try {
@@ -149,17 +115,17 @@ public class ThInitializrCtrl {
             IOUtils.copy(new ByteArrayInputStream(zipFile), outStream);
             outStream.flush();
 
-            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI5102);
-
             // [IYI5102] Check the `oiyokan-demo.zip`.
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI5102);
             log.info(OiyokanInitializrMessages.IYI5102 + ": oiyokan-demo.zip");
         } catch (IOException ex) {
             // [IYI5201] ERROR: Fail to generate zip file.
             log.error(OiyokanInitializrMessages.IYI5201, ex);
+            throw ex;
         }
 
-        // [IYI1002] Oiyokan Initializr End.
-        log.info(OiyokanInitializrMessages.IYI1002);
+        // [IYI1009] Download ZIP successfully
+        log.info(OiyokanInitializrMessages.IYI1009);
         return null;
     }
 }

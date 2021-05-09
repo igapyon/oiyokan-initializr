@@ -1,6 +1,5 @@
 package jp.oiyokan.initializr.ctrl;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
-import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.util.OiyoEncryptUtil;
 
@@ -33,13 +31,17 @@ public class ThInitializrSetupDatabaseCtrl {
     private OiyokanSettingsWrapper settingsBean;
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "new" }, method = { RequestMethod.POST })
-    public String open(Model model, ThInitializrBean initializrBean, BindingResult result) throws IOException {
+    public String open(Model model, ThInitializrBean initializrBean, BindingResult result) {
+        // [IYI6108] INFO: `/initializrSetupDatabase`(POST:new) clicked.
+        log.info(OiyokanInitializrMessages.IYI6108);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         OiyoSettingsDatabase database = new OiyoSettingsDatabase();
 
         if (database.getName() == null) {
-            database.setName("connDef1");
+            final int nextNumber = settingsBean.getSettings().getDatabase().size() + 1;
+            database.setName("connDef" + nextNumber);
         }
         if (database.getType() == null) {
             database.setType(OiyokanConstants.DatabaseType.PostgreSQL.name()); // h2, PostgreSQL, MySQL, SQLSV2008,
@@ -66,34 +68,31 @@ public class ThInitializrSetupDatabaseCtrl {
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "connTest" }, method = { RequestMethod.POST })
     public String connTest(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6109] INFO: `/initializrSetupDatabase`(POST:connTest) clicked.
+        log.info(OiyokanInitializrMessages.IYI6109);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
         initializrBean.setMsgError(null);
 
-        // [IYI1001] Oiyokan Initializr Begin.
-        log.info(OiyokanInitializrMessages.IYI1001 + ": (v" + OiyokanInitializrConstants.VERSION + ")");
-
         //////////////////////////////////////////////////////////
         // Setup basic settings info
 
         // ひとつもテーブルをマップさせずに接続のみ確認。
-        Map<String, String> mapNameFilter = new HashMap<>();
+        final Map<String, String> mapNameFilter = new HashMap<>();
         connTestInternal(initializrBean, database, mapNameFilter);
 
         return "oiyokan/initializrSetupDatabase";
     }
 
     static boolean connTestInternal(ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            Map<String, String> mapNameFilter) throws IOException {
-
-        //////////////////////////////////////////////////////////
-        // Setup basic settings info
+            Map<String, String> mapNameFilter) {
 
         // [IYI1101] Prepare database settings.
-        log.info(OiyokanInitializrMessages.IYI1101);
+        log.debug(OiyokanInitializrMessages.IYI1101);
 
         //////////////////////////////////////////////////////////
         // Process settings
@@ -119,14 +118,69 @@ public class ThInitializrSetupDatabaseCtrl {
             return false;
         }
 
-        // TODO message
-        initializrBean.setMsgSuccess("Connection test success.");
+        // [IYI7105] INFO: Connection test success.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7105);
+        log.info(OiyokanInitializrMessages.IYI7105);
         return true;
     }
 
+    @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "applyDatabaseSettings" }, method = {
+            RequestMethod.POST })
+    public String applyDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
+            BindingResult result) {
+        // [IYI6110] INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings)
+        // clicked.
+        log.info(OiyokanInitializrMessages.IYI6110);
+
+        model.addAttribute("settings", settingsBean.getSettings());
+        model.addAttribute("initializrBean", initializrBean);
+        model.addAttribute("database", database);
+        initializrBean.setMsgSuccess(null);
+        initializrBean.setMsgError(null);
+
+        //////////////////////////////////////////////////////////
+        // Setup basic settings info
+
+        // ひとつもテーブルをマップさせずに接続のみ確認。
+        final Map<String, String> mapNameFilter = new HashMap<>();
+        if (connTestInternal(initializrBean, database, mapNameFilter) == false) {
+            // [IYI7121] WARN: Fail to test connect to database.
+            initializrBean.setMsgError(OiyokanInitializrMessages.IYI7121);
+            log.warn(OiyokanInitializrMessages.IYI7121);
+            return "oiyokan/initializrSetupDatabase";
+        } else {
+            // [IYI7122] DEBUG: Success to test connect to database.
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7122);
+            log.debug(OiyokanInitializrMessages.IYI7122);
+
+            for (OiyoSettingsDatabase lookup : settingsBean.getSettings().getDatabase()) {
+                if (lookup.getName().equals(database.getName())) {
+                    // [IYI7131] WARN: Same name database already exists.
+                    initializrBean.setMsgError(OiyokanInitializrMessages.IYI7131 + ": " + database.getName());
+                    log.error(OiyokanInitializrMessages.IYI7131 + ": " + database.getName());
+                    return "oiyokan/initializrSetupDatabase";
+                }
+            }
+
+            // 接続成功。これを記憶する。
+            settingsBean.getSettings().getDatabase().add(database);
+
+            // [IYI7106] INFO: Database settings addded.
+            initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7106);
+            log.info(OiyokanInitializrMessages.IYI7106);
+            return "oiyokan/initializrTop";
+        }
+    }
+
+    ///////////////
+    // Pre
+
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preH2" }, method = { RequestMethod.POST })
     public String preH2(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
+        log.info(OiyokanInitializrMessages.IYI6111);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -143,7 +197,9 @@ public class ThInitializrSetupDatabaseCtrl {
         database.setJdbcUser("sa"); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
 
-        initializrBean.setMsgSuccess("Typical h2 preset is loaded.");
+        // [IYI7111] INFO: Typical h2 preset is loaded.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7111);
+        log.info(OiyokanInitializrMessages.IYI7111);
 
         return "oiyokan/initializrSetupDatabase";
     }
@@ -151,7 +207,10 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "prePostgreSQL" }, method = {
             RequestMethod.POST })
     public String prePostgreSQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
+        log.info(OiyokanInitializrMessages.IYI6111);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -167,14 +226,19 @@ public class ThInitializrSetupDatabaseCtrl {
         database.setJdbcUser(""); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
 
-        initializrBean.setMsgSuccess("Typical PostgreSQL preset is loaded.");
+        // [IYI7112] INFO: Typical PostgreSQL preset is loaded.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7112);
+        log.info(OiyokanInitializrMessages.IYI7112);
 
         return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preMySQL" }, method = { RequestMethod.POST })
     public String preMySQL(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
+        log.info(OiyokanInitializrMessages.IYI6111);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -191,7 +255,9 @@ public class ThInitializrSetupDatabaseCtrl {
         database.setJdbcUser("root"); // JDBC User.
         database.setJdbcPassPlain("passwd123"); // JDBC Password.
 
-        initializrBean.setMsgSuccess("Typical MySQL preset is loaded.");
+        // [IYI7113] INFO: Typical MySQL preset is loaded.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7113);
+        log.info(OiyokanInitializrMessages.IYI7113);
 
         return "oiyokan/initializrSetupDatabase";
     }
@@ -199,7 +265,10 @@ public class ThInitializrSetupDatabaseCtrl {
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preSQLSV2008" }, method = {
             RequestMethod.POST })
     public String preSQLSV2008(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
+        log.info(OiyokanInitializrMessages.IYI6111);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -215,14 +284,19 @@ public class ThInitializrSetupDatabaseCtrl {
         database.setJdbcUser("sa"); // JDBC User.
         database.setJdbcPassPlain("passwd123"); // JDBC Password.
 
-        initializrBean.setMsgSuccess("Typical SQLSV2008 preset is loaded.");
+        // [IYI7114] INFO: Typical SQLSV2008 preset is loaded.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7114);
+        log.info(OiyokanInitializrMessages.IYI7114);
 
         return "oiyokan/initializrSetupDatabase";
     }
 
     @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "preORCL18" }, method = { RequestMethod.POST })
     public String preORCL18(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
+            BindingResult result) {
+        // [IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.
+        log.info(OiyokanInitializrMessages.IYI6111);
+
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
         model.addAttribute("database", database);
@@ -238,40 +312,10 @@ public class ThInitializrSetupDatabaseCtrl {
         database.setJdbcUser("orauser"); // JDBC User.
         database.setJdbcPassPlain("passwd123"); // JDBC Password.
 
-        initializrBean.setMsgSuccess("Typical ORCL18 preset is loaded.");
+        // [IYI7115] INFO: Typical ORCL18 preset is loaded.
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI7115);
+        log.info(OiyokanInitializrMessages.IYI7115);
 
         return "oiyokan/initializrSetupDatabase";
-    }
-
-    @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "applyDatabaseSettings" }, method = {
-            RequestMethod.POST })
-    public String applyDatabaseSettings(Model model, ThInitializrBean initializrBean, OiyoSettingsDatabase database,
-            BindingResult result) throws IOException {
-        model.addAttribute("settings", settingsBean.getSettings());
-        model.addAttribute("initializrBean", initializrBean);
-        model.addAttribute("database", database);
-        initializrBean.setMsgSuccess(null);
-        initializrBean.setMsgError(null);
-
-        // TODO ここで 指定の Database 設定を保存.
-
-        // 接続確認
-
-        //////////////////////////////////////////////////////////
-        // Setup basic settings info
-
-        // ひとつもテーブルをマップさせずに接続のみ確認。
-        Map<String, String> mapNameFilter = new HashMap<>();
-        if (connTestInternal(initializrBean, database, mapNameFilter) == false) {
-            // データベース接続失敗。やりなおし。
-            return "oiyokan/initializrSetupDatabase";
-        } else {
-            // 接続成功した。これを保存する。
-            // TODO 既存のものがあれば置き換えること。
-
-            settingsBean.getSettings().getDatabase().add(database);
-            initializrBean.setMsgSuccess("Database settings addded.");
-            return "oiyokan/initializrTop";
-        }
     }
 }

@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -63,18 +64,30 @@ public class OiyokanInitializrUtil {
      * 
      * @param oiyoInfo      OiyoInfo info for passphrase.
      * @param oiyoSettings  OiyoSettings info.
+     * @param dbSettingName DB setting name.
      * @param isProcessView Process View. default:false.
      * @param mapNameFilter Filter of table name.
      * @throws SQLException              SQL exception occured.
      * @throws ODataApplicationException OData app exception occured.
      */
-    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean isProcessView,
-            boolean isReadWriteAccess, Map<String, String> mapNameFilter)
+    public static void traverseTable(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, String dbSettingName,
+            boolean isProcessView, boolean isReadWriteAccess, Map<String, String> mapNameFilter)
             throws SQLException, ODataApplicationException {
         // [IYI2101] Traverse tables in database.
-        log.info(OiyokanInitializrMessages.IYI2101);
+        log.debug(OiyokanInitializrMessages.IYI2101);
 
-        OiyoSettingsDatabase database = oiyoSettings.getDatabase().get(0);
+        OiyoSettingsDatabase database = null;
+        for (OiyoSettingsDatabase look : oiyoSettings.getDatabase()) {
+            if (look.getName().equals(dbSettingName)) {
+                database = look;
+            }
+        }
+        if (database == null) {
+            // [IYI2203] UNEXPECTED: 指定のDB settings が見つかりませんでした。
+            log.error(OiyokanInitializrMessages.IYI2203 + ": " + dbSettingName);
+            throw new ODataApplicationException(OiyokanInitializrMessages.IYI2203 + ": " + dbSettingName, 500,
+                    Locale.ENGLISH);
+        }
 
         // [IYI2111] Connect to database.
         log.info(OiyokanInitializrMessages.IYI2111 + ": " + database.getName());
@@ -155,7 +168,7 @@ public class OiyokanInitializrUtil {
     public static void tuneSettings(OiyoInfo oiyoInfo, OiyoSettings oiyoSettings, boolean convertCamel,
             boolean isFilterTreatNullAsBlank) {
         // [IYI3101] Tune settings info.
-        log.info(OiyokanInitializrMessages.IYI3101);
+        log.debug(OiyokanInitializrMessages.IYI3101);
 
         for (OiyoSettingsEntitySet entitySet : oiyoSettings.getEntitySet()) {
             entitySet.setName(adjustName(entitySet.getName(), convertCamel));
@@ -211,7 +224,7 @@ public class OiyokanInitializrUtil {
         return writer.toString();
     }
 
-    static String adjustName(String input, boolean convertCamel) {
+    public static String adjustName(String input, boolean convertCamel) {
         if (!convertCamel) {
             for (int index = 0; index < CAMEL_DELIMITER_CHARS.length; index++) {
                 input = input.replaceAll("[" + CAMEL_DELIMITER_CHARS[index] + "]", "_");

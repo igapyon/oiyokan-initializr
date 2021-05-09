@@ -10,10 +10,15 @@ import org.springframework.web.context.WebApplicationContext;
 
 import jp.oiyokan.dto.OiyoSettings;
 
+/**
+ * セッション上に記憶する情報。
+ */
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OiyokanSettingsWrapper implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    private String currentDbSettingName = null;
 
     private OiyoSettings settings = new OiyoSettings();
 
@@ -36,5 +41,13 @@ public class OiyokanSettingsWrapper implements Serializable {
 
     public void setSettings(OiyoSettings settings) {
         this.settings = settings;
+    }
+
+    public String getCurrentDbSettingName() {
+        return currentDbSettingName;
+    }
+
+    public void setCurrentDbSettingName(String currentDbSettingName) {
+        this.currentDbSettingName = currentDbSettingName;
     }
 }
