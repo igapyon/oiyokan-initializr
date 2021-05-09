@@ -151,12 +151,12 @@
                       <span class="mdl-checkbox__label">Includes VIEW (for Oiyokan experts)</span>
                     </label>
                   </div>
-
                 </form>
               </div>
 
-              <div th:if="${settings.database.size() == 0}" th:remove="tag">
-                <form class="" th:action="@{/initializrSetupDatabase}" method="post">
+              <p class="mdl-cell">
+              <form th:action="@{/initializrSetupDatabase}" method="post">
+                <div th:if="${settings.database.size() == 0}" th:remove="tag">
                   <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
                     name="new"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                       fill="#FFFFFF">
@@ -164,8 +164,17 @@
                       <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
                     </svg> Add Database</button>
-                </form>
-              </div>
+                </div>
+                <div th:if="${settings.database.size() != 0}" th:remove="tag">
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="new"><svg
+                      xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                    </svg> Add Database</button>
+                </div>
+              </form>
+              </p>
             </div>
 
             <div th:if="${settings.database.size() > 0}" th:remove="tag">
