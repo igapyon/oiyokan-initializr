@@ -167,53 +167,57 @@
                 </form>
               </div>
             </div>
-            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-              <h4 class="mdl-cell mdl-cell--12-col">Entity settings</h4>
 
-              <div th:if="${settings.entitySet.size() > 0}" th:remove="tag">
-                <form class="" th:action="@{/initializrEditEntity}" th:object="${initializrBean}" method="post">
-                  <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                    <thead>
-                      <tr>
-                        <th class="mdl-data-table__cell--non-numeric">Name</th>
-                        <th class="mdl-data-table__cell--non-numeric">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <div th:each="entitySet : ${settings.entitySet}" th:remove="tag">
+            <div th:if="${settings.database.size() > 0}" th:remove="tag">
+              <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+                <h4 class="mdl-cell mdl-cell--12-col">Entity settings</h4>
+
+                <div th:if="${settings.entitySet.size() > 0}" th:remove="tag">
+                  <form class="" th:action="@{/initializrEditEntity}" th:object="${initializrBean}" method="post">
+                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                      <thead>
                         <tr>
-                          <td class="mdl-data-table__cell--non-numeric">
-                            <div th:text="${entitySet.name}"></div>
-                          </td>
-                          <td class="mdl-data-table__cell--non-numeric">
-                            <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="edit"
-                              th:value="${entitySet.name}"><svg xmlns="http://www.w3.org/2000/svg"
-                                enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px"
-                                fill="#FFFFFF">
-                                <g>
-                                  <rect fill="none" height="24" width="24" />
-                                </g>
-                                <g>
+                          <th class="mdl-data-table__cell--non-numeric">Name</th>
+                          <th class="mdl-data-table__cell--non-numeric">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <div th:each="entitySet : ${settings.entitySet}" th:remove="tag">
+                          <tr>
+                            <td class="mdl-data-table__cell--non-numeric">
+                              <div th:text="${entitySet.name}"></div>
+                            </td>
+                            <td class="mdl-data-table__cell--non-numeric">
+                              <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="edit"
+                                th:value="${entitySet.name}"><svg xmlns="http://www.w3.org/2000/svg"
+                                  enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px"
+                                  fill="#FFFFFF">
+                                  <g>
+                                    <rect fill="none" height="24" width="24" />
+                                  </g>
                                   <g>
                                     <g>
-                                      <path
-                                        d="M3,21l3.75,0L17.81,9.94l-3.75-3.75L3,17.25L3,21z M5,18.08l9.06-9.06l0.92,0.92L5.92,19L5,19L5,18.08z" />
-                                    </g>
-                                    <g>
-                                      <path
-                                        d="M18.37,3.29c-0.39-0.39-1.02-0.39-1.41,0l-1.83,1.83l3.75,3.75l1.83-1.83c0.39-0.39,0.39-1.02,0-1.41L18.37,3.29z" />
+                                      <g>
+                                        <path
+                                          d="M3,21l3.75,0L17.81,9.94l-3.75-3.75L3,17.25L3,21z M5,18.08l9.06-9.06l0.92,0.92L5.92,19L5,19L5,18.08z" />
+                                      </g>
+                                      <g>
+                                        <path
+                                          d="M18.37,3.29c-0.39-0.39-1.02-0.39-1.41,0l-1.83,1.83l3.75,3.75l1.83-1.83c0.39-0.39,0.39-1.02,0-1.41L18.37,3.29z" />
+                                      </g>
                                     </g>
                                   </g>
-                                </g>
-                              </svg> Edit Entity</button>
-                          </td>
-                        </tr>
-                      </div>
-                    </tbody>
-                  </table>
-                </form>
+                                </svg> Edit Entity</button>
+                            </td>
+                          </tr>
+                        </div>
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
               </div>
             </div>
+
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
               <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
                 <div th:if="${settings.entitySet.size() == 0}" th:remove="tag">
