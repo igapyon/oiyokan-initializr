@@ -90,7 +90,7 @@
                 </div>
               </div>
 
-              <form class="" th:action="@{/initializrSelectEntity}" th:object="${entitySet}" method="post">
+              <form class="" th:action="@{/initializrEditEntity}" th:object="${entitySet}" method="post">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                   <input class="mdl-textfield__input" type="text" id="name" th:field="*{name}" readonly>
                   <label class="mdl-textfield__label" for="name">EntitySet name</label>
@@ -135,6 +135,18 @@
                   <label class="mdl-textfield__label" for="jdbcStmtTimeout">JDBC Statement Timeout</label>
                 </div>
 
+                <div>
+                  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
+                    name="applyChanges"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
+                      width="24px" fill="#FFFFFF">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" />
+                    </svg> Apply Entity Changes</button>
+                </div>
+
+                <br />
+
                 <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                   <thead>
                     <tr>
@@ -170,8 +182,8 @@
                         </td>
                         <td class="mdl-data-table__cell--non-numeric">
                           <div th:if="${property.precision > 0}" th:remove="tag">
-                            <div th:text="${property.precision}"></div>.
-                            <div th:text="${property.scale}"></div>
+                            <div th:text="${property.precision}" th:remove="tag"></div>.<div th:text="${property.scale}"
+                              th:remove="tag"></div>
                           </div>
                         </td>
                       </tr>

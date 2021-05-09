@@ -48,4 +48,16 @@ public class ThInitializrEditEntityCtrl {
         model.addAttribute("entitySet", entitySet);
         return "oiyokan/initializrEditEntity";
     }
+
+    @RequestMapping(value = { "/initializrEditEntity" }, params = { "applyChanges" }, method = { RequestMethod.POST })
+    public String applyEntityChanges(Model model, ThInitializrBean initializrBean, OiyoSettingsEntitySet entitySet,
+            BindingResult result) throws IOException {
+        model.addAttribute("settings", settingsBean.getSettings());
+        model.addAttribute("initializrBean", initializrBean);
+        initializrBean.setMsgSuccess(null);
+        initializrBean.setMsgError(null);
+
+        initializrBean.setMsgSuccess("Entity Change applied.");
+        return "oiyokan/initializrTop";
+    }
 }
