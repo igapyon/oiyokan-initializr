@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
 import jp.oiyokan.dto.OiyoSettings;
 import jp.oiyokan.dto.OiyoSettingsDatabase;
+import jp.oiyokan.initializr.OiyokanInitializrConstants;
 import jp.oiyokan.initializr.OiyokanInitializrMessages;
 import jp.oiyokan.initializr.OiyokanInitializrUtil;
 import jp.oiyokan.util.OiyoEncryptUtil;
@@ -37,6 +39,11 @@ public class ThInitializrCtrl {
     public String index(Model model, ThInitializrBean initializrBean, BindingResult result) {
         // [IYI6101] INFO: ルート `/initializr`(GET) が開かれた.
         log.info(OiyokanInitializrMessages.IYI6101);
+
+        // [IYI1001] Oiyokan Initializr
+        log.info(OiyokanInitializrMessages.IYI1001 + ": v" + OiyokanInitializrConstants.VERSION);
+        // [IYI1002] Oiyokan Library
+        log.info(OiyokanInitializrMessages.IYI1002 + ": v" + OiyokanConstants.VERSION);
 
         model.addAttribute("initializrBean", initializrBean);
 
