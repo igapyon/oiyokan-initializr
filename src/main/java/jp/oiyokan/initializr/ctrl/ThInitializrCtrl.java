@@ -147,6 +147,11 @@ public class ThInitializrCtrl {
         model.addAttribute("settings", settingsBean.getSettings());
         model.addAttribute("initializrBean", initializrBean);
 
+        if (!OiyokanInitializrConstants.SAVE_OIYOKAN_SETTINGS_ENABLED) {
+            // そもそも機能が有効化されていない。中断。
+            return null;
+        }
+
         for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
             // JSON書き込み直前に、JDBCの暗号化パスワードが未設定であればこれを設定
             if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
