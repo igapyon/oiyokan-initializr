@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import jp.oiyokan.initializr.OiyokanInitializrConstants;
+
 /**
  * Thymeleaf画面とやりとりに利用するBean.
  */
@@ -18,6 +20,8 @@ public class ThInitializrBean implements Serializable {
 
     private String msgSuccess = null;
     private String msgError = null;
+
+    private static final boolean isSaveOiyokanSettingsEnabled = OiyokanInitializrConstants.SAVE_OIYOKAN_SETTINGS_ENABLED;
 
     ///////////////////////////////////////////////
     // 画面項目
@@ -32,6 +36,10 @@ public class ThInitializrBean implements Serializable {
 
     ///////////////////////////////////////////////
     // Method
+
+    public boolean isSaveOiyokanSettingsEnabled() {
+        return isSaveOiyokanSettingsEnabled;
+    }
 
     public String getMsgSuccess() {
         return msgSuccess;
