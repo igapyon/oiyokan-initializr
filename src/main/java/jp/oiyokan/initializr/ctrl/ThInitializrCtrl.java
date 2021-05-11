@@ -4,9 +4,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -134,5 +136,54 @@ public class ThInitializrCtrl {
         // [IYI1009] Download ZIP successfully
         log.info(OiyokanInitializrMessages.IYI1009);
         return null;
+    }
+
+    @RequestMapping(value = { "/initializr" }, params = "saveOiyokanSettingsJson", method = { RequestMethod.POST })
+    public String saveOiyokanSettingsJson(Model model, ThInitializrBean initializrBean, HttpServletResponse response)
+            throws IOException {
+        // [IYI6112] INFO: `/initializrSetupDatabase`(saveOiyokanSettingsJson) clicked.
+        log.info(OiyokanInitializrMessages.IYI6112);
+
+        model.addAttribute("settings", settingsBean.getSettings());
+        model.addAttribute("initializrBean", initializrBean);
+
+        for (OiyoSettingsDatabase database : settingsBean.getSettings().getDatabase()) {
+            // JSON書き込み直前に、JDBCの暗号化パスワードが未設定であればこれを設定
+            if (database.getJdbcPassEnc() == null || database.getJdbcPassEnc().trim().length() == 0) {
+                if (database.getJdbcPassPlain() == null) {
+                    database.setJdbcPassPlain("");
+                }
+                database.setJdbcPassEnc(
+                        OiyoEncryptUtil.encrypt(database.getJdbcPassPlain(), new OiyoInfo().getPassphrase()));
+            }
+            // JSON書き込み直前に、JDBCの平文パスワードを除去
+            database.setJdbcPassPlain(null);
+        }
+
+        try {
+            log.info(OiyokanInitializrMessages.IYI4111);
+
+            final String jsonString = OiyokanInitializrUtil.oiyoSettings2String(settingsBean.getSettings());
+
+            final File fileTarget = new File("./target/generated-oiyokan/oiyokan-settings.json");
+            if (fileTarget.getParentFile().exists() == false) {
+                fileTarget.getParentFile().mkdirs();
+            }
+            FileUtils.writeStringToFile(fileTarget, jsonString, StandardCharsets.UTF_8);
+
+            // [IYI4112] `oiyokan-settings.json` generated into
+            // `./target/generated-oiyokan/oiyokan-settings.json`.
+            log.info(OiyokanInitializrMessages.IYI4112);
+        } catch (IOException ex) {
+            // [IYI4202] ERROR: Fail to generate json file.
+            log.error(OiyokanInitializrMessages.IYI4202 + ": " + ex.toString(), ex);
+            throw ex;
+        }
+
+        // [IYI1010] `oiyokan-settings.json` Generated successfully.
+        log.info(OiyokanInitializrMessages.IYI1010);
+        initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI1010);
+
+        return "oiyokan/initializrTop";
     }
 }

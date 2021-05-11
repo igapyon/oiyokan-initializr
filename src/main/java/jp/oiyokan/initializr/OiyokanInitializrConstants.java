@@ -20,4 +20,9 @@ package jp.oiyokan.initializr;
  */
 public class OiyokanInitializrConstants {
     public static final String VERSION = "0.5.20210511a";
+
+    /**
+     * 通常は FALSE 運用.
+     */
+    public static final boolean SAVE_OIYOKAN_SETTINGS_ENABLED = false;
 }
