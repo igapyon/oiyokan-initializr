@@ -30,13 +30,15 @@ http://localhost:8082/
 
 3-2. Click `START CREATING REST API SERVER FOR RDB`
 
-3-3. Click `ADD DATABASE`
+3-3. If basic authentication is shown, login with User: admin, Password: passwd123
 
-3-4. Fill database settings
+3-4. Click `ADD DATABASE`
 
-3-5. Click `CONNECTION TEST`
+3-5. Fill database settings
 
-3-6. Click `APPLY DATABASE SETTINGS`
+3-6. Click `CONNECTION TEST`
+
+3-7. Click `APPLY DATABASE SETTINGS`
 
 4-1. Click `ADD ENTITY`
 
