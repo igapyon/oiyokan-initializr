@@ -31,17 +31,34 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
- * `/initializr` 以下に BASIC認証を付与.
+ * `/initializr` 以下に BASIC認証を設定.
  */
 @EnableWebSecurity
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OiyokanWebAuthnAdapter extends WebSecurityConfigurerAdapter {
     private static final String USER = "admin";
     private static final String PASSWD = "passwd123";
+    private static final String ROLES = "USER";
+
+    private static final String PATH = "/initializr/";
+    private static final String REALMNAME = "REST API Server";
+
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser(USER).password(PASSWD).roles(ROLES);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.regexMatcher("^" + PATH + ".*");
+        http.authorizeRequests().anyRequest().authenticated();
+
+        BasicAuthenticationEntryPoint authenticationEntryPoint = entryPoint();
+        http.addFilter(authnFilter()).exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+    }
 
     private BasicAuthenticationEntryPoint entryPoint() {
         BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-        entryPoint.setRealmName("REST API Server");
+        entryPoint.setRealmName(REALMNAME);
         return entryPoint;
     }
 
@@ -51,17 +68,9 @@ public class OiyokanWebAuthnAdapter extends WebSecurityConfigurerAdapter {
         return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser(USER).password(PASSWD).roles("USER");
-    }
-
     @Bean
     public UserDetailsService userDetailsServiceBean() throws Exception {
         return super.userDetailsServiceBean();
-    }
-
-    private BasicAuthenticationFilter authnFilter() throws Exception {
-        return new BasicAuthenticationFilter(authenticationManagerBean());
     }
 
     @Override
@@ -71,12 +80,7 @@ public class OiyokanWebAuthnAdapter extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.regexMatcher("^/(initializr).*");
-        http.authorizeRequests().anyRequest().authenticated();
-
-        BasicAuthenticationEntryPoint authenticationEntryPoint = entryPoint();
-        http.addFilter(authnFilter()).exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+    private BasicAuthenticationFilter authnFilter() throws Exception {
+        return new BasicAuthenticationFilter(authenticationManagerBean());
     }
 }
