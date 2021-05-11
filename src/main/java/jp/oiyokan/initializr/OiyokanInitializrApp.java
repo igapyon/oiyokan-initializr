@@ -19,7 +19,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 import jp.oiyokan.OiyokanConstants;
 
@@ -27,7 +26,6 @@ import jp.oiyokan.OiyokanConstants;
  * Oiyokan Initializr.
  */
 @SpringBootApplication
-@ComponentScan("jp.oiyokan.initializr")
 public class OiyokanInitializrApp {
     private static final Log log = LogFactory.getLog(OiyokanInitializrApp.class);
 

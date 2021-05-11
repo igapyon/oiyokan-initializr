@@ -40,7 +40,7 @@ public class OiyokanWebAuthnAdapter extends WebSecurityConfigurerAdapter {
     private static final String PASSWD = "passwd123";
     private static final String ROLES = "USER";
 
-    private static final String PATH = "/initializr/";
+    private static final String PATH = "/initializr";
     private static final String REALMNAME = "REST API Server";
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
