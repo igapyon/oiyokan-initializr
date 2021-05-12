@@ -3,6 +3,13 @@
 Oiyokan is an generater to create new maven project of OData v4 server (provider).
 Using Oiyokan Initializr, you can quickly publish your RDB as an OData v4 Server (provider).
 
+## Getting Started with the Oiyokan
+
+Getting Started with the Oiyokan can be viewed at the following URL  (written in Japanese).
+
+- http://www.igapyon.jp/igapyon/diary/2021/ig210511.html
+
+
 # Usage
 
 ## Run `oiyokan-initializr`
