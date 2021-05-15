@@ -22,6 +22,7 @@ public class OiyokanInitializrMessages {
     public static final String IYI1001 = "[IYI1001] Oiyokan Initializr";
     public static final String IYI1002 = "[IYI1002] Oiyokan Library   ";
     public static final String IYI1009 = "[IYI1009] Download ZIP successfully.";
+    public static final String IYI1010 = "[IYI1010] `oiyokan-settings.json` Generated successfully.";
     public static final String IYI1101 = "[IYI1101] Prepare database settings.";
 
     public static final String IYI2101 = "[IYI2101] Traverse tables in database.";
@@ -40,7 +41,10 @@ public class OiyokanInitializrMessages {
 
     public static final String IYI4101 = "[IYI4101] Write settings info into `oiyokan-settings.json`.";
     public static final String IYI4102 = "[IYI4102] `oiyokan-settings.json` generated internally.";
+    public static final String IYI4111 = "[IYI4111] Write settings info into `oiyokan-settings.json`.";
+    public static final String IYI4112 = "[IYI4112] `oiyokan-settings.json` generated into `./target/generated-oiyokan/oiyokan-settings.json`.";
     public static final String IYI4201 = "[IYI4201] ERROR: Fail to generate json file.";
+    public static final String IYI4202 = "[IYI4202] ERROR: Fail to generate json file.";
 
     public static final String IYI5101 = "[IYI5101] Generate zip file into `oiyokan-demo.zip`.";
     public static final String IYI5102 = "[IYI5102] Check the `oiyokan-demo.zip`.";
@@ -57,6 +61,7 @@ public class OiyokanInitializrMessages {
     public static final String IYI6109 = "[IYI6109] INFO: `/initializrSetupDatabase`(POST:connTest) clicked.";
     public static final String IYI6110 = "[IYI6110] INFO: `/initializrSetupDatabase`(POST:applyDatabaseSettings) clicked.";
     public static final String IYI6111 = "[IYI6111] INFO: `/initializrSetupDatabase`(POST:preXXXXX) clicked.";
+    public static final String IYI6112 = "[IYI6112] INFO: `/initializrSetupDatabase`(saveOiyokanSettingsJson) clicked.";
 
     public static final String IYI7101 = "[IYI7101] INFO: Setup database settings first.";
     public static final String IYI7102 = "[IYI7102] INFO: Session info of Oiyokan Initializr initialized.";

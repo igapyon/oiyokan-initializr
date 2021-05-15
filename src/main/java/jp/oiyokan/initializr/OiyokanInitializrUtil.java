@@ -248,7 +248,6 @@ public class OiyokanInitializrUtil {
             "src/main/resources/static/static/js/jquery-3.6.0.min.map", //
             "src/main/resources/templates/error.html", //
             "src/main/resources/application.properties", //
-            "src/test/resources/logback-test.xml",//
     };
 
     public static byte[] packageZipFile(final File inputTemplateProjectDir, final String jsonString)
