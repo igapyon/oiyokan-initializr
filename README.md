@@ -1,8 +1,9 @@
 # Oiyokan Initializr
 
 Oiyokan Initializr is a low code tool that quickly publish database tables as a REST API server.
-Generate Spring Boot web based REST API Server (OData v4) with minimal text input and mouse ops.
-Knowledge of Spring Boot, Maven, and JDBC settings is recommended.
+
+* Generate Spring Boot web based REST API Server (OData v4) with minimal text input and mouse ops.
+* Knowledge of Spring Boot, Maven, and JDBC settings is recommended.
 
 ## Getting Started with the Oiyokan
 
@@ -111,5 +112,6 @@ http://localhost:8080/
 
 - [Oiyokan Library - github](https://github.com/igapyon/oiyokan)
 - [Oiyokan Initializr - github](https://github.com/igapyon/oiyokan-initializr)
+- [Oiyokan UnitTest - github](https://github.com/igapyon/oiyokan-unittest)
 - [Oiyokan Demosite - github](https://github.com/igapyon/oiyokan-demosite)
 - [Oiyokan Demosite-Test - github](https://github.com/igapyon/oiyokan-demosite-test)
