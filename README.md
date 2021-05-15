@@ -1,7 +1,8 @@
 # Oiyokan Initializr
 
-Oiyokan is an generater to create new maven project of OData v4 server (provider).
-Using Oiyokan Initializr, you can quickly publish your RDB as an OData v4 Server (provider).
+Oiyokan Initializr is a low code tool that quickly publish database tables as a REST API server.
+Generate Spring Boot web based REST API Server (OData v4) with minimal text input and mouse ops.
+Knowledge of Spring Boot, Maven, and JDBC settings is recommended.
 
 ## Getting Started with the Oiyokan
 
