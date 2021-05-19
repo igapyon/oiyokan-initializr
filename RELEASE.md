@@ -3,10 +3,12 @@
 ## EN
 
 - Applied the update of the main library. No change to Oiyokan Initializr itself.
+- Oiyokan lib: 1.15.20210519b
 
 ## JA
 
 - 本体ライブラリの更新を反映。Oiyokan Initializr 自体には変更なし。
+- Oiyokan lib: 1.15.20210519b
 
 # Release 0.5 (2021-05-11)
 
