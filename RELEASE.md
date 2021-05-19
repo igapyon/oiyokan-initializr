@@ -2,11 +2,11 @@
 
 ## EN
 
-- TBD: 本体ライブラリの更新に追従。
+- Applied the update of the main library. No change to Oiyokan Initializr itself.
 
 ## JA
 
-- 本体ライブラリの更新に追従。
+- 本体ライブラリの更新を反映。Oiyokan Initializr 自体には変更なし。
 
 # Release 0.5 (2021-05-11)
 
