@@ -1,4 +1,4 @@
-# Release 0.5 (2021-04-16)
+# Release 0.5 (2021-05-11)
 
 ## JA
 
@@ -11,7 +11,7 @@ Spring Boot web ベースの OData v4 対応 REST API Server を少ない操作�
 #olingo #springboot #java #odatav4 #jdbc #oiyokan #rest #api
 
 
-# Tutorial (2021-04-16)
+# Tutorial (2021-05-16)
 
 データベースのテーブルを、REST API Server として公開する Oiyokan Initializr のチュートリアル
 

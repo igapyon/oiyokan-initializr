@@ -12,7 +12,7 @@
 
 	<groupId>jp.igapyon.oiyokan</groupId>
 	<artifactId>oiyokan-initializr</artifactId>
-	<version>0.5.20210511a</version>
+	<version>0.6.20210520a</version>
 	<name>oiyokan-initializr</name>
 	<description>Oyekan Initializr is a generator for creating `oiyokan-settings.json`.</description>
 	<url>https://github.com/igapyon/oiyokan-initializr</url>
@@ -77,7 +77,7 @@
 		<dependency>
 			<groupId>jp.igapyon.oiyokan</groupId>
 			<artifactId>oiyokan</artifactId>
-			<version>1.14.20210510a</version>
+			<version>1.15.20210519b</version>
 		</dependency>
 
 		<dependency>

@@ -1,3 +1,13 @@
+# Release 0.6 (2021-05-20)
+
+## EN
+
+- Applied the update of the main library. No change to Oiyokan Initializr itself.
+
+## JA
+
+- 本体ライブラリの更新を反映。Oiyokan Initializr 自体には変更なし。
+
 # Release 0.5 (2021-05-11)
 
 ## EN
