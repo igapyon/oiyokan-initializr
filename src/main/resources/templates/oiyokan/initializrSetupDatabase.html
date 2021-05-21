@@ -123,6 +123,15 @@
                     <option th:value="ORCL18" th:text="ORCL18" th:selected="${type == 'ORCL18'}" />
                   </select>
                 </div>
+                <div>
+                  <label for="transactionIsolation" class="">Transaction Isolation</label>
+                  <select class="" id="transactionIsolation" required th:field="*{transactionIsolation}">
+                    <option th:value="Connection.TRANSACTION_READ_UNCOMMITTED" th:text="Connection.TRANSACTION_READ_UNCOMMITTED" th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_UNCOMMITTED'}" />
+                    <option th:value="Connection.TRANSACTION_READ_COMMITTED" th:text="Connection.TRANSACTION_READ_COMMITTED" th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_COMMITTED'}" />
+                    <option th:value="Connection.TRANSACTION_REPEATABLE_READ" th:text="Connection.TRANSACTION_REPEATABLE_READ" th:selected="${transactionIsolation == 'Connection.TRANSACTION_REPEATABLE_READ'}" />
+                    <option th:value="Connection.TRANSACTION_SERIALIZABLE" th:text="Connection.TRANSACTION_SERIALIZABLE" th:selected="${transactionIsolation == 'Connection.TRANSACTION_SERIALIZABLE'}" />
+                  </select>
+                </div>
                 <br />
 
                 <div>
