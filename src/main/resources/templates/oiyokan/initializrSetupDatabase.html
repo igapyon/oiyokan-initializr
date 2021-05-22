@@ -56,6 +56,7 @@
         <h3>Oiyokan Initializr</h3>
       </div>
       <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        <p>v[[${initializrBean.version}]]</p>
       </div>
       <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
         <a href="/index.html" class="mdl-layout__tab">Index</a>
@@ -113,9 +114,9 @@
                 </div>
 
                 <br />
-                <div>
-                  <label for="type" class="">DB type</label>
-                  <select class="" id="type" required th:field="*{type}">
+                <div class="mdl-selectfield mdl-js-selectfield">
+                  <label class="mdl-selectfield__label" for="type">DB type</label>
+                  <select class="mdl-selectfield__select" id="type" required th:field="*{type}">
                     <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
                     <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
                     <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
@@ -150,6 +151,26 @@
                     <input class="mdl-textfield__input" type="text" id="jdbcPassPlain" th:field="*{jdbcPassPlain}">
                     <label class="mdl-textfield__label" for="jdbcPassPlain">JDBC Password (plain text)</label>
                   </div>
+                </div>
+
+                <br />
+
+                <div class="mdl-selectfield mdl-js-selectfield">
+                  <label class="mdl-selectfield__label" for="transactionIsolation">Transaction Isolation</label>
+                  <select class="mdl-selectfield__select" id="transactionIsolation" required
+                    th:field="*{transactionIsolation}">
+                    <option th:value="Connection.TRANSACTION_READ_UNCOMMITTED"
+                      th:text="Connection.TRANSACTION_READ_UNCOMMITTED"
+                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_UNCOMMITTED'}" />
+                    <option th:value="Connection.TRANSACTION_READ_COMMITTED"
+                      th:text="Connection.TRANSACTION_READ_COMMITTED"
+                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_COMMITTED'}" />
+                    <option th:value="Connection.TRANSACTION_REPEATABLE_READ"
+                      th:text="Connection.TRANSACTION_REPEATABLE_READ"
+                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_REPEATABLE_READ'}" />
+                    <option th:value="Connection.TRANSACTION_SERIALIZABLE" th:text="Connection.TRANSACTION_SERIALIZABLE"
+                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_SERIALIZABLE'}" />
+                  </select>
                 </div>
 
                 <br />
