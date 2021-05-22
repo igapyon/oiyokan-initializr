@@ -42,8 +42,8 @@ public class ThInitializrSelectEntityCtrl {
     /////////////////////////
     // Select table
 
-    @RequestMapping(value = { "/initializrSelectEntity" }, params = { "new" }, method = { RequestMethod.POST })
-    public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("new") String dbName,
+    @RequestMapping(value = { "/initializrSelectEntity" }, params = { "newEntity" }, method = { RequestMethod.POST })
+    public String selectEntity(Model model, ThInitializrBean initializrBean, @RequestParam("newEntity") String dbName,
             BindingResult result) {
         // [IYI6106] INFO: `/initializrSelectEntity`(POST:new) clicked.
         log.info(OiyokanInitializrMessages.IYI6106);
