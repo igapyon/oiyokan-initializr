@@ -238,23 +238,14 @@
             <div th:if="${settings.database.size() > 0}" th:remove="tag">
               <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
                 <form class="" th:action="@{/initializr}" th:object="${initializrBean}" method="post">
-                  <div th:if="${settings.entitySet.size() == 0}" th:remove="tag">
-                    <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="generate"><svg
-                        xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
-                        fill="#FFFFFF">
-                        <path d="M0 0h24v24H0V0z" fill="none" />
-                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
-                      </svg> Generate REST API Server</button>
-                  </div>
-                  <div th:if="${settings.entitySet.size() != 0}" th:remove="tag">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit"
-                      name="generate" id="generate"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"
-                        width="24px" fill="#FFFFFF">
-                        <path d="M0 0h24v24H0V0z" fill="none" />
-                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
-                      </svg> Generate REST API Server</button>
-                      <span class="mdl-tooltip" for="generate">with Oiyokan Lib v[[${initializrBean.libVersion}]]</span>
-                  </div>
+                  <button
+                    th:class="${'mdl-button mdl-js-button mdl-button--raised' + (settings.entitySet.size() == 0 ? '' : ' mdl-button--colored')}"
+                    type="submit" name="generate" id="generate"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                      viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z" />
+                    </svg> Generate REST API Server</button>
+                  <span class="mdl-tooltip" for="generate">with Oiyokan Lib v[[${initializrBean.libVersion}]]</span>
                   <div th:if="${initializrBean.saveOiyokanSettingsEnabled && settings.entitySet.size() != 0}"
                     th:remove="tag">
                     <button class="mdl-button mdl-js-button mdl-button--raised" type="submit"
