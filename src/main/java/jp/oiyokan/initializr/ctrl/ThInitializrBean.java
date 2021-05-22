@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.initializr.OiyokanInitializrConstants;
 
 /**
@@ -36,6 +37,24 @@ public class ThInitializrBean implements Serializable {
 
     ///////////////////////////////////////////////
     // Method
+
+    /**
+     * Oiyokan Initializr のバージョンを取得
+     * 
+     * @return バージョン.
+     */
+    public String getVersion() {
+        return OiyokanInitializrConstants.VERSION;
+    }
+
+    /**
+     * Libのバージョンを取得。
+     * 
+     * @return Libのバージョン.
+     */
+    public String getLibVersion() {
+        return OiyokanConstants.VERSION;
+    }
 
     public boolean isSaveOiyokanSettingsEnabled() {
         return isSaveOiyokanSettingsEnabled;
