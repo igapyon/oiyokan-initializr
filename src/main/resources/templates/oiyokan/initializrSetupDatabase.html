@@ -113,9 +113,9 @@
                 </div>
 
                 <br />
-                <div>
-                  <label for="type" class="">DB type</label>
-                  <select class="" id="type" required th:field="*{type}">
+                <div class="mdl-selectfield mdl-js-selectfield">
+                  <label class="mdl-selectfield__label" for="type">DB type</label>
+                  <select class="mdl-selectfield__select" id="type" required th:field="*{type}">
                     <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
                     <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
                     <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />
@@ -154,9 +154,10 @@
 
                 <br />
 
-                <div>
-                  <label for="transactionIsolation" class="">Transaction Isolation</label>
-                  <select class="" id="transactionIsolation" required th:field="*{transactionIsolation}">
+                <div class="mdl-selectfield mdl-js-selectfield">
+                  <label class="mdl-selectfield__label" for="transactionIsolation">Transaction Isolation</label>
+                  <select class="mdl-selectfield__select" id="transactionIsolation" required
+                    th:field="*{transactionIsolation}">
                     <option th:value="Connection.TRANSACTION_READ_UNCOMMITTED"
                       th:text="Connection.TRANSACTION_READ_UNCOMMITTED"
                       th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_UNCOMMITTED'}" />
