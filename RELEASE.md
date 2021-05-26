@@ -1,3 +1,10 @@
+# Release 0.8 (2021-05-26)
+
+## EN
+
+- Update Oiyokan Lib: 1.18.20210526a
+- Implementation: Changed to pass OiyoInfo instance from the outside.
+
 # Release 0.7 (2021-05-22)
 
 ## EN

@@ -155,26 +155,6 @@
 
                 <br />
 
-                <div class="mdl-selectfield mdl-js-selectfield">
-                  <label class="mdl-selectfield__label" for="transactionIsolation">Transaction Isolation</label>
-                  <select class="mdl-selectfield__select" id="transactionIsolation" required
-                    th:field="*{transactionIsolation}">
-                    <option th:value="Connection.TRANSACTION_READ_UNCOMMITTED"
-                      th:text="Connection.TRANSACTION_READ_UNCOMMITTED"
-                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_UNCOMMITTED'}" />
-                    <option th:value="Connection.TRANSACTION_READ_COMMITTED"
-                      th:text="Connection.TRANSACTION_READ_COMMITTED"
-                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_READ_COMMITTED'}" />
-                    <option th:value="Connection.TRANSACTION_REPEATABLE_READ"
-                      th:text="Connection.TRANSACTION_REPEATABLE_READ"
-                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_REPEATABLE_READ'}" />
-                    <option th:value="Connection.TRANSACTION_SERIALIZABLE" th:text="Connection.TRANSACTION_SERIALIZABLE"
-                      th:selected="${transactionIsolation == 'Connection.TRANSACTION_SERIALIZABLE'}" />
-                  </select>
-                </div>
-
-                <br />
-
                 <div>
                   <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="connTest">Connection
                     Test</button>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jp.oiyokan.OiyokanOdata4RegisterImpl;
+import jp.oiyokan.common.OiyoInfo;
 
 @RestController
 public class DemoOData4Register {
@@ -15,6 +16,7 @@ public class DemoOData4Register {
 
     @RequestMapping(ODATA_ROOTPATH + "/*")
     public void serv(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException {
-        OiyokanOdata4RegisterImpl.serv(req, resp, ODATA_ROOTPATH);
+        final OiyoInfo oiyoInfo = new OiyoInfo();
+        OiyokanOdata4RegisterImpl.serv(oiyoInfo, req, resp, ODATA_ROOTPATH);
     }
 }
