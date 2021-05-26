@@ -59,7 +59,7 @@ public class ThInitializrSetupDatabaseCtrl {
         database.setJdbcUser(""); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
         if (database.getTransactionIsolation() == null) {
-            database.setTransactionIsolation("Connection.TRANSACTION_READ_COMMITTED");
+            database.setTransactionIsolation("");
         }
 
         model.addAttribute("database", database);
