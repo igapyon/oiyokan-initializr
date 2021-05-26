@@ -58,9 +58,6 @@ public class ThInitializrSetupDatabaseCtrl {
         }
         database.setJdbcUser(""); // JDBC User.
         database.setJdbcPassPlain(""); // JDBC Password.
-        if (database.getTransactionIsolation() == null) {
-            database.setTransactionIsolation("");
-        }
 
         model.addAttribute("database", database);
         initializrBean.setMsgSuccess(null);
