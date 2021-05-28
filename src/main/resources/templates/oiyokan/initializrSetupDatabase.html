@@ -56,6 +56,7 @@
         <h3>Oiyokan Initializr</h3>
       </div>
       <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        <p>v[[${initializrBean.version}]]</p>
       </div>
       <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
         <a href="/index.html" class="mdl-layout__tab">Index</a>
@@ -113,9 +114,9 @@
                 </div>
 
                 <br />
-                <div>
-                  <label for="type" class="">DB type</label>
-                  <select class="" id="type" required th:field="*{type}">
+                <div class="mdl-selectfield mdl-js-selectfield">
+                  <label class="mdl-selectfield__label" for="type">DB type</label>
+                  <select class="mdl-selectfield__select" id="type" required th:field="*{type}">
                     <option th:value="h2" th:text="h2" th:selected="${type == 'h2'}" />
                     <option th:value="PostgreSQL" th:text="PostgreSQL" th:selected="${type == 'PostgreSQL'}" />
                     <option th:value="MySQL" th:text="MySQL" th:selected="${type == 'MySQL'}" />

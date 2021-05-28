@@ -30,7 +30,7 @@ public class ThInitializrSetupDatabaseCtrl {
     @Autowired
     private OiyokanSettingsWrapper settingsBean;
 
-    @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "new" }, method = { RequestMethod.POST })
+    @RequestMapping(value = { "/initializrSetupDatabase" }, params = { "newDatabase" }, method = { RequestMethod.POST })
     public String open(Model model, ThInitializrBean initializrBean, BindingResult result) {
         // [IYI6108] INFO: `/initializrSetupDatabase`(POST:new) clicked.
         log.info(OiyokanInitializrMessages.IYI6108);
