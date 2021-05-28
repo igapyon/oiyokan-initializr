@@ -19,7 +19,7 @@ package jp.oiyokan.initializr;
  * Oiyokan Initializr の定数.
  */
 public class OiyokanInitializrConstants {
-    public static final String VERSION = "0.8.20210526a";
+    public static final String VERSION = "1.0.20210528a";
 
     /**
      * 通常は FALSE 運用.
