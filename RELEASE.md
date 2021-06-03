@@ -1,3 +1,13 @@
+# Release 1.1 (2021-06-03)
+
+## EN
+
+- Follows the main library upgrade: Oiyokan Lib: 1.19.20210603a
+
+## JA
+
+- 本体ライブラリバージョンアップに追従: Oiyokan Lib: 1.19.20210603a
+
 # Release 1.0 (2021-05-28)
 
 ## EN
