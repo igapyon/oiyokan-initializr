@@ -12,9 +12,9 @@
 
 	<groupId>jp.igapyon.oiyokan</groupId>
 	<artifactId>oiyokan-initializr</artifactId>
-	<version>1.0.20210528a</version>
+	<version>1.1.20210603a</version>
 	<name>oiyokan-initializr</name>
-	<description>Oyekan Initializr is a generator for creating `oiyokan-settings.json`.</description>
+	<description>Oiyokan Initializr is a low code tool that quickly publish database tables as a REST API server. Generate Spring Boot web based REST API Server (OData v4) with minimal text input and mouse ops. Knowledge of Spring Boot, Maven, and JDBC settings is recommended.</description>
 	<url>https://github.com/igapyon/oiyokan-initializr</url>
 
 	<!-- see: https://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
@@ -77,7 +77,7 @@
 		<dependency>
 			<groupId>jp.igapyon.oiyokan</groupId>
 			<artifactId>oiyokan</artifactId>
-			<version>1.18.20210526a</version>
+			<version>1.19.20210603a</version>
 		</dependency>
 
 		<dependency>
