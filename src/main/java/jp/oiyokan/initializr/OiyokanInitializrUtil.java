@@ -224,6 +224,26 @@ public class OiyokanInitializrUtil {
         return writer.toString();
     }
 
+    /**
+     * Read settings info from `oiyokan-settings.json`.
+     * 
+     * @param json OiyoSettings info.
+     * @return Target OiyoSettings info.
+     * @throws IOException IO exception occured.
+     */
+    public static OiyoSettings string2oiyoSettings(final String json) throws IOException {
+        // TODO message
+        log.info("TODO message");
+
+        ObjectMapper mapper = new ObjectMapper();
+        OiyoSettings result = mapper.readValue(json, OiyoSettings.class);
+
+        // TODO message
+        log.info("TODO message");
+
+        return result;
+    }
+
     public static String adjustName(String input, boolean convertCamel) {
         if (!convertCamel) {
             for (int index = 0; index < CAMEL_DELIMITER_CHARS.length; index++) {

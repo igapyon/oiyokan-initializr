@@ -163,6 +163,16 @@
                 <span class="mdl-tooltip" for="newDatabase">Add database settings.</span>
               </form>
               </p>
+
+              <div th:if="${settings.database.size() == 0}" th:remove="tag">
+                <h4 class="mdl-cell mdl-cell--12-col">Upload settings</h4>
+                <form th:action="@{/initializr}" method="post" enctype="multipart/form-data">
+                  <input type="file" name="uploadJson" /><br />
+                  <button class="mdl-button mdl-js-button mdl-button--raised" type="submit" name="uploadJson">upload
+                    json</button>
+                </form>
+                </p>
+              </div>
             </div>
 
             <div th:if="${settings.database.size() > 0}" th:remove="tag">

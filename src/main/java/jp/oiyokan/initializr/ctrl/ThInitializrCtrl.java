@@ -15,10 +15,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StreamUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import jp.oiyokan.OiyokanConstants;
 import jp.oiyokan.common.OiyoInfo;
@@ -188,6 +191,32 @@ public class ThInitializrCtrl {
         // [IYI1010] `oiyokan-settings.json` Generated successfully.
         log.info(OiyokanInitializrMessages.IYI1010);
         initializrBean.setMsgSuccess(OiyokanInitializrMessages.IYI1010);
+
+        return "oiyokan/initializrTop";
+    }
+
+    @RequestMapping(value = { "/initializr" }, params = "uploadJson", method = { RequestMethod.POST })
+    public String uploadJson(@RequestParam("uploadJson") MultipartFile multipartFile, ThInitializrBean initializrBean,
+            Model model) {
+        model.addAttribute("originalFilename", multipartFile.getOriginalFilename());
+
+        model.addAttribute("settings", settingsBean.getSettings());
+        model.addAttribute("initializrBean", initializrBean);
+
+        try {
+            String json = StreamUtils.copyToString(multipartFile.getInputStream(), StandardCharsets.UTF_8);
+            OiyoSettings settings = OiyokanInitializrUtil.string2oiyoSettings(json);
+            settingsBean.setSettings(settings);
+            // Update as latest.
+            model.addAttribute("settings", settingsBean.getSettings());
+        } catch (IOException e) {
+            // TODO message
+            log.error("えらー:" + e.toString(), e);
+            return "oiyokan/initializrTop";
+        }
+
+        // TODO message
+        log.info("ファイルアップロード完了.");
 
         return "oiyokan/initializrTop";
     }
